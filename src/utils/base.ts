@@ -1,7 +1,5 @@
-class Base {
-    
-    public  url () : string {
-        return "";
-    }
+export default class Base {
+  public static url(): string {
+  	return '111';
+  }
 }
-export default Base;

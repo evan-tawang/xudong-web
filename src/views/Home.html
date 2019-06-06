@@ -1,0 +1,54 @@
+<div id="container">
+    <!-- 头部 -->
+    <div id="container_banner">
+        <!-- 头部 左 -->
+        <div class="banner-left">
+            <a href="javascript:void(0);">
+<!--                <img src="../assets/images/admin_logo.png"/>-->
+            </a>
+        </div>
+
+        <!-- 头部 右 -->
+        <div class="banner-right">
+            <ul class="items">
+<!--                <li @click="logout()"><i class="el-icon-circle-cross"></i> 退出</li>-->
+            </ul>
+        </div>
+    </div>
+
+    <!-- 左侧菜单栏 -->
+    <div id="container_sidebar">
+        <el-menu
+                default-active="2"
+                class="el-menu-vertical-demo"
+                @open="handleOpen"
+                @close="handleClose"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+            <el-menu-item index="2">
+                <i class="el-icon-location"></i>
+                <span slot="title">客服聊天</span>
+            </el-menu-item>
+            <el-menu-item index="2">
+                <i class="el-icon-menu"></i>
+                <span slot="title">黑名单 </span>
+            </el-menu-item>
+            <el-menu-item index="3">
+                <i class="el-icon-document"></i>
+                <span slot="title">导航三</span>
+            </el-menu-item>
+            <el-menu-item index="4">
+                <i class="el-icon-setting"></i>
+                <span slot="title">导航四</span>
+            </el-menu-item>
+        </el-menu>
+    </div>
+
+    <!--右侧内容区-->
+    <div id="container_content" >
+        <router-view ></router-view>
+    </div>
+
+
+</div>

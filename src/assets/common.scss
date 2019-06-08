@@ -1,4 +1,15 @@
 
+body {
+  padding: 0;
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei",微软雅黑;
+  font-weight: 300;
+}
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+}
 /**顶部 banner*/
 #container_banner {
   //margin-top: -46px;

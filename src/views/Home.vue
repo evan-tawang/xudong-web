@@ -7,7 +7,7 @@
     @Component
     export default class Home extends Vue {
         private key!: number;
-        @Action('pageList') private pageList: any;
+        @Action('blankListPageList') private pageList: any;
 
         private async created() {
             const list = await this.pageList();

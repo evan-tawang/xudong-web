@@ -2,7 +2,7 @@ import {BlankList, BlankListQuery} from '../../model';
 import {GetterTree, MutationTree, ActionTree} from 'vuex';
 import Api from '@/api';
 
-const url = '/test/';
+const url = '/blackList/manage/';
 
 const state = {
     list: [],
@@ -10,8 +10,8 @@ const state = {
 };
 
 const actions: ActionTree<BlankListQuery, any> = {
-    async pageList({commit}, query) {
-        Api.$get(url + 'hello', query).then((res: any) => {
+    async blankListPageList({commit}, query) {
+        Api.$get(url + 'list', query).then((res: any) => {
             console.log(res);
             return res.data;
         });

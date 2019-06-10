@@ -1,0 +1,48 @@
+#login {
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  height: 100%;
+  background-image: url("../assets/images/login_bg.jpg");
+
+  li{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    width: 500px;
+  }
+
+  .login-box {
+    width: 402px;
+    right: 155px;
+    position: absolute;
+    top: 15%;
+    background: rgba(255, 255, 255, 0.8);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    height: 283px;
+
+    >li {
+      list-style: none;
+    }
+
+    .el-input {
+      width: 250px !important;
+      height: 40px;
+    }
+
+    >li.submit {
+      button {
+        margin-top: 12px;
+        margin-left: 96px;
+        background: #008bcc;
+        color: #fff;
+        cursor: pointer;
+        width: 250px;
+        height: 42px;
+        font-size: 16px;
+      }
+    }
+  }
+}

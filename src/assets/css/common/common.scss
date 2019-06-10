@@ -1,3 +1,25 @@
+html {
+  height: 100%;
+  body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
+    //font-family: 微软雅黑;
+    color: #666;
+    #app {
+      height: 100%;
+    }
+    th, td, div, span, li, a, input, button, label,
+    .el-form-item__label, .el-form-item__label,.el-radio__label, .el-form-item__content,
+    .el-menu-item, .el-submenu__title, .el-button, .el-textarea__inner, .el-table,
+    .el-input__inner, .el-select-dropdown__item, .el-pagination button, .el-pagination span,
+    .el-pagination__sizes, .el-input, .el-input__inner,
+    .el-dialog__body, .el-popover,.el-cascader-menu__item,.el-cascader__label,.el-cascader,.el-checkbox__label {
+      font-size: 12.4px;
+    }
+  }
+}
 
 body {
   padding: 0;
@@ -62,3 +84,5 @@ body {
   #container_menu {
   }
 }
+
+

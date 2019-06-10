@@ -10,5 +10,3 @@ export interface BlankList {
 export interface BlankListQuery {
     status: number; // 状态(1 正常 2 停用)
 }
-
-export default BlankList;

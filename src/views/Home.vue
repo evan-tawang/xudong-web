@@ -3,12 +3,14 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import {Getter, Action} from 'vuex-class';
-import RouterName from "@/constant/RouterName";
+import RouterName from "@/constant/router-name";
+import Menus from "@/constant/menus";
 
 @Component
 export default class Home extends Vue {
-    private key!: number; // 非number
+	private menus = Menus; // 菜单
 
+    private key!: number; // 非number
     private var1!: number; // 非number
     private var2: number = 0; // 只能number
     private var3: any; // 所有类型
@@ -21,7 +23,12 @@ export default class Home extends Vue {
         console.log(list);
     }
 
+	private jump(menu: any) {
+		this.$router.push({name: menu.routerName});
+	}
+
     private handleOpen(key: any, keyPath: any) {
+    	console.log('..open...')
         this.key = key;
     }
 
@@ -35,5 +42,17 @@ export default class Home extends Vue {
 	}
 }
 </script>
+<style type="scss" scoped>
+    .el-header {
+        background-color: #1f2d3d;
+        color: white;
+        text-align: center;
+        line-height: 60px;
+    }
 
+    .el-aside {
+        background-color: #545c64;
+        height: 100%;
+    }
+</style>
 

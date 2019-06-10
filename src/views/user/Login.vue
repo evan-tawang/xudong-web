@@ -23,7 +23,7 @@
 
 import {Component, Vue} from 'vue-property-decorator';
 import {Getter, Action} from 'vuex-class';
-import RouterName from '@/constant/RouterName';
+import RouterName from '@/constant/router-name';
 
 @Component
 export default class Login extends Vue {

@@ -1,7 +1,5 @@
 import axios from './axios';
-
 class Api {
-    
     public $post(url: string, params: any = {}) {
         return new Promise((resolve, reject) => {
             axios.post(url, null, {params}).then((res: any) => {
@@ -11,7 +9,6 @@ class Api {
             });
         });
     }
-    
     public $get(url: string, {params}: any = {}): any {
         return new Promise((resolve, reject) => {
             axios.get(url, {params}).then((res: any) => {
@@ -22,7 +19,5 @@ class Api {
         });
     }
 }
-
 const api = new Api();
-
 export default api;

@@ -1,8 +1,8 @@
 import {BlankList, BlankListQuery} from './limit/blanklist';
-import {StaffLoginDTO} from './user/user';
+import {UserAgent} from './user/user';
 
 export {
     BlankList,
     BlankListQuery,
-    StaffLoginDTO,
+    UserAgent,
 };

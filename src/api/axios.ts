@@ -16,6 +16,7 @@ axios.interceptors.request.use((config: any) => {
 
 // 请求到结果的拦截处理
 axios.interceptors.response.use((config: any) => {
+    console.log(config);
     return config.data;
 }, (error: any) => {
     return Promise.reject(error);

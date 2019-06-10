@@ -1,9 +1,8 @@
-import {BlankList, BlankListQuery} from '../../model';
-import {GetterTree, MutationTree, ActionTree} from 'vuex';
+import {ActionTree} from 'vuex';
 import Api from '@/api';
 import {sha256} from 'js-sha256';
 import {Base64} from 'js-base64';
-import {UserAgent} from "@/model/user/user";
+import {UserAgent} from '@/model/user/user';
 
 const state = {
 	userAgent: {},
@@ -11,15 +10,16 @@ const state = {
 
 const getters = {
 	userAgent(state: any) {
-		if (!state.userAgent || Object.keys(state.userAgent).length == 0) {
-			let userAgentStoreOnCookie = window.localStorage.getItem('userAgent');
+		console.log(11111111);
+		if (!state.userAgent || Object.keys(state.userAgent).length === 0) {
+			const userAgentStoreOnCookie = window.localStorage.getItem('userAgent');
 			if (userAgentStoreOnCookie) {
-				let userAgentJson = Base64.decode(userAgentStoreOnCookie).substr(64);
-				// console.log(userAgentJson);
+				const userAgentJson = Base64.decode(userAgentStoreOnCookie).substr(64);
 				try {
+					console.log(userAgentJson);
 					state.userAgent = JSON.parse(userAgentJson);
 				} catch (ex) {
-					console.error("Json parse error: " + userAgentJson);
+					console.error('Json parse error: ' + userAgentJson);
 				}
 			}
 		}
@@ -29,34 +29,35 @@ const getters = {
 
 const mutations = {
 	saveUserAgent(state: any, userAgent: UserAgent) {
-		//加密
-		let userAgentStoreOnCahe = Base64.encode(sha256.digest(userAgent.token + new Date().getTime() + '') + JSON.stringify(userAgent));
-		//存储
+		// 加密
+		const userAgentStoreOnCahe =
+		  Base64.encode(sha256.hex(userAgent.token + new Date().getTime() + '') + JSON.stringify(userAgent));
+		// 存储
 		window.localStorage.setItem('userAgent', userAgentStoreOnCahe);
 		state.userAgent = userAgent;
 	},
 };
 
-const actions: ActionTree<BlankListQuery, any> = {
-	userLogin({commit, state}, {account, pwd, validateCode}) {
+const actions: ActionTree<any, any> = {
+	userLogin({commit}, {account, pwd, validateCode}: any) {
 		if (!account || !pwd) {
 			console.warn('>>>>>>>>> login params is has null');
 			return;
 		}
-		let random = new Date().getTime();
-		
-		let login = {
-			random: random,
-			account: account,
-			validateCode: validateCode,
+		const random = new Date().getTime();
+		const login = {
+			random,
+			account,
+			validateCode,
 			sign: sha256.hex(account + random + sha256.hex(pwd)),
 		};
-		
 		return Api.$post('/login', login).then((res: any) => {
-			console.log(res);
-			commit('saveUserAgent', res.data);
+			if (res.success) {
+				commit('saveUserAgent', res.data);
+			}
 			return res;
 		}).catch((e: any) => {
+			console.error(e);
 			return {success: false, msg: '登录失败！'};
 		});
 	},
@@ -71,4 +72,5 @@ export default {
 	state,
 	actions,
 	mutations,
+	getters,
 };

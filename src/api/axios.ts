@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import router from '../router';
 import axios from 'axios';
+import RouterName from "@/constant/RouterName";
 
 axios.defaults.headers = {
     // 'X-Requested-With': 'XMLHttpRequest',
@@ -17,6 +18,9 @@ axios.interceptors.request.use((config: any) => {
 // 请求到结果的拦截处理
 axios.interceptors.response.use((config: any) => {
     console.log(config);
+    if(config.data.code === 'NO_LOGIN'){
+        router.push({name:RouterName.USER.LOGIN});
+    }
     return config.data;
 }, (error: any) => {
     return Promise.reject(error);

@@ -36,6 +36,10 @@ const mutations = {
 		window.localStorage.setItem('userAgent', userAgentStoreOnCahe);
 		state.userAgent = userAgent;
 	},
+	cleanUserAgent(state: any) {
+		window.localStorage.removeItem('userAgent');
+		state.userAgent = {};
+	},
 };
 
 const actions: ActionTree<any, any> = {
@@ -62,8 +66,11 @@ const actions: ActionTree<any, any> = {
 		});
 	},
 	userLogout({commit}) {
-		Api.$get('/logout').then((res: any) => {
-			return res.data;
+		Api.$post('/logout').then((res: any) => {
+			commit('cleanUserAgent');
+		}).catch((e: any) => {
+			console.error(e);
+			commit('cleanUserAgent');
 		});
 	},
 };

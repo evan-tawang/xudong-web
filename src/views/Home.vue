@@ -3,6 +3,7 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-property-decorator';
 import {Getter, Action} from 'vuex-class';
+import RouterName from "@/constant/RouterName";
 
 @Component
 export default class Home extends Vue {
@@ -13,11 +14,13 @@ export default class Home extends Vue {
     private var3: any; // 所有类型
 
     @Action('blankListPageList') private pageList: any;
+	@Action('userLogout') private userLogout: any;
 
     private async created() {
         const list = await this.pageList();
         console.log(list);
     }
+
     private handleOpen(key: any, keyPath: any) {
         this.key = key;
     }
@@ -25,6 +28,11 @@ export default class Home extends Vue {
     private handleClose(key: any, keyPath: any) {
         this.key = key;
     }
+
+	private logout(){
+        this.userLogout();
+		this.$router.push({name: RouterName.USER.LOGIN});
+	}
 }
 </script>
 

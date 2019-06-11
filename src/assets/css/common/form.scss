@@ -9,6 +9,15 @@
     vertical-align: middle;
 }
 
+.el-form {
+    .msg {
+        color: #777;
+    }
+    .msg--above {
+        margin-bottom: 8px;
+    }
+}
+
 //定义el-input的输入框宽度
 .input-60  {
     width: 60px !important;

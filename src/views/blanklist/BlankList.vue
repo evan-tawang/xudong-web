@@ -17,8 +17,12 @@
         private page: number = 0;
         private list: object = [];
         private query: any = DEFAULT_QUERY;
-        private loading: any = {list: false, stopUsing: false, startUsing: false, remove: false};
+        private loading: any = {list: false, stopUsing: false, startUsing: false, remove: false,add: false, modifyWin: false, modify: false};
         private selectedDatas: any = [];
+        private showAddWin: boolean = false;
+        private showModifyWin: boolean = false;
+        private contentsAdd: string = '';
+        private modifyModel: any = {};
 
         @Action("blankList") private blankList: any;
 
@@ -32,7 +36,7 @@
         private getListData() {
             this.loading.list = true;
             Api.$get(API_URL_PREFIX + "/list", this.query).then((res: any) => {
-                console.log(res.data);
+                //console.log(res.data);
                 this.list = res.data;
                 this.page = res.page;
                 this.loading.list = false;
@@ -68,11 +72,57 @@
         }
 
         private openAddWin() {
+            this.contentsAdd = '';
+            this.loading.add = false;
+            this.showAddWin = true;
+        }
 
+        private submitAdd(){
+            const _this = this;
+            this.loading.add = true;
+            Api.$post(API_URL_PREFIX + "/addGroup", {
+                "blackLists": this.contentsAdd
+            }).then((res: any) => {
+                this.$message({
+                    type: "success",
+                    message: "添加成功!",
+                    duration: 1500,
+                    onClose: function() {
+                        _this.loading.add = false;
+                        _this.getListData();
+                        _this.showAddWin = false;
+                    }
+                });
+            });
         }
 
         private openModifyWin(id: number) {
+            this.loading.modifyWin = true;
+            this.loading.modify = false;
+            Api.$get(API_URL_PREFIX + "/getOne", {id:id}).then((res: any) => {
+                if(res.data) {
+                    this.modifyModel = res.data;
+                }
+                this.loading.modifyWin=false;
+            });
+            this.showModifyWin = true;
+        }
 
+        private submitModify(){
+            const _this = this;
+            this.loading.modify = true;
+            Api.$post(API_URL_PREFIX + "/update", {id:this.modifyModel.id,content:this.modifyModel.content}).then((res: any) => {
+                this.$message({
+                    type: "success",
+                    message: "修改成功!",
+                    duration: 1500,
+                    onClose: function() {
+                        _this.loading.modify = false;
+                        _this.getListData();
+                        _this.showModifyWin = false;
+                    }
+                });
+            });
         }
 
         private selectListRow(val: any) {
@@ -86,15 +136,15 @@
                     showClose: false
                 });
             } else {
-                var _this = this;
+                const _this = this;
                 this.$confirm("确定 [" + operateText + "] 所选黑名单?", {
                     // confirmButtonText: '确定',
                     // cancelButtonText: '取消',
                     type: "info",
                     showClose: false
                 }).then(() => {
-                    var ids: string = "";
-                    //var count = this.selectedDatas.length;
+                    const ids: string = "";
+                    //const count = this.selectedDatas.length;
                     this.selectedDatas.forEach(function(e: any) {
                         //ids.push(e.id);
                         ids += "," + e.id;
@@ -133,7 +183,7 @@
                 type: "warning",
                 showClose: false
             }).then(() => {
-                var _this = this;
+                const _this = this;
                 Api.$post(API_URL_PREFIX + "/delete", {id: id}).then((res: any) => {
                     this.$message({
                         type: "success",

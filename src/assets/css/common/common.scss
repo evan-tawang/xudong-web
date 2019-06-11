@@ -49,6 +49,18 @@ ul {
   }
 }
 
+.el-dialog {
+  .el-dialog__header{
+    padding: 26px 30px 5px;
+  }
+  .el-dialog__body {
+    padding: 20px 35px;
+  }
+  .el-dialog__footer{
+    padding: 10px 30px 26px;
+  }
+}
+
 /*color*/
 .gray {
   color: gray;

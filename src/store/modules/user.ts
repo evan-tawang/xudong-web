@@ -3,6 +3,8 @@ import Api from '@/api';
 import {sha256} from 'js-sha256';
 import {Base64} from 'js-base64';
 import {UserAgent} from '@/model/user/user';
+import Login from "@/views/user/Login.vue";
+import Types from "@/constant/types";
 
 const state = {
 	userAgent: {},
@@ -43,7 +45,7 @@ const mutations = {
 };
 
 const actions: ActionTree<any, any> = {
-	userLogin({commit}, {account, pwd, validateCode}: any) {
+	[Types.USER.LOGIN]({commit}, {account, pwd, validateCode}: any) {
 		if (!account || !pwd) {
 			console.warn('>>>>>>>>> login params is has null');
 			return;

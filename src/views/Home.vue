@@ -5,6 +5,7 @@ import {Component, Vue} from 'vue-property-decorator';
 import {Getter, Action} from 'vuex-class';
 import RouterName from "@/constant/router-name";
 import Menus from "@/constant/menus";
+import Types from "@/constant/types";
 
 @Component
 export default class Home extends Vue {
@@ -15,10 +16,11 @@ export default class Home extends Vue {
     private var2: number = 0; // 只能number
     private var3: any; // 所有类型
 
-    @Action('blankListPageList') private pageList: any;
-	@Action('userLogout') private userLogout: any;
+    @Action(Types.USER.LOGIN) private pageList: any;
+	@Action private userLogout: any;
 
     private async created() {
+    	console.log(this.$store)
         const list = await this.pageList();
         console.log(list);
     }
@@ -28,7 +30,7 @@ export default class Home extends Vue {
 	}
 
     private handleOpen(key: any, keyPath: any) {
-    	console.log('..open...')
+    	console.log('..open...');
         this.key = key;
     }
 

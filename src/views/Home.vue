@@ -37,12 +37,16 @@ export default class Home extends Vue {
     }
 
 	private logout(){
-        this.userLogout();
+		this.userLogout();
 		this.$router.push({name: RouterName.USER.LOGIN});
 	}
 }
 </script>
 <style type="scss" scoped>
+    .el-container{
+        height: 100%;
+    }
+
     .el-header {
         background-color: #1f2d3d;
         color: white;
@@ -53,6 +57,10 @@ export default class Home extends Vue {
     .el-aside {
         background-color: #545c64;
         height: 100%;
+    }
+
+    .el-main{
+
     }
 </style>
 

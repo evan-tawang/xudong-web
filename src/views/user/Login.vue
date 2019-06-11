@@ -24,6 +24,7 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {Getter, Action} from 'vuex-class';
 import RouterName from '@/constant/router-name';
+import Types from "@/store/types";
 
 @Component
 export default class Login extends Vue {
@@ -32,7 +33,7 @@ export default class Login extends Vue {
         pwd: '',
     };
 
-    @Action('userLogin') private userLogin: any;
+	@Action(Types.USER.LOGIN) private userLogin: any;
 
     private async login() {
         if (!this.user.account) {

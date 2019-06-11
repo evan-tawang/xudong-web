@@ -3,8 +3,7 @@ import Api from '@/api';
 import {sha256} from 'js-sha256';
 import {Base64} from 'js-base64';
 import {UserAgent} from '@/model/user/user';
-import Login from "@/views/user/Login.vue";
-import Types from "@/constant/types";
+import Types from "@/store/types";
 
 const state = {
 	userAgent: {},
@@ -12,7 +11,6 @@ const state = {
 
 const getters = {
 	userAgent(state: any) {
-		console.log(11111111);
 		if (!state.userAgent || Object.keys(state.userAgent).length === 0) {
 			const userAgentStoreOnCookie = window.localStorage.getItem('userAgent');
 			if (userAgentStoreOnCookie) {
@@ -67,7 +65,7 @@ const actions: ActionTree<any, any> = {
 			return {success: false, msg: '登录失败！'};
 		});
 	},
-	userLogout({commit}) {
+	[Types.USER.LOGOUT]({commit}) {
 		Api.$post('/logout').then((res: any) => {
 			commit('cleanUserAgent');
 		}).catch((e: any) => {

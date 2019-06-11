@@ -21,6 +21,9 @@
         td.button-box {
             text-align: right;
             white-space: nowrap;
+            .el-button {
+                padding: 10px 15px
+            }
         }
         .el-input__inner {
             height: 35px;
@@ -66,10 +69,26 @@
     background: #fff;
 
     .list__tools{
-        padding-bottom: 15px;
+        padding-bottom: 18px;
         border-bottom: 1px solid #ebeef5;
         .el-button {
-            padding: 10px 15px
+            padding: 9px 15px
+        }
+
+        .left{
+            display: inline-block;
+        }
+        .right{
+            float:right;
+            .el-form{
+                .el-input{
+                    margin-right: 12px;
+                }
+                .el-input__inner {
+                    height: 34px;
+                    line-height: 34px;
+                }
+            }
         }
         //.el-button + .el-button {
         //    margin-left: 5px;
@@ -78,13 +97,13 @@
 
     .list__data{
         .el-button {
-            padding: 3px 4px;
+            padding: 3px 3px;
         }
     }
 
     .el-pagination {
         text-align: right;
-        margin-top: 20px;
+        margin-top: 18px;
         margin-bottom: 20px;
         //border-top: 1px solid #ebeef5;
     }

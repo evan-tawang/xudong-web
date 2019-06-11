@@ -1,24 +1,24 @@
 <div>
-    <div class="search__wrapper">
-        <el-form :model="query" :inline="true">
-            <table class="table-search">
-                <tr>
-                    <td><el-input v-model="query.content" placeholder="请输入ip或账号搜索"></el-input></td>
-                    <td class="button-box"> <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
-                        <el-button @click="resetQuery">清空</el-button></td>
-                </tr>
-            </table>
-        </el-form>
-    </div>
+    <!--    <div class="search__wrapper">-->
+    <!--    </div>-->
 
     <div class="list__wrapper">
         <div class="list__tools">
-            <el-button type="primary" @click="openAddWin" icon="el-icon-circle-plus">添加</el-button>
-            <el-button @click="stopUsing" type="warning">停用</el-button>
-            <el-button @click="startUsing" type="success">启用</el-button>
+            <div class="left">
+                <el-button type="primary" @click="openAddWin" icon="el-icon-circle-plus">添加</el-button>
+                <el-button @click="stopUsing" type="warning">停用</el-button>
+                <el-button @click="startUsing" type="success">启用</el-button>
+            </div>
+            <div class="right">
+                <el-form :model="query" :inline="true">
+                    <el-input v-model="query.content" class="input-350" placeholder="请输入ip或账号搜索"></el-input>
+                    <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
+                    <el-button @click="resetQuery">清空</el-button>
+                </el-form>
+            </div>
         </div>
 
-        <el-table :data="list" class="list__data" highlight-current-row >
+        <el-table :data="list" ref="listData" class="list__data" @selection-change="selectListRow" highlight-current-row v-loading="loading.list">
             <el-table-column type="selection" width="50">
             </el-table-column>
             <el-table-column type="index" label="序号" align="center" width="70"></el-table-column>

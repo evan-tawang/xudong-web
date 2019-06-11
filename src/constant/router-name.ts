@@ -3,7 +3,7 @@ const RouterName = {
 	USER: {
 		LOGIN: 'user_login',
 	},
-	CHAT:'CHAT',
+	STAFF_CHAT:'staff_chat',
 	ALLOCATE:'allocate',
 	BLANKLIST:'blanklist',
 	SENSITIVE_WORD:'sensitive_word',

@@ -8,6 +8,7 @@ import Mobile from './views/mobile/Mobile.vue';
 import Message from './views/mobile/message/Message.vue';
 import Chat from './views/mobile/chat/Chat.vue';
 
+import StaffChat from './views/chat/StaffChat.vue';
 import TalkSkillList from '@/views/talk-skill/TalkSkillList.vue';
 import SensitiveWordList from '@/views/sensitive-word/SensitiveWordList.vue';
 import BlankList from '@/views/blanklist/BlankList.vue';
@@ -33,9 +34,9 @@ export default new Router({
       component: Home,
       children:[
         {
-          path: 'chat',
-          name: RouterName.CHAT,
-          component: Chat,
+          path: 'staff-chat',
+          name: RouterName.STAFF_CHAT,
+          component: StaffChat,
         },
         {
           path: 'allocate',

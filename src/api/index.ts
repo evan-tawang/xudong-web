@@ -9,7 +9,7 @@ class Api {
             });
         });
     }
-    public $get(url: string, {params}: any = {}): any {
+    public $get(url: string, params: any = {}): any {
         return new Promise((resolve, reject) => {
             axios.get(url, {params}).then((res: any) => {
                 resolve(res);

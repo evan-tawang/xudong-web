@@ -1,9 +1,14 @@
 /*
 *列表页的包装
 */
-.search__wrapper {
-    padding: 8px;
+.search__wrapper,.list__wrapper {
+    padding: 24px;
     background: #fff;
+    border-radius:7px;
+    box-shadow: 0 3px 15px 0 rgba(3,3,3,.06);
+}
+
+.search__wrapper {
     margin-bottom: 15px;
 
     /**搜索表格*/
@@ -65,9 +70,6 @@
 /*
 */
 .list__wrapper {
-    padding: 8px;
-    background: #fff;
-
     .list__tools{
         padding-bottom: 18px;
         border-bottom: 1px solid #ebeef5;
@@ -96,6 +98,8 @@
     }
 
     .list__data{
+        min-height: 200px;
+
         .el-button {
             padding: 3px 3px;
         }
@@ -104,7 +108,6 @@
     .el-pagination {
         text-align: right;
         margin-top: 18px;
-        margin-bottom: 20px;
         //border-top: 1px solid #ebeef5;
     }
 }

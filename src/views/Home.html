@@ -1,27 +1,33 @@
-<el-container>
-    <el-header>
-        <div style="margin-left: 96%;" @click="logout"><i class="el-icon-circle-cross"></i> 退出</div>
-    </el-header>
+<div id="container" >
+    <div id="container_banner">
+        <div class="banner-left">
+            <h1>XXX管理系统</h1>
+        </div>
+        <div class="banner-right">
+            <el-button type="text" @click="logout" icon="el-icon-circle-cross">退出</el-button>
+        </div>
+    </div>
 
-    <el-container>
-        <el-aside width="200px">
-            <el-menu
-                    default-active="2"
-                    class="el-menu-vertical-demo"
-                    background-color="#545c64"
-                    text-color="#fff"
-                    active-text-color="#ffd04b">
+    <!-- 左侧菜单栏 -->
+    <div id="container_sidebar">
+        <div id="menu_toggle" @click="leftFold()">
+            <i :class="{'el-icon-arrow-right':isCollapse,'el-icon-arrow-left':!isCollapse}"></i>
+        </div>
+        <el-menu id="container_menu"
+                 :default-active="menuActiveIndex"
+                :collapse="isCollapse" >
 
-                <el-menu-item v-for="menu in menus" :index="menu.routerName" :key="menu.routerName" @click="jump(menu)">
-                    <i :class="menu.icon"></i>
-                    <span slot="title">{{menu.text}}</span>
-                </el-menu-item>
-            </el-menu>
-        </el-aside>
-
-        <el-main>
-            <router-view></router-view>
-
-        </el-main>
-    </el-container>
-</el-container>
+            <el-menu-item v-for="menu in menus" :index="menu.routerName" :key="menu.routerName" @click="jump(menu)">
+                <i :class="menu.icon"></i>
+                <span slot="title">{{menu.text}}</span>
+            </el-menu-item>
+        </el-menu>
+    </div>
+    <!--右侧内容区-->
+    <div id="container_content" :class="{'collapse':isCollapse}">
+        <div id="container_content_title">
+            <h2>{{pageTitle}}</h2>
+        </div>
+        <router-view></router-view>
+    </div>
+</div>

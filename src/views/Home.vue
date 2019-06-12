@@ -12,7 +12,7 @@
         private menus = Menus; // 菜单
         private isCollapse: boolean = false;
         private pageTitle: string = "xxx管理系统";
-        private menuActiveIndex: any = 0;
+        private menuActiveIndex: any = "";
 
         @Action(Types.USER.LOGOUT) private userLogout: any;
 

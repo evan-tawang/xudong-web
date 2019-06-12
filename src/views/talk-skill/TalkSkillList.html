@@ -25,7 +25,7 @@
             <el-table-column type="index" label="序号" align="center" width="70"></el-table-column>
             <el-table-column prop="content" label="常用话术" min-width="200" show-overflow-tooltip></el-table-column>
             <el-table-column prop="gmtCreate" label="创建时间" min-width="150">
-                <template slot-scope="scope">{{ scope.row.gmtCreate | date('yyyy-MM-dd hh:mm') }}</template>
+                <template slot-scope="scope">{{ scope.row.gmtCreate | dateTime }}</template>
             </el-table-column>
             <el-table-column label="状态" min-width="100">
                 <template slot-scope="scope">

@@ -10,6 +10,8 @@ import Types from "@/store/types";
 @Component
 export default class Home extends Vue {
 	private menus = Menus; // 菜单
+    private isCollapse : boolean = false;
+    private pageTitle : string = '标题'
 
 	@Action(Types.USER.LOGOUT) private userLogout: any;
 
@@ -24,27 +26,13 @@ export default class Home extends Vue {
 		this.userLogout();
 		this.$router.push({name: RouterName.USER.LOGIN});
 	}
+
+    //折叠和展开
+    private leftFold() {
+        this.isCollapse = !this.isCollapse;
+    }
 }
 </script>
-<style type="scss" scoped>
-    .el-container{
-        height: 100%;
-    }
-
-    .el-header {
-        background-color: #1f2d3d;
-        color: white;
-        text-align: center;
-        line-height: 60px;
-    }
-
-    .el-aside {
-        background-color: #545c64;
-        height: 100%;
-    }
-
-    .el-main{
-
-    }
+<style lang="scss">
+    @import "../assets/css/module/home";
 </style>
-

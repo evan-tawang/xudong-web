@@ -4,7 +4,7 @@
     import {Component, Vue} from "vue-property-decorator";
     import {Getter, Action} from "vuex-class";
     import RouterName from "@/constant/router-name";
-    import TalkSkillEnum from "@/constant/TalkSkillEnum";
+    import TalkSkillEnum from "@/constant/enums/TalkSkillEnum";
 
     import Api from "@/api";
 

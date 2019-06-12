@@ -14,6 +14,8 @@ Vue.config.productionTip = false;
 
 Vue.use(ElementUI);
 
+filters(Vue);
+
 //前端验证token
 router.beforeEach((to, from, next) => {
 	const path = to.path;

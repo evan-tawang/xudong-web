@@ -22,7 +22,7 @@
 //      true,
 //      {
 //        "class": false,
-//        "enum": false,
+//        "enums": false,
 //        "function": false,
 //        "interface": false,
 //        "namespace": false,

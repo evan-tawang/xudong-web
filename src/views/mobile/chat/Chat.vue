@@ -3,23 +3,31 @@
         <div class="chat_header">在线客服</div>
         <div class="chat_history" :class="{'expand': expand}" ref="chatHistory">
             <template v-for="msg in msgs">
-                <div v-if="msg.type === 'custom'"  class="chat_history_area custom" :key="msg.id">
+                <div v-if="msg.sendUserType === 1"  class="chat_history_area custom" :key="msg.id">
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
-                        <div class="msg" v-if="msg.msgType==='text'">{{msg.content}}</div>
-                        <div class="msg" v-if="msg.msgType==='image'">
-                            <img :src="msg.content">
+                        <div class="msg">
+                            <template v-if="msg.msgType==='image'">
+                                <img :src="msg.content">
+                            </template>
+                            <template v-else>
+                                {{msg.content }}
+                            </template>
                         </div>
                     </div>
                     <img :src="msg.avatar" alt="头像">
                 </div>
-                <div v-if="msg.type === 'service'" class="chat_history_area service" :key="msg.id">
+                <div v-if="msg.sendUserType === 2" class="chat_history_area service" :key="msg.id">
                     <img :src="msg.avatar" alt="头像">
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
-                        <div class="msg" v-if="msg.msgType==='text'">{{msg.content}}</div>
-                        <div class="msg" v-if="msg.msgType==='image'">
-                            <img :src="msg.content">
+                        <div class="msg">
+                            <template v-if="msg.msgType==='image'">
+                                <img :src="msg.content">
+                            </template>
+                            <template v-else>
+                                {{msg.content}}
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -44,43 +52,72 @@
 </template>
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import Utils from '../../../utils/index';
+	import Api from '@/api';
+	import Utils from "@/utils";
+	const SockJS = require("sockjs-client");
+	const Stomp = require("stompjs");
+
     @Component
     export default class Chat extends Vue {
         private input: string = ''; // 输入框数值
         private expand: boolean = false; // 是否展开表情
         private msgs: object[] = []; // 消息数据
+		private stompClient: any = {};
+		private chatSession: any = {};
 
         public created() { // 初始化数据
-            this.msgs = [{
-                id: 1,
-                type: 'service',
-                msgType: 'text',
-                content: '就是的就开始对方就开始对方就开始的九分裤上的接口方式接口的接口',
-                time: Date.now(),
-                name: '客服名',
-                avatar: '/images/smile.png',
-            },
-            {
-                id: 2,
-                type: 'custom',
-                msgType: 'text',
-                content: '就是的就开始对方就开始对方就开始的九分裤上的接口方式接口的接口',
-                time: Date.now(),
-                name: '顾客名',
-                avatar: '/images/smile.png',
-            },
-            {
-                id: 3,
-                type: 'service',
-                msgType: 'image',
-                content: '/images/smile.png',
-                time: Date.now(),
-                name: '客服名',
-                avatar: '/images/smile.png',
-            }];
+            // this.msgs = [{
+            //     id: 1,
+			// 	sendUserType: 'service',
+            //     msgType: 'text',
+            //     content: '就是的就开始对方就开始对方就开始的九分裤上的接口方式接口的接口',
+            //     time: Date.now(),
+            //     name: '客服名',
+            //     avatar: '/images/smile.png',
+            // },
+            // {
+            //     id: 2,
+			// 	sendUserType: 'custom',
+            //     msgType: 'text',
+            //     content: '就是的就开始对方就开始对方就开始的九分裤上的接口方式接口的接口',
+            //     time: Date.now(),
+            //     name: '顾客名',
+            //     avatar: '/images/smile.png',
+            // },
+            // {
+            //     id: 3,
+			// 	sendUserType: 'service',
+            //     msgType: 'image',
+            //     content: '/images/smile.png',
+            //     time: Date.now(),
+            //     name: '客服名',
+            //     avatar: '/images/smile.png',
+            // }];
             this.handleData(this.msgs);
+            this.init();
         }
+
+		// init
+        private init(){
+			this.initWebSocket();
+			this.createChatSession();
+        }
+
+		private initWebSocket() {
+			let socket = new SockJS('/' + 'ws');
+			this.stompClient = Stomp.over(socket);
+
+			let that = this;
+			let stompClient = that.stompClient;
+			stompClient.connect({}, () => {
+				stompClient.subscribe('/chat/2222/receiveMsg', function (resp: any) {
+					let message = JSON.parse(resp.body);
+					message.sendUserType = 2;
+					that.msgs.push(message);
+				});
+			});
+		}
+
         private handleData(arr: object[]) { // 处理原始数据
             arr.forEach((item: any) => {
                 item.timeStr = Utils.dateFormat(item.time, 'HH:mm:ss');
@@ -96,20 +133,27 @@
         private handleBlur() {
             window.scroll(0, 0);
         }
-        private sendMsg() { // 发送信息
-            // 清空信息，并且增加一条custom信息
-            if (this.input) {
-                this.msgs.push({
-                    type: 'custom',
-                    msgType: 'text',
-                    content: this.input,
-                    time: Date.now(),
-                    name: '顾客名',
-                    avatar: '/images/smile.png',
-                });
-                this.input = '';
-                this.scrollToBottom();
-            }
+
+		// 创建聊天会话
+		private createChatSession() {
+			Api.$post('/chat/createSession').then((res: any) => {
+				this.chatSession = res.data;
+			});
+		}
+
+		// 发送信息 ==> 清空信息，并且增加一条custom信息
+        private sendMsg() {
+			if (!this.input) {
+				return;
+			}
+			let that = this;
+			Api.$post('/chat/sendMsg', {content: this.input, sessionId: this.chatSession.id}).then((res: any) => {
+				res.data.sendUserType = 1;
+				that.msgs.push(res.data);
+			});
+
+            this.input = '';
+            this.scrollToBottom();
         }
         private scrollToBottom() {
             // 滚动到最下

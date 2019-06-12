@@ -45,6 +45,8 @@
 <script lang="ts">
 	import {Component, Vue} from 'vue-property-decorator';
 	import Api from '@/api';
+	import {Getter} from "vuex-class";
+	import UserTypeEnum from "@/constant/enums/UserTypeEnum";
 	const SockJS = require("sockjs-client");
 	const Stomp = require("stompjs");
 
@@ -56,7 +58,11 @@
 		private stompClient: any = {};
 		private msg: string = '';
 
+		@Getter private userAgent: any;
+
 		private created() {
+			console.log(UserTypeEnum.STAFF)
+
 			this.initWebSocket();
 			this.loadStaff();
         }
@@ -69,18 +75,28 @@
 			let that = this;
 			let stompClient = that.stompClient;
 			stompClient.connect({}, () => {
-				stompClient.subscribe('/chat/2222/receiveMsg', function (resp: any) {
-					let message = JSON.parse(resp.body);
-					message.sendUserType = 1;
-					that.current.messages.push(message);
-					console.log(that.current)
-					that.visitorList.forEach(o => {
-						let messages = o.messages || [];
-						messages.push(message);
-                    });
+				stompClient.subscribe('/chat/' + that.userAgent.id + '/allocate', function (resp: any) {
+					console.log(resp)
+					let chatSession = JSON.parse(resp.body);
+					that.subscribeReceiveMsg(chatSession);
+					that.visitorList.push(chatSession);
 				});
 			});
 		}
+
+		private subscribeReceiveMsg(chatSession) {
+			let that = this;
+			this.stompClient.subscribe('/chat/' + chatSession.visitorId + '/receiveMsg', function (resp: any) {
+				let message = JSON.parse(resp.body);
+				message.sendUserType = UserTypeEnum.STAFF;
+				that.current.messages.push(message);
+				console.log(that.current);
+				that.visitorList.forEach(o => {
+					let messages = o.messages || [];
+					messages.push(message);
+				});
+			});
+        }
 
 		private loadStaff() {
 

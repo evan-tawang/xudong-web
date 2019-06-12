@@ -5,7 +5,7 @@
     import {Getter, Action} from "vuex-class";
     import RouterName from "@/constant/router-name";
     import {BlankListQuery} from "@/model";
-    import BlanklistEnum from "@/constant/BlanklistEnum";
+    import BlanklistEnum from "@/constant/enums/BlanklistEnum";
 
     import Api from "@/api";
 

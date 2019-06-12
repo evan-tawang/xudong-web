@@ -21,7 +21,7 @@ router.beforeEach((to, from, next) => {
 	// 	router.push({name:RouterName.USER.LOGIN});
 	// 	return;
 	// }
-	if (!Utils.match('^/login', path)) {
+	if (!Utils.match('^/login|^/mobile/chat', path)) {
 		const userAgent = store.getters.userAgent;
 		if (!userAgent || Object.keys(userAgent).length === 0) {
 			router.push({name:RouterName.USER.LOGIN});

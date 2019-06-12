@@ -14,7 +14,7 @@
             <i :class="{'el-icon-arrow-right':isCollapse,'el-icon-arrow-left':!isCollapse}"></i>
         </div>
         <el-menu id="container_menu"
-                default-active="2"
+                 :default-active="menuActiveIndex"
                 :collapse="isCollapse" >
 
             <el-menu-item v-for="menu in menus" :index="menu.routerName" :key="menu.routerName" @click="jump(menu)">

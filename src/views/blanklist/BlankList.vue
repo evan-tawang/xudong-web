@@ -5,7 +5,7 @@
     import {Getter, Action} from "vuex-class";
     import RouterName from "@/constant/router-name";
     import {BlankListQuery} from "@/model";
-    import BlanklistEnum from "@/constant/BlanklistEnum";
+    import BlanklistEnum from "@/constant/BlacklistEnum";
 
     import Api from "@/api";
 
@@ -78,7 +78,7 @@
         }
 
         private submitAdd(){
-            const _this = this;
+            let _this = this;
             this.loading.add = true;
             Api.$post(API_URL_PREFIX + "/addGroup", {
                 "blackLists": this.contentsAdd
@@ -109,7 +109,7 @@
         }
 
         private submitModify(){
-            const _this = this;
+            let _this = this;
             this.loading.modify = true;
             Api.$post(API_URL_PREFIX + "/update", {id:this.modifyModel.id,content:this.modifyModel.content}).then((res: any) => {
                 this.$message({
@@ -136,15 +136,15 @@
                     showClose: false
                 });
             } else {
-                const _this = this;
+                let _this = this;
                 this.$confirm("确定 [" + operateText + "] 所选黑名单?", {
                     // confirmButtonText: '确定',
                     // cancelButtonText: '取消',
                     type: "info",
                     showClose: false
                 }).then(() => {
-                    const ids: string = "";
-                    //const count = this.selectedDatas.length;
+                    let ids: string = "";
+                    //let count = this.selectedDatas.length;
                     this.selectedDatas.forEach(function(e: any) {
                         //ids.push(e.id);
                         ids += "," + e.id;
@@ -183,7 +183,7 @@
                 type: "warning",
                 showClose: false
             }).then(() => {
-                const _this = this;
+                let _this = this;
                 Api.$post(API_URL_PREFIX + "/delete", {id: id}).then((res: any) => {
                     this.$message({
                         type: "success",

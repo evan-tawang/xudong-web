@@ -17,6 +17,7 @@
         @Action(Types.USER.LOGOUT) private userLogout: any;
 
         private async created() {
+			this.activeMenu(this.$route, null);
             document.title = this.pageTitle;
         }
 
@@ -38,9 +39,14 @@
             document.title = this.pageTitle;
         }
 
+		private activeMenu(to: any, from: any ) {
+			this.menuActiveIndex = to.name;
+		}
+
         @Watch("$route")
         onRouteChange(to:any, from:any) {
             if (to.name != from.name) {
+				this.activeMenu(to, from);
                 this.activeCurrentModule(to, from);
             }
         }

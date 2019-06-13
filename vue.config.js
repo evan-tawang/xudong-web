@@ -45,6 +45,7 @@ module.exports = {
         port: 8080, // 端口
         proxy: {//代理
             '/': {
+                ws:false,
                 target: 'http://127.0.0.1:9001',
                 changeOrigin: true
             },

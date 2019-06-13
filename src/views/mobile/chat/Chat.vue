@@ -3,7 +3,7 @@
         <div class="chat_header">在线客服</div>
         <div class="chat_history" :class="{'expand': expand}" ref="chatHistory">
             <template v-for="msg in msgs">
-                <div v-if="msg.sendUserType === 1"  class="chat_history_area custom" :key="msg.id">
+                <div v-if="msg.sendUserType === 2"  class="chat_history_area custom" :key="msg.id">
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
                         <div class="msg">
@@ -17,7 +17,7 @@
                     </div>
                     <img :src="msg.avatar" alt="头像">
                 </div>
-                <div v-if="msg.sendUserType === 2" class="chat_history_area service" :key="msg.id">
+                <div v-if="msg.sendUserType === 1" class="chat_history_area service" :key="msg.id">
                     <img :src="msg.avatar" alt="头像">
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
@@ -54,6 +54,7 @@
     import {Component, Vue} from 'vue-property-decorator';
 	import Api from '@/api';
 	import Utils from "@/utils";
+	import UserTypeEnum from "@/constant/enums/UserTypeEnum";
 	const SockJS = require("sockjs-client");
 	const Stomp = require("stompjs");
 
@@ -66,41 +67,15 @@
 		private chatSession: any = {};
 
         public created() { // 初始化数据
-            // this.msgs = [{
-            //     id: 1,
-			// 	sendUserType: 'service',
-            //     msgType: 'text',
-            //     content: '就是的就开始对方就开始对方就开始的九分裤上的接口方式接口的接口',
-            //     time: Date.now(),
-            //     name: '客服名',
-            //     avatar: '/images/smile.png',
-            // },
-            // {
-            //     id: 2,
-			// 	sendUserType: 'custom',
-            //     msgType: 'text',
-            //     content: '就是的就开始对方就开始对方就开始的九分裤上的接口方式接口的接口',
-            //     time: Date.now(),
-            //     name: '顾客名',
-            //     avatar: '/images/smile.png',
-            // },
-            // {
-            //     id: 3,
-			// 	sendUserType: 'service',
-            //     msgType: 'image',
-            //     content: '/images/smile.png',
-            //     time: Date.now(),
-            //     name: '客服名',
-            //     avatar: '/images/smile.png',
-            // }];
             this.handleData(this.msgs);
             this.init();
         }
 
 		// init
         private init(){
-			this.initWebSocket();
 			this.createChatSession();
+
+
         }
 
 		private initWebSocket() {
@@ -110,9 +85,8 @@
 			let that = this;
 			let stompClient = that.stompClient;
 			stompClient.connect({}, () => {
-				stompClient.subscribe('/chat/2222/receiveMsg', function (resp: any) {
+				this.stompClient.subscribe('/chat/' + that.chatSession.id + '-' + UserTypeEnum.STAFF + '/receiveMsg', function (resp: any) {
 					let message = JSON.parse(resp.body);
-					message.sendUserType = 2;
 					that.msgs.push(message);
 				});
 			});
@@ -138,6 +112,7 @@
 		private createChatSession() {
 			Api.$post('/chat/createSession').then((res: any) => {
 				this.chatSession = res.data;
+				this.initWebSocket();
 			});
 		}
 
@@ -148,7 +123,6 @@
 			}
 			let that = this;
 			Api.$post('/chat/sendMsg', {content: this.input, sessionId: this.chatSession.id}).then((res: any) => {
-				res.data.sendUserType = 1;
 				that.msgs.push(res.data);
 			});
 

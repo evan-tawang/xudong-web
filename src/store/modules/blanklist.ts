@@ -1,4 +1,4 @@
-import {BlankList, BlankListQuery} from '../../model';
+import {BlackList, BlackListQuery} from '../../model';
 import {GetterTree, MutationTree, ActionTree} from 'vuex';
 import Api from '@/api';
 
@@ -9,8 +9,8 @@ const state = {
     data: {},
 };
 
-const actions: ActionTree<BlankListQuery, any> = {
-    async blankListPageList({commit}, query) {
+const actions: ActionTree<BlackListQuery, any> = {
+    async blackListPageList({commit}, query) {
         Api.$get(url + 'list', query).then((res: any) => {
             console.log(res);
             return res.data;

@@ -1,8 +1,8 @@
-import {BlankList, BlankListQuery} from './limit/blanklist';
+import {BlackList, BlackListQuery} from './limit/blacklist';
 import {UserAgent} from './user/user';
 
 export {
-    BlankList,
-    BlankListQuery,
+    BlackList,
+    BlackListQuery,
     UserAgent,
 };

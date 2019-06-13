@@ -11,7 +11,7 @@ import Chat from './views/mobile/chat/Chat.vue';
 import StaffChat from './views/chat/StaffChat.vue';
 import TalkSkillList from '@/views/talk-skill/TalkSkillList.vue';
 import SensitiveWordList from '@/views/sensitive-word/SensitiveWordList.vue';
-import BlankList from '@/views/blanklist/BlankList.vue';
+import BlackList from '@/views/blacklist/BlackList.vue';
 import Allocate from '@/views/allocate/Allocate.vue';
 
 Vue.use(Router);
@@ -44,9 +44,9 @@ export default new Router({
           component: Allocate,
         },
         {
-          path: 'blanklist',
-          name: RouterName.BLANKLIST,
-          component: BlankList,
+          path: 'blacklist',
+          name: RouterName.BLACKLIST,
+          component: BlackList,
         },
         {
           path: 'sensitive-word',

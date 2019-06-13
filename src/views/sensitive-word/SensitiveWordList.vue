@@ -2,7 +2,7 @@
     <div class="panel_main detail__wrapper">
         <el-form>
             <div class="msg msg--above">以下敏感词会在聊天中屏蔽，多个敏感词以“,”分割</div>
-            <el-input v-model="words" type="textarea" :rows="20">
+            <el-input v-model="words" type="textarea" :rows="25">
             </el-input>
         </el-form>
         <div class="buttons__wrapper">

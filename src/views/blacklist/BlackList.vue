@@ -1,11 +1,10 @@
-<template src="./BlankList.html"></template>
+<template src="./BlackList.html"></template>
 
 <script lang="ts">
     import {Component, Vue} from "vue-property-decorator";
     import {Getter, Action} from "vuex-class";
     import RouterName from "@/constant/router-name";
-    import {BlankListQuery} from "@/model";
-    import BlanklistEnum from "@/constant/enums/BlanklistEnum";
+    import BlacklistEnum from "@/constant/enums/BlacklistEnum";
 
     import Api from "@/api";
 
@@ -13,7 +12,7 @@
     const DEFAULT_QUERY = {pageNo: 1, pageSize: 10};
 
     @Component
-    export default class BlankList extends Vue {
+    export default class BlackList extends Vue {
         private page: number = 0;
         private list: object = [];
         private query: any = DEFAULT_QUERY;
@@ -23,8 +22,6 @@
         private showModifyWin: boolean = false;
         private contentsAdd: string = '';
         private modifyModel: any = {};
-
-        @Action("blankList") private blankList: any;
 
         public created() {
             this.getListData();
@@ -169,11 +166,11 @@
         }
 
         private startUsing() {
-            this.updateStatus("启用", BlanklistEnum.Status.NORMAL.value);
+            this.updateStatus("启用", BlacklistEnum.Status.NORMAL.value);
         }
 
         private stopUsing() {
-            this.updateStatus("停用", BlanklistEnum.Status.STOP.value);
+            this.updateStatus("停用", BlacklistEnum.Status.STOP.value);
         }
 
         private remove(id: number) {

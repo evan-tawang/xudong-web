@@ -1,5 +1,8 @@
 import axios from './axios';
 import {Loading, Message, MessageBox} from "element-ui";
+
+// const loading = new Map();
+
 class Api {
     
     /**
@@ -44,7 +47,6 @@ class Api {
                 if (isOwnCatch) {
                     reject(err);
                 } else {
-                    Loading.service({ fullscreen: true });
                     Message.error({message: err.msg, type: 'error'});
                 }
             });

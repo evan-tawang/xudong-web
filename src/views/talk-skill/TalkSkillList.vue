@@ -20,8 +20,13 @@
         private selectedDatas: any = [];
         private showAddWin: boolean = false;
         private showModifyWin: boolean = false;
-        private contentAdd: string = '';
+        private addModel: any = {};
         private modifyModel: any = {};
+        private rules: object = {
+            content: [
+                {required: true, message: "请输入常用话术内容", trigger: "blur"}
+            ]
+        };
 
         public created() {
             this.getListData();
@@ -69,25 +74,30 @@
         }
 
         private openAddWin() {
-            this.contentAdd = '';
+            this.addModel.content = '';
             this.loading.add = false;
             this.showAddWin = true;
         }
 
         private submitAdd(){
             let _this = this;
-            this.loading.add = true;
-            Api.$post(API_URL_PREFIX + "/add", {"content": this.contentAdd}).then((res: any) => {
-                this.$message({
-                    type: "success",
-                    message: "添加成功!",
-                    duration: 1500,
-                    onClose: function() {
-                        _this.loading.add = false;
-                        _this.getListData();
-                        _this.showAddWin = false;
-                    }
-                });
+
+            this.$refs['addForm'].validate((valid) => {
+                if (valid) {
+                    this.loading.add = true;
+                    Api.$post(API_URL_PREFIX + "/add", {"content": this.addModel.content}).then((res: any) => {
+                        this.$message({
+                            type: "success",
+                            message: "添加成功!",
+                            duration: 1500,
+                            onClose: function() {
+                                _this.loading.add = false;
+                                _this.getListData();
+                                _this.showAddWin = false;
+                            }
+                        });
+                    });
+                }
             });
         }
 
@@ -105,18 +115,27 @@
 
         private submitModify(){
             let _this = this;
-            this.loading.modify = true;
-            Api.$post(API_URL_PREFIX + "/update", {id:this.modifyModel.id,content:this.modifyModel.content}).then((res: any) => {
-                this.$message({
-                    type: "success",
-                    message: "修改成功!",
-                    duration: 1500,
-                    onClose: function() {
-                        _this.loading.modify = false;
-                        _this.getListData();
-                        _this.showModifyWin = false;
-                    }
-                });
+
+            this.$refs['addForm'].validate((valid) => {
+                if (valid) {
+
+                    this.loading.modify = true;
+                    Api.$post(API_URL_PREFIX + "/update", {
+                        id: this.modifyModel.id,
+                        content: this.modifyModel.content
+                    }).then((res: any) => {
+                        this.$message({
+                            type: "success",
+                            message: "修改成功!",
+                            duration: 1500,
+                            onClose: function() {
+                                _this.loading.modify = false;
+                                _this.getListData();
+                                _this.showModifyWin = false;
+                            }
+                        });
+                    });
+                }
             });
         }
 

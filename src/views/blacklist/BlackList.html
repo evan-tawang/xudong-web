@@ -55,11 +55,16 @@
 
     </div>
 
-    <el-dialog title="添加黑名单" :visible.sync="showAddWin" width="40%">
-        <el-form>
-            <div class="msg msg--above">输入要设置成黑名单的ip或账号，多个以“,”分割</div>
-            <el-input v-model="contentsAdd" type="textarea" :rows="8">
-            </el-input>
+    <el-dialog title="添加黑名单" :visible.sync="showAddWin" width="40%" :close-on-click-modal="false"
+               :close-on-press-escape="false">
+        <el-form :model="model" :rules="rules" ref="addForm" :open="onAddWinOpened">
+            <div class="msg msg--above">
+                输入要设置成黑名单的ip或账号，多个以“,”分割
+            </div>
+            <el-form-item prop="contentsAdd">
+                <el-input v-model="model.contentsAdd" type="textarea" :rows="8">
+                </el-input>
+            </el-form-item>
         </el-form>
         <div slot="footer">
             <el-button @click="showAddWin = false">取 消</el-button>
@@ -67,12 +72,15 @@
         </div>
     </el-dialog>
 
-    <el-dialog title="修改" :visible.sync="showModifyWin" width="25%" v-loading="loading.modifyWin">
-        <el-form :model="modifyModel">
-            <el-input v-model="modifyModel.content" ></el-input>
-            <el-input v-model="modifyModel.id" type="hidden"></el-input>
+    <el-dialog title="修改" :visible.sync="showModifyWin" width="25%" v-loading="loading.modifyWin"
+               :close-on-click-modal="false" :close-on-press-escape="false">
+        <el-form :model="model" :rules="rules" ref="modifyForm">
+            <el-form-item prop="content">
+                <el-input v-model="model.content"></el-input>
+            </el-form-item>
+            <el-input v-model="model.id" type="hidden"></el-input>
         </el-form>
-        <div slot="footer" >
+        <div slot="footer">
             <el-button @click="showModifyWin = false">取 消</el-button>
             <el-button type="primary" @click="submitModify" v-loading="loading.modify">确 定</el-button>
         </div>

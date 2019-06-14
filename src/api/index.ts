@@ -8,7 +8,7 @@ class Api {
      * @param params 参数
      * @param ownCatch 是否自己处理catch
      */
-    public $post(url: string, params: any = {}, isOwnCatch: boolean) {
+    public $post(url: string, params: any = {}, isOwnCatch: boolean = false) {
         return new Promise((resolve, reject) => {
             
             let data = new FormData();
@@ -36,7 +36,7 @@ class Api {
      * @param params 参数
      * @param ownCatch 是否自己处理catch
      */
-    public $get(url: string, params: any = {}, isOwnCatch: boolean): any {
+    public $get(url: string, params: any = {}, isOwnCatch: boolean = false): any {
         return new Promise((resolve, reject) => {
             axios.get(url, {params}).then((res: any) => {
                 resolve(res);

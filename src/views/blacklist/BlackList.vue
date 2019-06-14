@@ -33,10 +33,10 @@
 
         private rules: object = {
             contentsAdd: [
-                {required: true, message: "请输入黑名单内容", trigger: "blur"}
+                {required: true, message: "请输入黑名单内容", trigger: "change"}
             ],
             content: [
-                {required: true, message: "请输入黑名单内容", trigger: "blur"}
+                {required: true, message: "请输入黑名单内容", trigger: "change"}
             ]
         };
 

@@ -24,7 +24,7 @@
         private modifyModel: any = {content:''};
         private rules: object = {
             content: [
-                {required: true, message: "请输入常用话术内容", trigger: "blur"}
+                {required: true, message: "请输入常用话术内容", trigger: "change"}
             ]
         };
 

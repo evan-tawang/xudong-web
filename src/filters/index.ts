@@ -4,7 +4,7 @@ const filters: any = {
 	date(date: Date | number, format: string = 'YYYY-MM-DD') {
 		return moment(date).format(format);
 	},
-	dateTime(date: Date | number, format: string = 'YYYY-MM-DD hh:mm') {
+	dateTime(date: Date | number, format: string = 'YYYY-MM-DD HH:mm') {
 		return moment(date).format(format);
 	}
 };

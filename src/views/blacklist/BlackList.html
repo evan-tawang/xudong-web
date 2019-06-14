@@ -58,13 +58,16 @@
     <el-dialog title="添加黑名单" :visible="showAddWin" width="40%" :close-on-click-modal="false"
                :close-on-press-escape="false" :before-close="closeAddWin">
         <el-form :model="addModel" :rules="rules" ref="addForm" >
-            <div class="msg msg--above">
-                输入要设置成黑名单的ip或账号，多个以“,”分割
-            </div>
             <el-form-item prop="contentsAdd">
                 <el-input v-model="addModel.contentsAdd" type="textarea" :rows="8">
                 </el-input>
             </el-form-item>
+            <ul class="msg">
+                <li>1、黑名单可配置用户账号或IP</li>
+                <li>2、多个黑名单之间用逗号","隔开，或另启一行</li>
+                <li>3、IP地址支持通配符配置，如：192.168.0.*, 202.101.*</li>
+                <li>4、IP地址支持ip段配置，如：192.168.1.0-192.168.1.10, 192.168.1.20-192.168.1.50</li>
+            </ul>
         </el-form>
         <div slot="footer">
             <el-button @click="closeAddWin">取 消</el-button>

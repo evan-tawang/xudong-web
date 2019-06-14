@@ -129,6 +129,13 @@
             this.input = '';
             this.scrollToBottom();
         }
+
+		private messageHistory() {
+			Api.$get('/chat/history', {sessionId: this.chatSession.id}).then((res: any) => {
+				this.msgs.push(res.data);
+			})
+		}
+
         private scrollToBottom() {
             // 滚动到最下
             this.$nextTick(() => {

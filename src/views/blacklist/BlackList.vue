@@ -13,7 +13,7 @@
 
     @Component
     export default class BlackList extends Vue {
-        private page: number = 0;
+		private page: object = {recordCount: 0};
         private list: object = [];
         private query: any = DEFAULT_QUERY;
         private loading: any = {

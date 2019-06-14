@@ -28,7 +28,8 @@
         private selectedDatas: any = [];
         private showAddWin: boolean = false;
         private showModifyWin: boolean = false;
-        private model: any = {};
+        private addModel: any = {contentsAdd:''};
+        private modifyModel: any = {content:''};
 
         private rules: object = {
             contentsAdd: [
@@ -85,14 +86,14 @@
         }
 
         private openAddWin() {
-            this.model.contentsAdd = '';
             this.loading.add = false;
             this.showAddWin = true;
         }
 
-        private onAddWinOpened(){
-            console.log( this.$refs['addForm']);
-            this.$refs['addForm'].resetFields();
+        private closeAddWin(){
+            //console.log( this.$refs['addForm']);
+            //this.$refs['addForm'].resetFields();
+            this.showAddWin = false;
         }
 
         private submitAdd() {
@@ -102,8 +103,9 @@
                 if (valid) {
                     this.loading.add = true;
                     Api.$post(API_URL_PREFIX + "/addGroup", {
-                        "blackLists": this.model.contentsAdd
+                        "blackLists": this.addModel.contentsAdd
                     }).then((res: any) => {
+                        this.addModel.contentsAdd = '';
                         this.$message({
                             type: "success",
                             message: "添加成功!",
@@ -127,11 +129,17 @@
             this.loading.modify = false;
             Api.$get(API_URL_PREFIX + "/getOne", {id: id}).then((res: any) => {
                 if (res.data) {
-                    this.model = res.data;
+                    this.modifyModel = res.data;
                 }
                 this.loading.modifyWin = false;
             });
             this.showModifyWin = true;
+        }
+
+        private closeMofifyWin(){
+            //console.log( this.$refs['modifyForm']);
+            this.$refs['modifyForm'].resetFields();
+            this.showModifyWin = false;
         }
 
         private submitModify() {
@@ -140,8 +148,8 @@
                     let _this = this;
                     this.loading.modify = true;
                     Api.$post(API_URL_PREFIX + "/update", {
-                        id: this.model.id,
-                        content: this.model.content
+                        id: this.modifyModel.id,
+                        content: this.modifyModel.content
                     }).then((res: any) => {
                         this.$message({
                             type: "success",

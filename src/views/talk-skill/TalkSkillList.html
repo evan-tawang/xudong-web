@@ -56,7 +56,7 @@
     </div>
 
     <el-dialog title="添加常用话术" :visible.sync="showAddWin" width="40%" :close-on-click-modal="false"
-               :close-on-press-escape="false">
+               :close-on-press-escape="false" :before-close="closeAddWin">
         <el-form :model="addModel" :rules="rules" ref="addForm">
             <el-form-item prop="content">
                 <el-input v-model="addModel.content" type="textarea" :rows="3">
@@ -64,13 +64,13 @@
             </el-form-item>
         </el-form>
         <div slot="footer">
-            <el-button @click="showAddWin = false">取 消</el-button>
+            <el-button @click="closeAddWin">取 消</el-button>
             <el-button type="primary" @click="submitAdd" v-loading="loading.add">确 定</el-button>
         </div>
     </el-dialog>
 
     <el-dialog title="修改" :visible.sync="showModifyWin" width="25%" v-loading="loading.modifyWin"
-               :close-on-click-modal="false" :close-on-press-escape="false">
+               :close-on-click-modal="false" :close-on-press-escape="false" :before-close="closeMofifyWin">
         <el-form :model="modifyModel" :rules="rules" ref="modifyForm">
             <el-form-item prop="content">
                 <el-input v-model="modifyModel.content" type="textarea" :rows="3"></el-input>
@@ -78,7 +78,7 @@
             <el-input v-model="modifyModel.id" type="hidden"></el-input>
         </el-form>
         <div slot="footer">
-            <el-button @click="showModifyWin = false">取 消</el-button>
+            <el-button @click="closeMofifyWin">取 消</el-button>
             <el-button type="primary" @click="submitModify" v-loading="loading.modify">确 定</el-button>
         </div>
     </el-dialog>

@@ -20,8 +20,8 @@
         private selectedDatas: any = [];
         private showAddWin: boolean = false;
         private showModifyWin: boolean = false;
-        private addModel: any = {};
-        private modifyModel: any = {};
+        private addModel: any = {content:''};
+        private modifyModel: any = {content:''};
         private rules: object = {
             content: [
                 {required: true, message: "请输入常用话术内容", trigger: "blur"}
@@ -74,9 +74,14 @@
         }
 
         private openAddWin() {
-            this.addModel.content = '';
             this.loading.add = false;
             this.showAddWin = true;
+        }
+
+        private closeAddWin(){
+            //console.log( this.$refs['modifyForm']);
+            //this.$refs['addForm'].resetFields();
+            this.showAddWin = false;
         }
 
         private submitAdd(){
@@ -91,6 +96,7 @@
                             message: "添加成功!",
                             duration: 1500,
                             onClose: function() {
+                                _this.addModel.content = '';
                                 _this.loading.add = false;
                                 _this.getListData();
                                 _this.showAddWin = false;
@@ -113,10 +119,16 @@
             this.showModifyWin = true;
         }
 
+        private closeMofifyWin(){
+            //console.log( this.$refs['modifyForm']);
+            this.$refs['modifyForm'].resetFields();
+            this.showModifyWin = false;
+        }
+
         private submitModify(){
             let _this = this;
 
-            this.$refs['addForm'].validate((valid) => {
+            this.$refs['modifyForm'].validate((valid) => {
                 if (valid) {
 
                     this.loading.modify = true;

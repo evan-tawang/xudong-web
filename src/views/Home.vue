@@ -35,19 +35,21 @@
             this.isCollapse = !this.isCollapse;
         }
 
-        private activeCurrentModule(to:any, from:any){
-            document.title = this.pageTitle;
-        }
-
 		private activeMenu(to: any, from: any ) {
 			this.menuActiveIndex = to.name;
+			for (let menu of this.menus){
+				if(menu.routerName == to.name){
+					this.pageTitle = menu.text;
+					document.title = menu.text;
+					break;
+                }
+            }
 		}
 
         @Watch("$route")
-        onRouteChange(to:any, from:any) {
+        private onRouteChange(to:any, from:any) {
             if (to.name != from.name) {
 				this.activeMenu(to, from);
-                this.activeCurrentModule(to, from);
             }
         }
     }

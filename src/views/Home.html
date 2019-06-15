@@ -1,7 +1,8 @@
-<div id="container" >
+<div id="container">
     <div id="container_banner">
         <div class="banner-left">
-            <h1>XXX管理系统</h1>
+            <img src="../assets/images/logo.png"/></a>
+            <h1>即时通讯管理系统</h1>
         </div>
         <div class="banner-right">
             <el-button type="text" @click="logout" icon="el-icon-circle-cross">退出</el-button>
@@ -15,7 +16,7 @@
         </div>
         <el-menu id="container_menu"
                  :default-active="menuActiveIndex"
-                :collapse="isCollapse" >
+                 :collapse="isCollapse">
 
             <el-menu-item v-for="menu in menus" :index="menu.routerName" :key="menu.routerName" @click="jump(menu)">
                 <i :class="menu.icon"></i>

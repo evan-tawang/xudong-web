@@ -72,20 +72,18 @@
         }
 
 		// init
-        private init(){
+        private init() {
 			this.createChatSession();
-
-
         }
 
 		private initWebSocket() {
-			let socket = new SockJS('/' + 'ws');
+			const socket = new SockJS('/' + 'ws');
 			this.stompClient = Stomp.over(socket);
 
-			let that = this;
-			let stompClient = that.stompClient;
+			const that = this;
+			const stompClient = that.stompClient;
 			stompClient.connect({}, () => {
-				this.stompClient.subscribe('/chat/' + that.chatSession.id + '-' + UserTypeEnum.STAFF + '/receiveMsg', function (resp: any) {
+				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserTypeEnum.STAFF}/receiveMsg`, (resp: any) => {
 					let message = JSON.parse(resp.body);
 					that.msgs.push(message);
 				});
@@ -133,7 +131,7 @@
 		private messageHistory() {
 			Api.$get('/chat/history', {sessionId: this.chatSession.id}).then((res: any) => {
 				this.msgs.push(res.data);
-			})
+			});
 		}
 
         private scrollToBottom() {

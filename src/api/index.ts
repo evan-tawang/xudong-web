@@ -1,10 +1,9 @@
 import axios from './axios';
-import {Loading, Message, MessageBox} from "element-ui";
+import {Loading, Message, MessageBox} from 'element-ui';
 
 // const loading = new Map();
 
 class Api {
-    
     /**
      * post
      * @param url url
@@ -13,15 +12,14 @@ class Api {
      */
     public $post(url: string, params: any = {}, isOwnCatch: boolean = false) {
         return new Promise((resolve, reject) => {
-            
-            let data = new FormData();
-            
-            for (let k in params) {
-                data.append(k, params[k]);
+            const data = new FormData();
+            for (const k in params) {
+                if (params.hasOwnProperty(k)) {
+                    data.append(k, params[k]);
+                }
             }
-            
             axios.post(url, data).then((res: any) => {
-                //axios.post(url, null, {params}).then((res: any) => {
+                // axios.post(url, null, {params}).then((res: any) => {
                 resolve(res);
             }).catch((err: any) => {
                 if (isOwnCatch) {
@@ -32,7 +30,6 @@ class Api {
             });
         });
     }
-    
     /**
      * get
      * @param url url

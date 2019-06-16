@@ -12,30 +12,30 @@
 </template>
 <script lang="ts">
 
-    import {Component, Vue} from "vue-property-decorator";
-    import {Getter, Action} from "vuex-class";
-    import RouterName from "@/constant/router-name";
-    import Api from "@/api";
+    import {Component, Vue} from 'vue-property-decorator';
+    import {Getter, Action} from 'vuex-class';
+    import RouterName from '@/constant/router-name';
+    import Api from '@/api';
 
-    const API_URL_PREFIX = "/sensitiveWord/manage";
+    const API_URL_PREFIX = '/sensitiveWord/manage';
 
     @Component
     export default class SensitiveWordList extends Vue {
-        private words: string = "";
+        private words: string = '';
         private loading: boolean = false;
 
         public created() {
-            Api.$get(API_URL_PREFIX + "/get").then((res: any) => {
+            Api.$get(API_URL_PREFIX + '/get').then((res: any) => {
                 this.words = res.data;
             });
         }
 
         private submitSave() {
             // let _this = this;
-            Api.$post(API_URL_PREFIX + "/save", {words: this.words}).then((res: any) => {
+            Api.$post(API_URL_PREFIX + '/save', {words: this.words}).then((res: any) => {
                 this.$message({
-                    type: "success",
-                    message: "保存成功!",
+                    type: 'success',
+                    message: '保存成功!',
                     duration: 1000,
                 });
             });

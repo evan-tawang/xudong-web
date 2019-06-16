@@ -24,7 +24,7 @@
 import {Component, Vue} from 'vue-property-decorator';
 import {Getter, Action} from 'vuex-class';
 import RouterName from '@/constant/router-name';
-import Types from "@/store/types";
+import Types from '@/store/types';
 
 @Component
 export default class Login extends Vue {

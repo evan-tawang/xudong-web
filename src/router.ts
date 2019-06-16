@@ -58,7 +58,7 @@ export default new Router({
           name: RouterName.TALK_SKILL_LIST,
           component: TalkSkillList,
         },
-      ]
+      ],
     },
     {
       path: '/mobile',

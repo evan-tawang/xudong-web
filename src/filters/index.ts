@@ -6,11 +6,11 @@ const filters: any = {
 	},
 	dateTime(date: Date | number, format: string = 'YYYY-MM-DD HH:mm') {
 		return moment(date).format(format);
-	}
+	},
 };
 
 export default (Vue: any) => {
-	Object.keys(filters).forEach(key => {
-		Vue.filter(key, filters[key])
+	Object.keys(filters).forEach((key) => {
+		Vue.filter(key, filters[key]);
 	});
 }

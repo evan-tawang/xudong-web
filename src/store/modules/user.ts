@@ -3,7 +3,7 @@ import Api from '@/api';
 import {sha256} from 'js-sha256';
 import {Base64} from 'js-base64';
 import {UserAgent} from '@/model/user/user';
-import Types from "@/store/types";
+import Types from '@/store/types';
 
 const state = {
 	userAgent: {},

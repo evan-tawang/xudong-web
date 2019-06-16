@@ -1,48 +1,50 @@
 <template>
     <div class="chat">
         <div class="chat-top">
-
+            <img src="/images/logo.jpg" alt="">
+            <div class="chat-top-msg">
+                <div>旭东红木</div>
+                <div>(咨询时间：09:00 - 17:00)</div>
+            </div>
         </div>
-
         <div class="chat-main">
             <div class="chat-main-left">
-
-                <template v-for="session in sessionList">
-                    <div @click="changeSession(session)"
-                         :style="current.visitorId == session.visitorId ? 'background: red':''">
-                        <div>
-    <!--                            <img src="">-->
-                        </div>
-                        <div>
-                            <span>
-                                {{ session.name ? session.name : '游客' + session.id }}
-                            </span>
-                            <span  v-if="session.messages">
-<!--                                {{ session.messages }}-->
-<!--                                 {{ session.messages[session.messages.length - 1].content }}-->
-                            </span>
-                        </div>
+                <div v-for="session in sessionList"
+                    :key="session.id"
+                    :class="{'current': current.visitorId == session.visitorId}"
+                    @click="changeSession(session)"
+                    class="visitor-item">
+                    <img :src="session.avatar">
+                    <div class="visitor-info">
+                        <div>{{ session.name ? session.name : '游客' + session.id }}</div>
+                        <div class="visitor-info-msg" v-if="session.messages">{{ session.messages }}</div>
                     </div>
-                </template>
-
+                </div>
             </div>
             <div class="chat-main-center">
-                <div class="chat_history">
-                    <template v-for="message in current.messages">
-                        <div v-if="message.sendUserType == 1">
-                            <div style="background:#dbba7e">
-                                <span>{{ message.content }}</span>
+                <div class="chat-history" ref="chatHistory">
+                    <div v-for="(message, index) in current.messages"
+                    :key="index"
+                    class="column"
+                    :class="{'service': message.sendUserType == 1, 'custom': message.sendUserType != 1 }">
+                        <template v-if="message.sendUserType == 1" >
+                            <div class="service-info">
+                                <div class="title">客服 18:00:00</div>
+                                <div class="service-msg msg" v-html="message.content"></div>
                             </div>
-                        </div>
-                        <div v-else>
-                            <div style="background:#f4eee1">
-                                <span>{{ message.content }}</span>
+                            <img src="/images/logo.jpg">
+                        </template>
+                        <template v-else>
+                            <img src="/images/logo.jpg">
+                            <div class="custom-info">
+                                <div class="title">顾客 18:00:00</div>
+                                <div class="custom-msg msg" v-html="message.content"></div>
                             </div>
-                        </div>
-                    </template>
+                        </template>
+                    </div>
                 </div>
                 <div class="chat-edit">
-                    <div class="chat-edit-choose">
+                    <!-- <div class="chat-edit-choose">
                         <img src="/images/smile.png" alt="">
                         <img src="/images/image.png" alt="">
 
@@ -50,7 +52,6 @@
                             <div slot="content">
                                 <div v-for="talkSkill in talkSkillList" @click="chooseTalkSkill(talkSkill)">{{ talkSkill }}</div>
                             </div>
-                            <!-- 需要用img or icon -->
                            <a href="javascript:void(0)" class="el-icon-chat-dot-round"> </a>
                         </el-tooltip>
 
@@ -59,11 +60,35 @@
                     <textarea v-model="msg"></textarea>
                     <div style=" text-align:right">
                         <el-button type="warning" size="small" style=" line-height: 0.5;padding: 9px 10px;margin-right: 10px;margin-bottom: 5px;" @click="sendMsg" >发送</el-button>
+                    </div> -->
+                    <div class="chat_attachment">
+                        <div class="chat_expression">
+                            <img src="/images/smile.png" alt="" @click="chatExpressionToggle">
+                            <div v-if="chatExpressionChoose" class="chat_expression_choose">
+                                <div data-value="0">1</div>
+                                <div data-value="1">2</div>
+                                <div data-value="2">3</div>
+                            </div>
+                        </div>
+                        <div class="chat_image">
+                            <img src="/images/image.png" alt="" @click="chooseFile">
+                            <input @change="changeFile(event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg" style="display: none;">
+                        </div>
+                    </div>
+                    <div class="chat_input">
+                        <div ref="chatInputArea" class="chat_input_area" contenteditable="true"></div>
+                        <div class="chat_btn" @click="sendMsg">发送</div>
                     </div>
                 </div>
             </div>
             <div class="chat-main-right">
-                right
+                <div class="service-item">
+                    <img src="/images/logo.jpg">
+                    <div class="service-info">
+                        <div>客服1:xxx</div>
+                        <div>服务时间</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -71,21 +96,30 @@
 <script lang="ts">
 	import {Component, Vue} from 'vue-property-decorator';
 	import Api from '@/api';
-	import {Getter} from "vuex-class";
-	import UserTypeEnum from "@/constant/enums/UserTypeEnum";
-	const SockJS = require("sockjs-client");
-	const Stomp = require("stompjs");
+	import {Getter} from 'vuex-class';
+	import UserTypeEnum from '@/constant/enums/UserTypeEnum';
+	const SockJS = require('sockjs-client');
+    const Stomp = require('stompjs');
 
 	@Component
 	export default class StaffChat extends Vue {
-		private staff: object = {};
-		private sessionList: object[] = [];
+		private staff: any = {};
+        private sessionList: any[] = [
+            {avatar: '/images/logo.jpg', name: '游客', id: 1, visitorId: 1, messages: '听说过了你最棒呢哈哈哈'},
+            {avatar: '/images/logo.jpg', name: '游客', id: 2, visitorId: 2, messages:''}
+        ];
 		private talkSkillList: string[] = [];
-
+        private chatExpressionChoose: boolean = false;
 		private current = {
-			id: '',
-			visitorId: '',
-			messages: []
+			id: 1,
+			visitorId: 1,
+			messages: [{
+                sendUserType:1,
+                content: 'ehllo'
+            },{
+                sendUserType:2,
+                content: 'world'
+            }]
 		};
 
 		private stompClient: any = {};
@@ -94,24 +128,22 @@
 		@Getter private userAgent: any;
 
 		private created() {
-			console.log(UserTypeEnum.STAFF)
-
 			this.initWebSocket();
-			this.loadStaff();
+			// this.loadStaff();
 			this.loadConnected();
 			this.loadTalkSkillList();
         }
 
         // init
 		private initWebSocket() {
-			let socket = new SockJS('/' + 'ws');
+			const socket = new SockJS('/' + 'ws');
 			this.stompClient = Stomp.over(socket);
 
-			let that = this;
-			let stompClient = that.stompClient;
+			const that = this;
+			const stompClient = that.stompClient;
 			stompClient.connect({}, () => {
-				stompClient.subscribe('/chat/' + that.userAgent.id + '/allocate', function (resp: any) {
-					let chatSession = JSON.parse(resp.body);
+				stompClient.subscribe(`/chat/${that.userAgent.id}/allocate`, (resp: any) => {
+					const chatSession = JSON.parse(resp.body);
 					that.subscribeReceiveMsg(chatSession);
 					chatSession.messages = [];
 					that.sessionList.push(chatSession);
@@ -120,52 +152,46 @@
 		}
 
 		private subscribeReceiveMsg(chatSession: any) {
-			for (let session of this.sessionList) {
-                if(session.id == chatSession.id){
+			for (const session of this.sessionList) {
+                if (session.id === chatSession.id) {
                 	return;
                 }
             }
-			
-			let that = this;
-			this.stompClient.subscribe('/chat/' + chatSession.id + '-' + UserTypeEnum.VISITOR + '/receiveMsg', function (resp: any) {
-				let message = JSON.parse(resp.body);
-				// that.current.messages.push(message);
-				console.log(that.current);
+			const that = this;
+			this.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
+				const message = JSON.parse(resp.body);
 				that.sessionList.forEach((o: any) => {
-					if(o.visitorId === message.visitorId){
-						let messages = o.messages || [];
+					if (o.visitorId === message.visitorId) {
+						const messages = o.messages || [];
 						messages.push(message);
                     }
 				});
 			});
         }
 
-		private loadStaff() {
-
-		}
+		// private loadStaff() {
+		// }
 
 		private loadTalkSkillList() {
 			Api.$get('/talkSkill/service/list').then((res: any) => {
-
-				res.data.forEach((o: object) => {
+				res.data.forEach((o: any) => {
 					this.talkSkillList.push(o.content);
-                })
-			})
+                });
+			});
 		}
 
 		private loadConnected() {
 			Api.$get('/chat/connected').then((res: any) => {
-				if(!res.data || res.data.length == 0){
+				if (!res.data || res.data.length === 0) {
 					return;
 				}
 
 				this.sessionList = res.data;
 				res.data.forEach((o: any) => {
 					this.subscribeReceiveMsg(o);
-
 					this.messageHistory(o);
 				});
-			})
+			});
 		}
 
 		private messageHistory(chatSession: any) {
@@ -173,115 +199,280 @@
 				this.sessionList.forEach((o: any) => {
 					o.messages = res.data;
 				});
-			})
+			});
 		}
 
-		private openExpression(){
-        }
-
-		private changeSession(visitor:any){
-			// if (this.sessionList.length <= 1) {
-			// 	return;
-			// }
+		private changeSession(visitor: any) {
 			this.current = visitor;
         }
 
 		private chooseTalkSkill(talkSkill: string) {
-            this.msg += talkSkill
+            this.msg += talkSkill;
         }
 
-		private disconnect(){
-			Api.$post('/chat/disconnect', {
-				sessionId: this.current.id,
-			}).then((res: any) => {
-				this.sessionList.splice(this.current, 1);
-			})
-		}
+		// private disconnect(){
+		// 	Api.$post('/chat/disconnect', {
+		// 		sessionId: this.current.id,
+		// 	}).then((res: any) => {
+		// 		this.sessionList.splice(this.current, 1);
+		// 	})
+		// }
 
 		private sendMsg() {
-			Api.$post('/chat/sendMsg', {
-				content: this.msg,
-				sessionId: this.current.id,
-				receiveId: this.current.visitorId
-			}).then((res: any) => {
-				if (!this.current.messages) {
-					this.current.messages = [];
-                }
-				this.current.messages.push(res.data);
-				this.msg = '';
-			})
-		}
+            const dom = this.$refs.chatInputArea as HTMLElement;
+            if (dom.innerHTML) {
+                this.current.messages.push({
+                    sendUserType: 1,
+                    content: dom.innerHTML,
+                });
+                dom.innerHTML = '';
+                const chatHistory = this.$refs.chatHistory as HTMLElement;
+                this.$nextTick(() => {
+                    chatHistory.scrollTo(0, chatHistory.scrollHeight);
+                });
+                // Api.$post('/chat/sendMsg', {
+                //     content: this.msg,
+                //     sessionId: this.current.id,
+                //     receiveId: this.current.visitorId
+                // }).then((res: any) => {
+                //     if (!this.current.messages) {
+                //         this.current.messages = [];
+                //     }
+                //     this.current.messages.push(res.data);
+                //     this.msg = '';
+                // })
+            }
+        }
+        private chatExpressionToggle() {
+            this.chatExpressionChoose = !this.chatExpressionChoose;
+        }
+
+        private chooseFile() {
+            let dom = this.$refs.imageFile as HTMLElement;
+            dom.click();
+        }
+        private changeFile(event: Event){
+        }
 	}
 </script>
 <style lang="scss" scoped>
 .chat {
-    /*#E65B24*/
-    height: 80%;
-    width: 85%;
-    grid-template-rows: 10% 90%;
-    box-shadow: 0px 4px 10px #AAAAAA;
-    display: inline-grid;
-
+    height: 90%;
+    width: 100%;
+    min-width: 800px;
+    min-height: 600px;
+    box-shadow: 0px 4px 10px #ddd;
+    border-radius: 4px;
+    overflow: hidden;
     .chat-top {
-        background: #C1A062;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        background: #dbba7e;
+        padding: 0 10px;
+        color: #fff;
+        img {
+            height: 30px;
+            width: 30px;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
     }
 
     .chat-main {
-        display: inline-grid;
-        grid-template-columns: 15% 70% 15%;
-
-        div{
-        }
-
-        > div {
-            height: 100%;
-            display: inline-block;
-        }
-
+        display: flex;
+        width: 100%;
+        height: calc(100% - 56px);
         .chat-main-left {
+            width: 20%;
+            float: left;
             background: #F8F8F8;
+            border-right: 1px solid #ddd;
+            overflow: auto;
+            .visitor-item {
+                height: 64px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                cursor: pointer;
+                transition: all .3s;
+                &:hover {
+                    background: #eee;
+                }
+                &.current {
+                    background: #f0eded;
+                }
+                img {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 18px;
+                    margin-right: 6px;
+                }
+                .visitor-info {
+                    width: calc(100% - 42px);
+                    .visitor-info-msg {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        font-size: 12px;
+                    }
+                }
+            }
         }
 
         .chat-main-center {
-            border-right: 2px solid rgb(222,214,204);
-            display: inline-grid;
-            grid-template-rows: 70% 30%;
-
-            .chat_history {
-            }
-
-            .chat-edit {
-                border-top: 2px solid rgb(227,221,212);
-                display: inline-grid;
-                grid-template-rows: 25px calc(100% - 40px - 25px) 40px;
-
+            width: 60%;
+            border-right: 1px solid #ddd;
+            .chat-history {
+                height: 70%;
+                padding: 16px;
+                overflow-y: auto;
                 img {
-                    height: 23px;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 18px;
+                    margin: 0 12px;
                 }
-
-                .chat-edit-choose {
-                    height: 25px;
+                .column {
+                    padding: 12px;
+                    width: 70%;
+                    .msg {
+                        width: 70%;
+                        padding: 12px;
+                        border-radius: 4px;
+                    }
+                    .title {
+                        margin-bottom: 8px;
+                        color: #aaa;
+                    }
                 }
-
-                textarea{
-                    margin-bottom: 5px;
-                    border: 0px;
-                    outline:none;
-                    resize: none;
-                    overflow-x: hidden;
-                    overflow-y: hidden
+                .service {
+                    display: flex;
+                    width: 100%;
+                    justify-content: flex-end;
+                    .service-info {
+                        .service-msg {
+                            background: #dbba7e;
+                            color: #fff;
+                        }
+                    }
                 }
+                .custom {
+                    display: flex;
+                    width: 100%;
+                    .custom-info {
+                        .custom-msg {
+                            background: #f4eee1;
+                        }
+                    }
 
-                .button {
-                    /*line-height: 0.5;*/
-                    /*padding: 9px 10px;*/
-                    /*margin-left: 94%;*/
-                    /*margin-bottom: 5px;*/
+                }
+            }
+            .chat-edit {
+                width: 100%;
+                height: 30%;
+                border-top: 1px solid #ddd;
+                .chat_attachment {
+                    display: flex;
+                    padding: 5px 0;
+                    img{
+                        width: 24px;
+                        margin: 0 5px;
+                    }
+                    .chat_expression {
+                        position: relative;
+                        .chat_expression_choose {
+                            position: absolute;
+                            left: 5px;
+                            bottom: 35px;
+                            height: 80px;
+                            width: 200px;
+                            background: #fff;
+                            border: 1px solid #ddd;
+                            border-radius: 2px;
+                            display: none;
+                            &::before {
+                                content: '';
+                                position: absolute;
+                                bottom: -21px;
+                                display: blcok;
+                                border: 10px solid transparent;
+                                border-top: 10px solid #ddd;
+                            }
+                            &::after {
+                                content: '';
+                                position: absolute;
+                                display: blcok;
+                                bottom: -20px;
+                                border: 10px solid transparent;
+                                border-top: 10px solid #fff;
+                            }
+                        }
+                    }
+                }
+                .chat_input {
+                    position: relative;
+                    .chat_input_area{
+                        outline: none;
+                        height: 70px;
+                        overflow: scroll;
+                        padding: 0 10px;
+                        font-size: 12px;
+                    }
+                    .chat_btn {
+                        float: right;
+                        margin: 5px;
+                        padding: 5px 15px;
+                        background: #dbba7e;
+                        color: #fff;
+                        text-align: center;
+                        border-radius: 2px;
+                        font-size: 12px;
+                        cursor: pointer;
+                    }
                 }
             }
         }
 
         .chat-main-right {
+            width: 20%;
+            height: 100%;
+            float: left;
+            background: #F8F8F8;
+            overflow: auto;
+            .service-item {
+                height: 64px;
+                width: 100%;
+                display: flex;
+                align-items: center;
+                border-bottom: 1px solid #ddd;
+                padding: 12px;
+                cursor: pointer;
+                transition: all .3s;
+                &:hover {
+                    background: #eee;
+                }
+                &.current {
+                    background: #f0eded;
+                }
+                img {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 18px;
+                    margin-right: 6px;
+                }
+                .service-info {
+                    width: calc(100% - 42px);
+                    .service-info-msg {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        font-size: 12px;
+                    }
+                }
+            }
         }
     }
 }

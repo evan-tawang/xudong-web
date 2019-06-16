@@ -1,18 +1,18 @@
 <template src="./Home.html"></template>
 
-<script lang="ts">
-    import {Component, Vue, Watch} from "vue-property-decorator";
-    import {Getter, Action} from "vuex-class";
-    import RouterName from "@/constant/router-name";
-    import Menus from "@/constant/menus";
-    import Types from "@/store/types";
+<script lang='ts'>
+    import {Component, Vue, Watch} from 'vue-property-decorator';
+    import {Getter, Action} from 'vuex-class';
+    import RouterName from '@/constant/router-name';
+    import Menus from '@/constant/menus';
+    import Types from '@/store/types';
 
     @Component
     export default class Home extends Vue {
         private menus = Menus; // 菜单
         private isCollapse: boolean = false;
-        private pageTitle: string = "即时通讯管理系统";
-        private menuActiveIndex: any = "";
+        private pageTitle: string = '即时通讯管理系统';
+        private menuActiveIndex: any = '';
 
         @Action(Types.USER.LOGOUT) private userLogout: any;
 
@@ -37,7 +37,7 @@
 
 		private activeMenu(to: any, from: any ) {
 			this.menuActiveIndex = to.name;
-			for (let menu of this.menus){
+			for (const menu of this.menus) {
 				if(menu.routerName == to.name){
 					this.pageTitle = menu.text;
 					document.title = menu.text;
@@ -46,7 +46,7 @@
             }
 		}
 
-        @Watch("$route")
+        @Watch('$route')
         private onRouteChange(to:any, from:any) {
             if (to.name != from.name) {
 				this.activeMenu(to, from);
@@ -54,6 +54,6 @@
         }
     }
 </script>
-<style lang="scss">
-    @import "../assets/css/module/home";
+<style lang='scss'>
+    @import '../assets/css/module/home';
 </style>

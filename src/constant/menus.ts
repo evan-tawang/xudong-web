@@ -1,4 +1,4 @@
-import RouterName from "@/constant/router-name";
+import RouterName from '@/constant/router-name';
 
 const Menus = [
 	{icon: 'el-icon-menu', text: '聊天', routerName: RouterName.STAFF_CHAT},

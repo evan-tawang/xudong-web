@@ -1,14 +1,14 @@
 <template src="./TalkSkillList.html"></template>
 
-<script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
-    import {Getter, Action} from "vuex-class";
-    import RouterName from "@/constant/router-name";
-    import TalkSkillEnum from "@/constant/enums/TalkSkillEnum";
+<script lang='ts'>
+    import {Component, Vue} from 'vue-property-decorator';
+    import {Getter, Action} from 'vuex-class';
+    import RouterName from '@/constant/router-name';
+    import {Status as TalkSkillStatus} from '@/constant/enums/TalkSkillEnum';
 
-    import Api from "@/api";
+    import Api from '@/api';
 
-    const API_URL_PREFIX = "/talkSkill/manage";
+    const API_URL_PREFIX = '/talkSkill/manage';
     const DEFAULT_QUERY = {pageNo: 1, pageSize: 10};
 
     @Component
@@ -16,7 +16,15 @@
         private page: number = 0;
         private list: object = [];
         private query: any = DEFAULT_QUERY;
-        private loading: any = {list: false, stopUsing: false, startUsing: false, remove: false,add: false, modifyWin: false, modify: false};
+        private loading: any = {
+            list: false,
+            stopUsing: false,
+            startUsing: false,
+            remove: false,
+            add: false,
+            modifyWin: false,
+            modify: false
+        };
         private selectedDatas: any = [];
         private showAddWin: boolean = false;
         private showModifyWin: boolean = false;
@@ -24,8 +32,8 @@
         private modifyModel: any = {content:''};
         private rules: object = {
             content: [
-                {required: true, message: "请输入常用话术内容", trigger: "change"}
-            ]
+                {required: true, message: '请输入常用话术内容', trigger: 'change'},
+            ],
         };
 
         public created() {
@@ -37,8 +45,8 @@
          */
         private getListData() {
             this.loading.list = true;
-            Api.$get(API_URL_PREFIX + "/list", this.query).then((res: any) => {
-                //console.log(res.data);
+            Api.$get(API_URL_PREFIX + '/list', this.query).then((res: any) => {
+                // console.log(res.data);
                 this.list = res.data;
                 this.page = res.page;
                 this.loading.list = false;
@@ -78,29 +86,29 @@
             this.showAddWin = true;
         }
 
-        private closeAddWin(){
-            //console.log( this.$refs['modifyForm']);
-            //this.$refs['addForm'].resetFields();
+        private closeAddWin() {
+            // console.log( this.$refs['modifyForm']);
+            // this.$refs['addForm'].resetFields();
             this.showAddWin = false;
         }
 
         private submitAdd(){
             let _this = this;
-
-            this.$refs['addForm'].validate((valid) => {
+            const form = this.$refs.addForm as HTMLFormElement
+            form.validate((valid: boolean) => {
                 if (valid) {
                     this.loading.add = true;
-                    Api.$post(API_URL_PREFIX + "/add", {"content": this.addModel.content}).then((res: any) => {
+                    Api.$post(API_URL_PREFIX + '/add', {'content': this.addModel.content}).then((res: any) => {
                         this.$message({
-                            type: "success",
-                            message: "添加成功!",
+                            type: 'success',
+                            message: '添加成功!',
                             duration: 1500,
-                            onClose: function() {
+                            onClose() {
                                 _this.addModel.content = '';
                                 _this.loading.add = false;
                                 _this.getListData();
                                 _this.showAddWin = false;
-                            }
+                            },
                         });
                     });
                 }
@@ -110,7 +118,7 @@
         private openModifyWin(id: number) {
             this.loading.modifyWin = true;
             this.loading.modify = false;
-            Api.$get(API_URL_PREFIX + "/getOne", {id:id}).then((res: any) => {
+            Api.$get(API_URL_PREFIX + '/getOne', { id }).then((res: any) => {
                 if(res.data) {
                     this.modifyModel = res.data;
                 }
@@ -120,31 +128,30 @@
         }
 
         private closeMofifyWin(){
-            //console.log( this.$refs['modifyForm']);
-            this.$refs['modifyForm'].resetFields();
+            const form = this.$refs.modifyForm as HTMLFormElement
+            form.resetFields();
             this.showModifyWin = false;
         }
 
         private submitModify(){
             let _this = this;
-
-            this.$refs['modifyForm'].validate((valid) => {
+            const form = this.$refs.modifyForm as HTMLFormElement
+            form.validate((valid: boolean) => {
                 if (valid) {
-
                     this.loading.modify = true;
-                    Api.$post(API_URL_PREFIX + "/update", {
+                    Api.$post(API_URL_PREFIX + '/update', {
                         id: this.modifyModel.id,
-                        content: this.modifyModel.content
+                        content: this.modifyModel.content,
                     }).then((res: any) => {
                         this.$message({
-                            type: "success",
-                            message: "修改成功!",
+                            type: 'success',
+                            message: '修改成功!',
                             duration: 1500,
-                            onClose: function() {
+                            onClose() {
                                 _this.loading.modify = false;
                                 _this.getListData();
                                 _this.showModifyWin = false;
-                            }
+                            },
                         });
                     });
                 }
@@ -156,38 +163,38 @@
         }
 
         private updateStatus(operateText: string, newStatus: number) {
-            if (this.selectedDatas.length == 0) {
-                this.$alert("请选择需要 [" + operateText + "] 的常用话术！", {
-                    type: "warning",
-                    showClose: false
+            if (this.selectedDatas.length === 0) {
+                this.$alert('请选择需要 [' + operateText + '] 的常用话术！', {
+                    type: 'warning',
+                    showClose: false,
                 });
             } else {
                 let _this = this;
-                this.$confirm("确定 [" + operateText + "] 所选常用话术?", {
+                this.$confirm('确定 [' + operateText + '] 所选常用话术?', {
                     // confirmButtonText: '确定',
                     // cancelButtonText: '取消',
-                    type: "info",
-                    showClose: false
+                    type: 'info',
+                    showClose: false,
                 }).then(() => {
-                    let ids: string = "";
-                    //let count = this.selectedDatas.length;
+                    let ids: string = '';
+                    // let count = this.selectedDatas.length;
                     this.selectedDatas.forEach(function(e: any) {
-                        //ids.push(e.id);
-                        ids += "," + e.id;
+                        // ids.push(e.id);
+                        ids += ',' + e.id;
                     });
                     ids = ids.substr(1);
-                    //console.log(ids);
-                    Api.$post(API_URL_PREFIX + "/updateStatusGroup", {
-                        "ids": ids,
-                        "newStatus": newStatus
+                    // console.log(ids);
+                    Api.$post(API_URL_PREFIX + '/updateStatusGroup', {
+                        'ids': ids,
+                        'newStatus': newStatus,
                     }).then((res: any) => {
                         this.$message({
-                            type: "success",
-                            message: "操作成功!",
+                            type: 'success',
+                            message: '操作成功!',
                             duration: 1000,
-                            onClose: function() {
+                            onClose() {
                                 _this.getListData();
-                            }
+                            },
                         });
                     });
                 });
@@ -195,29 +202,29 @@
         }
 
         private startUsing() {
-            this.updateStatus("启用", TalkSkillEnum.Status.NORMAL.value);
+            this.updateStatus('启用', TalkSkillStatus.NORMAL);
         }
 
         private stopUsing() {
-            this.updateStatus("停用", TalkSkillEnum.Status.STOP.value);
+            this.updateStatus('停用', TalkSkillStatus.STOP);
         }
 
         private remove(id: number) {
-            this.$confirm("确定 [删除] 该常用话术?", {
+            this.$confirm('确定 [删除] 该常用话术?', {
                 // confirmButtonText: '确定',
                 // cancelButtonText: '取消',
-                type: "warning",
+                type: 'warning',
                 showClose: false
             }).then(() => {
                 let _this = this;
-                Api.$post(API_URL_PREFIX + "/delete", {id: id}).then((res: any) => {
+                Api.$post(API_URL_PREFIX + '/delete', { id }).then((res: any) => {
                     this.$message({
-                        type: "success",
-                        message: "操作成功!",
+                        type: 'success',
+                        message: '操作成功!',
                         duration: 1000,
-                        onClose: function() {
+                        onClose() {
                             _this.getListData();
-                        }
+                        },
                     });
                 });
             });

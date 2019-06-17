@@ -74,6 +74,9 @@
                             <img src="/images/image.png" alt="" @click="chooseFile">
                             <input @change="changeFile(event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg" style="display: none;">
                         </div>
+                        <div class="talk_sikill">
+                            <i class="el-icon-chat-dot-round"></i>
+                        </div>
                     </div>
                     <div class="chat_input">
                         <div ref="chatInputArea" class="chat_input_area" contenteditable="true"></div>
@@ -409,6 +412,13 @@
                                 border: 10px solid transparent;
                                 border-top: 10px solid #fff;
                             }
+                        }
+                    }
+                    .talk_sikill {
+                        i {
+                            font-size: 24px;
+                            color: #ccc;
+                            margin-left: 4px;
                         }
                     }
                 }

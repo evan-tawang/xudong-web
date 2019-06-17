@@ -2,19 +2,24 @@
     <div id="login">
         <ul class="login-box">
             <li>
-                <h1 class="title">用户登录</h1>
+                <h2 class="title">用户登录</h2>
             </li>
             <li class="username">
-                <label>请输入您的账号：</label>
-                <el-input v-model="user.account" type="text" placeholder="请输入您的账号"></el-input>
+                <el-input v-model="user.account" type="text" placeholder="请输入您的账号" prefix-icon="el-icon-user"></el-input>
             </li>
             <li class="password">
-                <label>请输入您的密码：</label>
-                <el-input v-model="user.pwd" type="password" placeholder="请输入您的密码"></el-input>
+                <el-input v-model="user.pwd" type="password" placeholder="请输入您的密码" prefix-icon="el-icon-lock"></el-input>
             </li>
             <li class="submit">
-                <label></label>
                 <el-button type="primary" @click="login">登录</el-button>
+            </li>
+            <li class="more">
+               <span>注册</span>
+               <span>忘记密码？</span>
+            </li>
+            <li class="other">
+               <span>其他登陆方式</span>
+               <img src="/images/wechat.png">
             </li>
         </ul>
     </div>

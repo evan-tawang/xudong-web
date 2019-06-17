@@ -4,44 +4,53 @@
   background-attachment: fixed;
   background-position: center;
   height: 100%;
-  background-image: url("../assets/images/login_bg.jpg");
+  background-image: url("/images/login_bg.png");
 
   li{
     margin-top: 20px;
     margin-bottom: 5px;
-    width: 500px;
+    text-align: center;
   }
 
   .login-box {
-    width: 402px;
-    right: 155px;
     position: absolute;
-    top: 15%;
+    width: 300px;
+    right: 15%;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 16px;
     background: rgba(255, 255, 255, 0.8);
     -webkit-border-radius: 10px;
     -moz-border-radius: 10px;
     border-radius: 10px;
-    height: 283px;
-
-    >li {
-      list-style: none;
-    }
-
-    .el-input {
-      width: 250px !important;
-      height: 40px;
-    }
-
-    >li.submit {
+    color: #dbba7e;
+   .submit {
       button {
-        margin-top: 12px;
-        margin-left: 96px;
-        background: #008bcc;
-        color: #fff;
-        cursor: pointer;
-        width: 250px;
+        width: 100%;
         height: 42px;
         font-size: 16px;
+        background: #dbba7e;
+        color: #fff;
+        outline: none;
+        border: 0;
+      }
+    }
+    .more {
+      text-align: right;
+      span {
+        margin-left: 8px;
+        cursor: pointer;
+      }
+    }
+    .other {
+      display: flex;
+      align-items: center;
+      border-top: 1px solid #ddd;
+      padding-top: 16px;
+      text-align: left;
+      img {
+        margin: 0 8px;
+        cursor: pointer;
       }
     }
   }

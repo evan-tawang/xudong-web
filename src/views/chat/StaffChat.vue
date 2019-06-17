@@ -9,14 +9,14 @@
         </div>
         <div class="chat-main">
             <div class="chat-main-left">
-                <div v-for="session in sessionList"
+                <div v-for="(session,index) in sessionList"
                     :key="session.id"
                     :class="{'current': current.visitorId == session.visitorId}"
                     @click="changeSession(session)"
                     class="visitor-item">
-                    <img :src="session.avatar">
+                    <img :src="session.avatar ? session.avatar : '/images/logo.jpg' ">
                     <div class="visitor-info">
-                        <div>{{ session.name ? session.name : '游客' + session.id }}</div>
+                        <div>{{ session.name ? session.name : '游客' + index }}</div>
                         <div class="visitor-info-msg" v-if="session.messages">{{ session.messages }}</div>
                     </div>
                 </div>
@@ -44,23 +44,7 @@
                     </div>
                 </div>
                 <div class="chat-edit">
-                    <!-- <div class="chat-edit-choose">
-                        <img src="/images/smile.png" alt="">
-                        <img src="/images/image.png" alt="">
 
-                        <el-tooltip placement="right-start">
-                            <div slot="content">
-                                <div v-for="talkSkill in talkSkillList" @click="chooseTalkSkill(talkSkill)">{{ talkSkill }}</div>
-                            </div>
-                           <a href="javascript:void(0)" class="el-icon-chat-dot-round"> </a>
-                        </el-tooltip>
-
-                        <a href="javascript:void(0)" class="el-icon-close" @click="disconnect()"> </a>
-                    </div>
-                    <textarea v-model="msg"></textarea>
-                    <div style=" text-align:right">
-                        <el-button type="warning" size="small" style=" line-height: 0.5;padding: 9px 10px;margin-right: 10px;margin-bottom: 5px;" @click="sendMsg" >发送</el-button>
-                    </div> -->
                     <div class="chat_attachment">
                         <div class="chat_expression">
                             <img src="/images/smile.png" alt="" @click="chatExpressionToggle">
@@ -73,6 +57,17 @@
                         <div class="chat_image">
                             <img src="/images/image.png" alt="" @click="chooseFile">
                             <input @change="changeFile(event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg" style="display: none;">
+                        </div>
+                        <div>
+                          <el-tooltip placement="right-start" effect="light">
+                              <div slot="content">
+                                  <div v-for="talkSkill in talkSkillList" @click="chooseTalkSkill(talkSkill)">{{ talkSkill }}</div>
+                              </div>
+                             <a href="javascript:void(0)" class="el-icon-chat-dot-round"> </a>
+                          </el-tooltip>
+                        </div>
+                        <div>
+                            <a href="javascript:void(0)" class="el-icon-close" @click="disconnect()"> </a>
                         </div>
                     </div>
                     <div class="chat_input">
@@ -104,22 +99,13 @@
 	@Component
 	export default class StaffChat extends Vue {
 		private staff: any = {};
-        private sessionList: any[] = [
-            {avatar: '/images/logo.jpg', name: '游客', id: 1, visitorId: 1, messages: '听说过了你最棒呢哈哈哈'},
-            {avatar: '/images/logo.jpg', name: '游客', id: 2, visitorId: 2, messages:''}
-        ];
+        private sessionList: any[] = [ ];
 		private talkSkillList: string[] = [];
         private chatExpressionChoose: boolean = false;
 		private current = {
-			id: 1,
-			visitorId: 1,
-			messages: [{
-                sendUserType:1,
-                content: 'ehllo'
-            },{
-                sendUserType:2,
-                content: 'world'
-            }]
+			id:'',
+			visitorId:'',
+			messages: []
 		};
 
 		private stompClient: any = {};
@@ -160,6 +146,7 @@
 			const that = this;
 			this.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
 				const message = JSON.parse(resp.body);
+				console.log(message)
 				that.sessionList.forEach((o: any) => {
 					if (o.visitorId === message.visitorId) {
 						const messages = o.messages || [];
@@ -210,38 +197,39 @@
             this.msg += talkSkill;
         }
 
-		// private disconnect(){
-		// 	Api.$post('/chat/disconnect', {
-		// 		sessionId: this.current.id,
-		// 	}).then((res: any) => {
-		// 		this.sessionList.splice(this.current, 1);
-		// 	})
-		// }
+		private disconnect(){
+			Api.$post('/chat/disconnect', {
+				sessionId: this.current.id,
+			}).then((res: any) => {
+				this.sessionList.splice(this.current, 1);
+			})
+		}
 
 		private sendMsg() {
             const dom = this.$refs.chatInputArea as HTMLElement;
-            if (dom.innerHTML) {
-                this.current.messages.push({
-                    sendUserType: 1,
-                    content: dom.innerHTML,
-                });
-                dom.innerHTML = '';
-                const chatHistory = this.$refs.chatHistory as HTMLElement;
-                this.$nextTick(() => {
-                    chatHistory.scrollTo(0, chatHistory.scrollHeight);
-                });
-                // Api.$post('/chat/sendMsg', {
-                //     content: this.msg,
-                //     sessionId: this.current.id,
-                //     receiveId: this.current.visitorId
-                // }).then((res: any) => {
-                //     if (!this.current.messages) {
-                //         this.current.messages = [];
-                //     }
-                //     this.current.messages.push(res.data);
-                //     this.msg = '';
-                // })
-            }
+            if (!dom.innerHTML) {
+            	return;
+			}
+			const content = dom.innerHTML;
+            Api.$post('/chat/sendMsg', {
+				content: content,
+                sessionId: this.current.id,
+                receiveId: this.current.visitorId
+            }).then((res: any) => {
+
+				console.log(res)
+
+				dom.innerHTML = '';
+				const chatHistory = this.$refs.chatHistory as HTMLElement;
+				this.$nextTick(() => {
+					chatHistory.scrollTo(0, chatHistory.scrollHeight);
+				});
+
+                if (!this.current.messages) {
+                    this.current.messages = [];
+                }
+                this.current.messages.push(res.data);
+            })
         }
         private chatExpressionToggle() {
             this.chatExpressionChoose = !this.chatExpressionChoose;
@@ -417,7 +405,7 @@
                     .chat_input_area{
                         outline: none;
                         height: 70px;
-                        overflow: scroll;
+                        overflow: hidden;
                         padding: 0 10px;
                         font-size: 12px;
                     }

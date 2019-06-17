@@ -1,5 +1,9 @@
 <template>
     <div id="login">
+        <div class="login-header">
+            <img src="/images/logo.png" alt="">
+            <span>旭东红木后台管理系统</span>
+        </div>
         <ul class="login-box">
             <li>
                 <h2 class="title">用户登录</h2>
@@ -14,12 +18,12 @@
                 <el-button type="primary" @click="login">登录</el-button>
             </li>
             <li class="more">
-               <span>注册</span>
-               <span>忘记密码？</span>
+            <span>注册</span>
+            <span>忘记密码？</span>
             </li>
             <li class="other">
-               <span>其他登陆方式</span>
-               <img src="/images/wechat.png">
+            <span>其他登陆方式</span>
+            <img src="/images/wechat.png">
             </li>
         </ul>
     </div>

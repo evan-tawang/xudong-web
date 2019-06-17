@@ -5,7 +5,18 @@
   background-position: center;
   height: 100%;
   background-image: url("/images/login_bg.png");
-
+  .login-header {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 0 48px;
+    img {
+      height: 36px;
+      width: 36px;
+      margin-right: 8px;
+    }
+  }
   li{
     margin-top: 20px;
     margin-bottom: 5px;

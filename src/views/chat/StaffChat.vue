@@ -65,7 +65,7 @@
                               </div>
                              <a href="javascript:void(0)" class="el-icon-chat-dot-round"> </a>
                           </el-tooltip>
-
+                        </div>
 <!--                        <div class="talk_sikill">-->
 <!--                            <i class="el-icon-chat-dot-round"></i>-->
 <!--                        </div>-->

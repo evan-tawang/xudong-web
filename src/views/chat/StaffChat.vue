@@ -65,7 +65,11 @@
                               </div>
                              <a href="javascript:void(0)" class="el-icon-chat-dot-round"> </a>
                           </el-tooltip>
-                        </div>
+
+<!--                        <div class="talk_sikill">-->
+<!--                            <i class="el-icon-chat-dot-round"></i>-->
+<!--                        </div>-->
+
                         <div>
                             <a href="javascript:void(0)" class="el-icon-close" @click="disconnect()"> </a>
                         </div>
@@ -397,6 +401,13 @@
                                 border: 10px solid transparent;
                                 border-top: 10px solid #fff;
                             }
+                        }
+                    }
+                    .talk_sikill {
+                        i {
+                            font-size: 24px;
+                            color: #ccc;
+                            margin-left: 4px;
                         }
                     }
                 }

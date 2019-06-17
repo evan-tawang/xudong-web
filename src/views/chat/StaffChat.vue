@@ -58,20 +58,22 @@
                             <img src="/images/image.png" alt="" @click="chooseFile">
                             <input @change="changeFile(event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg" style="display: none;">
                         </div>
-                        <div>
-                          <el-tooltip placement="right-start" effect="light">
-                              <div slot="content">
-                                  <div v-for="talkSkill in talkSkillList" @click="chooseTalkSkill(talkSkill)">{{ talkSkill }}</div>
-                              </div>
-                             <a href="javascript:void(0)" class="el-icon-chat-dot-round"> </a>
-                          </el-tooltip>
+                        <div class="talk_sikill">
+                            <el-popover
+                                popper-class="skills_popover"
+                                placement="right"
+                                width="300"
+                                trigger="click">
+                                <ul>
+                                    <li v-for="(talkSkill, index) in talkSkillList"
+                                        :key="index"
+                                        @click="chooseTalkSkill(talkSkill)">{{ talkSkill }}</li>
+                                </ul>
+                                <i slot="reference" class="el-icon-chat-dot-round"></i>
+                            </el-popover>
                         </div>
-<!--                        <div class="talk_sikill">-->
-<!--                            <i class="el-icon-chat-dot-round"></i>-->
-<!--                        </div>-->
-
-                        <div>
-                            <a href="javascript:void(0)" class="el-icon-close" @click="disconnect()"> </a>
+                        <div class="talk_disconect">
+                            <i class="el-icon-close" @click="disconnect()"></i>
                         </div>
                     </div>
                     <div class="chat_input">
@@ -104,7 +106,7 @@
 	export default class StaffChat extends Vue {
 		private staff: any = {};
         private sessionList: any[] = [ ];
-		private talkSkillList: string[] = [];
+		private talkSkillList: string[] = ['今天说的对', '很有道理'];
         private chatExpressionChoose: boolean = false;
 		private current = {
 			id:'',
@@ -198,7 +200,8 @@
         }
 
 		private chooseTalkSkill(talkSkill: string) {
-            this.msg += talkSkill;
+            const dom = this.$refs.chatInputArea as HTMLElement;
+            dom.innerHTML = dom.innerHTML + talkSkill;
         }
 
 		private disconnect(){
@@ -403,7 +406,7 @@
                             }
                         }
                     }
-                    .talk_sikill {
+                    .talk_sikill, .talk_disconect {
                         i {
                             font-size: 24px;
                             color: #ccc;
@@ -416,7 +419,7 @@
                     .chat_input_area{
                         outline: none;
                         height: 70px;
-                        overflow: hidden;
+                        overflow: scroll;
                         padding: 0 10px;
                         font-size: 12px;
                     }
@@ -471,6 +474,20 @@
                         font-size: 12px;
                     }
                 }
+            }
+        }
+    }
+}
+.skills_popover {
+    padding: 0;
+    ul {
+        li {
+            padding: 5px;
+            line-height: 30px;
+            cursor: pointer;
+            transition: all .3s;
+            &:hover {
+                background: #eee;
             }
         }
     }

@@ -46,7 +46,8 @@ module.exports = {
         proxy: {//代理
             '/': {
                 ws:false,
-                target: 'http://127.0.0.1:9001',
+                //target: 'http://127.0.0.1:9001',
+                target: 'http://47.96.89.84:9001',
                 changeOrigin: true
             },
         }

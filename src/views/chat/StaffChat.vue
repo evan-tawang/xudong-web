@@ -1,5 +1,5 @@
 <template>
-    <div class="chat">
+    <div class="chat detail__wrapper">
         <div class="chat-top">
             <img src="/images/logo.jpg" alt="">
             <div class="chat-top-msg">

@@ -19,7 +19,6 @@ module.exports = {
     outputDir: 'build/', // 打包生成的生产环境构建文件的目录
     assetsDir: process.env.assetsDir || 'static', // 放置生成的静态资源路径，默认在outputDir
     indexPath: 'index.html', // 指定生成的 index.html 输入路径，默认outputDir
-    pages: undefined, // 构建多页
     // lintOnSave: true, // 是否开启eslint保存检测，有效值：ture | false | 'error'
     productionSourceMap: IS_PROD, // 开启 生产环境的 source map?
     // runtimeCompiler: true, // 是否使用包含运行时编译器的 Vue 构建版本
@@ -45,10 +44,13 @@ module.exports = {
         port: 8080, // 端口
         proxy: {//代理
             '/': {
-                ws:false,
-                //target: 'http://127.0.0.1:9001',
-                target: 'http://47.96.89.84:9001',
-                changeOrigin: true
+                ws: false,
+                target: 'http://127.0.0.1:9001',
+                // target: 'http://47.96.89.84:9001',
+                changeOrigin: true,
+                pathRewrite: {
+                    '/service': '',
+                },
             },
         }
     }

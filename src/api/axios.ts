@@ -12,6 +12,9 @@ axios.defaults.headers = {
 axios.defaults.timeout = 20000;
 
 axios.interceptors.request.use((config: any) => {
+    
+    config.url = 'service/' + config.url;
+    
     const userAgent = store.getters.userAgent;
     if (!userAgent || Object.keys(userAgent).length === 0) {
         return config;

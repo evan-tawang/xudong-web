@@ -109,7 +109,7 @@
 	@Component
 	export default class StaffChat extends Vue {
 		private staff: any = {};
-		private sessionList: object[] = [];
+		private sessionList: any[] = [];
 		private talkSkillList: string[] = ['今天说的对', '很有道理'];
         private chatExpressionChoose: boolean = false;
 		private current = {
@@ -146,7 +146,7 @@
 		}
 
 		private subscribeReceiveMsg(chatSession: any) {
-			for (const session of this.sessionList) {
+			for (let session of this.sessionList) {
                 if (session.id === chatSession.id) {
                 	return;
                 }

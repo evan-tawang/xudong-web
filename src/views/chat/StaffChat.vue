@@ -16,7 +16,7 @@
                     class="visitor-item">
                     <img :src="session.avatar ? session.avatar : '/images/logo.jpg' ">
                     <div class="visitor-info">
-                        <div>{{ session.name ? session.name : '游客' + index + 1 }}</div>
+                        <div>{{ session.name ? session.name : '游客' + (index + 1) }}</div>
                         <div class="visitor-info-msg">
                             <template v-if="session.messages && session.messages.length > 0">
                                 {{ session.messages[session.messages.length-1].content }}
@@ -33,8 +33,11 @@
                     :class="{'service': message.sendUserType == 1, 'custom': message.sendUserType != 1 }">
                         <template v-if="message.sendUserType == 1" >
                             <div class="service-info">
-                                <div class="title">客服 18:00:00</div>
-                                <div class="service-msg msg" v-html="message.content"></div>
+                                <div class="title">客服 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
+                                <div v-if="message.contentType == 2">
+                                    <img width="16" height="16" :src="message.content">
+                                </div>
+                                <div v-else class="service-msg msg" v-html="message.content"></div>
                             </div>
                             <img src="/images/logo.jpg">
                         </template>
@@ -42,7 +45,10 @@
                             <img src="/images/logo.jpg">
                             <div class="custom-info">
                                 <div class="title">顾客 18:00:00</div>
-                                <div class="custom-msg msg" v-html="message.content"></div>
+                                <div v-if="message.contentType == 2">
+                                    <img width="16" height="16" :src="message.content">
+                                </div>
+                                <div v-else class="custom-msg msg" v-html="message.content"></div>
                             </div>
                         </template>
                     </div>
@@ -60,7 +66,7 @@
                         </div>
                         <div class="chat_image">
                             <img src="/images/image.png" alt="" @click="chooseFile">
-                            <input @change="changeFile(event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg" style="display: none;">
+                            <input @change="changeFile($event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg" style="display: none;">
                         </div>
                         <div class="talk_sikill">
                             <el-popover
@@ -110,7 +116,7 @@
 	export default class StaffChat extends Vue {
 		private staff: any = {};
 		private sessionList: any[] = [];
-		private talkSkillList: string[] = ['今天说的对', '很有道理'];
+		private talkSkillList: string[] = [];
         private chatExpressionChoose: boolean = false;
 		private current = {
 			id: '',
@@ -174,7 +180,9 @@
 		private loadTalkSkillList() {
 			Api.$get('/talkSkill/service/list').then((res: any) => {
 				res.data.forEach((o: any) => {
-					this.talkSkillList.push(o.content);
+					if(o && o.content){
+						this.talkSkillList.push(o.content);
+                    }
                 });
 			});
 		}
@@ -196,7 +204,9 @@
 		private messageHistory(chatSession: any) {
 			Api.$get('/chat/history', {sessionId: chatSession.id}).then((res: any) => {
 				this.sessionList.forEach((o: any) => {
-					o.messages = res.data;
+					if(o.id == chatSession.id){
+						o.messages = res.data;
+                    }
 				});
 			});
 		}
@@ -233,9 +243,7 @@
                 receiveId: this.current.visitorId
 			}).then((res: any) => {
 				dom.innerHTML = '';
-
-				const message = this.current.messages || [];
-				message.push(res.data);
+				this.current.messages.push(res.data);
 				this.scrollToBottom();
             })
         }
@@ -255,7 +263,28 @@
             let dom = this.$refs.imageFile as HTMLElement;
             dom.click();
         }
-        private changeFile(event: Event){
+
+        private changeFile(event:any){
+			if (event.srcElement.files.length == 0) {
+				return;
+			}
+
+			let that = this;
+			const reader = new FileReader();
+
+			reader.onload = function(event){
+				Api.$post('/chat/sendMsg', {
+					content: reader.result,
+					sessionId: that.current.id,
+					receiveId: that.current.visitorId,
+					contentType: 2
+				}).then((res: any) => {
+
+					that.current.messages.push(res.data);
+					that.scrollToBottom();
+				});
+			};
+			reader.readAsDataURL(event.srcElement.files[0]);
         }
 	}
 </script>

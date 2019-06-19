@@ -7,7 +7,7 @@
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
                         <div class="msg">
-                            <template v-if="msg.msgType==='image'">
+                            <template v-if="msg.msgType===2">
                                 <img :src="msg.content">
                             </template>
                             <template v-else>
@@ -22,7 +22,7 @@
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
                         <div class="msg">
-                            <template v-if="msg.msgType==='image'">
+                            <template v-if="msg.msgType === 2">
                                 <img :src="msg.content">
                             </template>
                             <template v-else>

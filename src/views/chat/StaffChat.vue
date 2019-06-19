@@ -122,6 +122,9 @@
 		@Getter private userAgent: any;
 
 		private created() {
+			// TODO: 兼容tslint
+			this.current.messages = [];
+
 			this.initWebSocket();
 			// this.loadStaff();
 			this.loadConnected();

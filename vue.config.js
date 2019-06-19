@@ -41,7 +41,7 @@ module.exports = {
         },
         open: true, // 配置自动启动浏览器
         hotOnly: true, // 热更新
-        port: 8080, // 端口
+        port: 8081, // 端口
         proxy: {//代理
             '/': {
                 ws: false,

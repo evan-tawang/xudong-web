@@ -41,6 +41,11 @@
             float: right;
             padding-right: 30px;
             vertical-align: middle;
+
+            .welcome{
+                margin-right: 30px;
+                color: #ccc;
+            }
             .el-button {
                 vertical-align: middle;
                 display: inline-block;
@@ -129,6 +134,10 @@
         .search__wrapper,.list__wrapper,.detail__wrapper{
             max-width: 1400px;
             margin:0 auto;
+        }
+
+        .list__wrapper,.detail__wrapper{
+            min-height: 400px;
         }
     }
 

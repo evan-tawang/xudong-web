@@ -12,13 +12,20 @@
         private menus = Menus; // 菜单
         private isCollapse: boolean = false;
         private pageTitle: string = '即时通讯管理系统';
+        private welcome : string = ''
         private menuActiveIndex: any = '';
+
+        @Getter private userAgent: any;
 
         @Action(Types.USER.LOGOUT) private userLogout: any;
 
         private async created() {
 			this.activeMenu(this.$route, null);
             document.title = this.pageTitle;
+
+
+
+            this.welcome = '欢迎您，' + this.userAgent.account+ ' ！';
         }
 
         private jump(menu: any) {

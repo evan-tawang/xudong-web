@@ -1,6 +1,6 @@
 <template>
-    <div >
-        客服分配
+    <div class="panel_main list__wrapper">
+        开发中...
     </div>
 </template>
 <script lang="ts">

@@ -16,9 +16,9 @@ const IS_PROD = process.env.NODE_ENV === 'production';
 
 module.exports = {
     publicPath: IS_PROD ? './' : '/', // 线上打包路径，请根据项目实际线上情况
-    outputDir: 'build/' + process.env.VUE_APP_OUT_PUT_DIR || 'dist', // 打包生成的生产环境构建文件的目录
+    outputDir: 'build/', // 打包生成的生产环境构建文件的目录
     assetsDir: process.env.assetsDir || 'static', // 放置生成的静态资源路径，默认在outputDir
-    indexPath: 'public/index.html', // 指定生成的 index.html 输入路径，默认outputDir
+    indexPath: 'index.html', // 指定生成的 index.html 输入路径，默认outputDir
     pages: undefined, // 构建多页
     // lintOnSave: true, // 是否开启eslint保存检测，有效值：ture | false | 'error'
     productionSourceMap: IS_PROD, // 开启 生产环境的 source map?

@@ -17,8 +17,10 @@
                     <img :src="session.avatar ? session.avatar : '/images/logo.jpg' ">
                     <div class="visitor-info">
                         <div>{{ session.name ? session.name : '游客' + index + 1 }}</div>
-                        <div class="visitor-info-msg" v-if="session.messages">
-                            {{ session.messages[session.messages.length -1].content }}
+                        <div class="visitor-info-msg">
+                            <template v-if="session.messages && session.messages.length > 0">
+                                {{ session.messages[session.messages.length-1].content }}
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -113,7 +115,7 @@
 		private current = {
 			id: '',
 			visitorId: '',
-			messages: []
+			messages: [{}]
 		};
 
 		private stompClient: any = {};
@@ -152,13 +154,14 @@
 			const that = this;
 			this.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
 				const message = JSON.parse(resp.body);
-				console.log(message)
 				that.sessionList.forEach((o: any) => {
 					if (o.visitorId === message.visitorId) {
 						const messages = o.messages || [];
 						messages.push(message);
-                    }
+					}
 				});
+
+				this.scrollToBottom();
 			});
         }
 
@@ -197,6 +200,7 @@
 
 		private changeSession(visitor: any) {
 			this.current = visitor;
+			this.scrollToBottom();
         }
 
 		private chooseTalkSkill(talkSkill: string) {
@@ -226,17 +230,23 @@
                 receiveId: this.current.visitorId
 			}).then((res: any) => {
 				dom.innerHTML = '';
-				const chatHistory = this.$refs.chatHistory as HTMLElement;
-				this.$nextTick(() => {
-					chatHistory.scrollTo(0, chatHistory.scrollHeight);
-				});
+
 				const message = this.current.messages || [];
 				message.push(res.data);
+				this.scrollToBottom();
             })
         }
         private chatExpressionToggle() {
             this.chatExpressionChoose = !this.chatExpressionChoose;
         }
+
+		private scrollToBottom() {
+			// 滚动到最下
+			this.$nextTick(() => {
+				const dom = this.$refs.chatHistory as HTMLDivElement;
+				dom.scrollTo(0, dom.offsetHeight);
+			});
+		}
 
         private chooseFile() {
             let dom = this.$refs.imageFile as HTMLElement;

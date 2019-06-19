@@ -86,6 +86,7 @@
 				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserTypeEnum.STAFF}/receiveMsg`, (resp: any) => {
 					let message = JSON.parse(resp.body);
 					that.msgs.push(message);
+					that.scrollToBottom();
 				});
 			});
 		}
@@ -108,9 +109,12 @@
 
 		// 创建聊天会话
 		private createChatSession() {
+        	const that = this;
 			Api.$post('/chat/createSession').then((res: any) => {
-				this.chatSession = res.data;
-				this.initWebSocket();
+				that.chatSession = res.data;
+
+				that.initWebSocket();
+				that.messageHistory();
 			});
 		}
 
@@ -130,7 +134,8 @@
 
 		private messageHistory() {
 			Api.$get('/chat/history', {sessionId: this.chatSession.id}).then((res: any) => {
-				this.msgs.push(res.data);
+				this.msgs = res.data;
+				this.scrollToBottom();
 			});
 		}
 

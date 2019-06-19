@@ -16,8 +16,10 @@
                     class="visitor-item">
                     <img :src="session.avatar ? session.avatar : '/images/logo.jpg' ">
                     <div class="visitor-info">
-                        <div>{{ session.name ? session.name : '游客' + index }}</div>
-                        <div class="visitor-info-msg" v-if="session.messages">{{ session.messages }}</div>
+                        <div>{{ session.name ? session.name : '游客' + index + 1 }}</div>
+                        <div class="visitor-info-msg" v-if="session.messages">
+                            {{ session.messages[session.messages.length -1].content }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -105,18 +107,16 @@
 	@Component
 	export default class StaffChat extends Vue {
 		private staff: any = {};
-        private sessionList: any[] = [ ];
+		private sessionList: object[] = [];
 		private talkSkillList: string[] = ['今天说的对', '很有道理'];
         private chatExpressionChoose: boolean = false;
 		private current = {
-			id:'',
-			visitorId:'',
+			id: '',
+			visitorId: '',
 			messages: []
 		};
 
 		private stompClient: any = {};
-		private msg: string = '';
-
 		@Getter private userAgent: any;
 
 		private created() {
@@ -208,7 +208,9 @@
 			Api.$post('/chat/disconnect', {
 				sessionId: this.current.id,
 			}).then((res: any) => {
-				// this.sessionList.splice(this.current, 1);
+				for (let i in this.sessionList) {
+					this.sessionList.splice(parseInt(i), 1);
+                }
 			})
 		}
 
@@ -222,17 +224,14 @@
 				content: content,
                 sessionId: this.current.id,
                 receiveId: this.current.visitorId
-			}).then((res: any = {}) => {
+			}).then((res: any) => {
 				dom.innerHTML = '';
 				const chatHistory = this.$refs.chatHistory as HTMLElement;
 				this.$nextTick(() => {
 					chatHistory.scrollTo(0, chatHistory.scrollHeight);
 				});
-
-                if (!this.current.messages) {
-                    this.current.messages = [];
-                }
-                // this.current.messages.push(res.data);
+				const message = this.current.messages || [];
+				message.push(res.data);
             })
         }
         private chatExpressionToggle() {

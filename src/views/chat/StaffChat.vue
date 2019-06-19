@@ -208,7 +208,7 @@
 			Api.$post('/chat/disconnect', {
 				sessionId: this.current.id,
 			}).then((res: any) => {
-				this.sessionList.splice(this.current, 1);
+				// this.sessionList.splice(this.current, 1);
 			})
 		}
 
@@ -222,10 +222,7 @@
 				content: content,
                 sessionId: this.current.id,
                 receiveId: this.current.visitorId
-            }).then((res: any) => {
-
-				console.log(res)
-
+			}).then((res: any = {}) => {
 				dom.innerHTML = '';
 				const chatHistory = this.$refs.chatHistory as HTMLElement;
 				this.$nextTick(() => {
@@ -235,7 +232,7 @@
                 if (!this.current.messages) {
                     this.current.messages = [];
                 }
-                this.current.messages.push(res.data);
+                // this.current.messages.push(res.data);
             })
         }
         private chatExpressionToggle() {

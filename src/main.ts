@@ -19,10 +19,6 @@ filters(Vue);
 //前端验证token
 router.beforeEach((to, from, next) => {
 	const path = to.path;
-	if (path === '/') {
-		router.push({name:RouterName.USER.LOGIN});
-		return;
-	}
 	if (!Utils.match('^/login|^/mobile/chat', path)) {
 		const userAgent = store.getters.userAgent;
 		if (!userAgent || Object.keys(userAgent).length === 0) {

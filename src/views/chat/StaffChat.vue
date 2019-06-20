@@ -83,8 +83,12 @@
                             </el-popover>
                         </div>
                         <div class="talk_disconect">
+                            <i class="el-icon-search" @click="showSearch()"></i>
+                        </div>
+                        <div class="talk_disconect">
                             <i class="el-icon-close" @click="disconnect()"></i>
                         </div>
+
                     </div>
                     <div class="chat_input">
                         <div ref="chatInputArea" class="chat_input_area" contenteditable="true"></div>
@@ -102,6 +106,41 @@
                 </div>
             </div>
         </div>
+
+        <el-dialog
+                title="提示"
+                :visible.sync="showSearchModel"
+                width="30%"
+                :before-close="handleClose">
+            <div>
+                <el-input></el-input>
+                <i class="el-icon-close" @click="disconnect()"></i>
+            </div>
+            <div>
+                <div v-for="(o,index) in searchedList" :key="o.id">
+                    <div class="search-chat-name">
+                        <template v-if="o.sendUserType == 1">
+                            {{ current.visitorName ? current.visitorName : '游客' }}
+                        </template>
+                        <template v-else>
+                            {{ current.staffName ? current.staffName : '我' }}
+                        </template>
+                    </div>
+                    <div class="search-chat-content">
+                        <template v-if="o.contentType == 2">
+                            <img width="16" height="16" :src="message.content">
+                        </template>
+                        <template v-else>
+                            {{ o.content }}
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+            </span>
+        </el-dialog>
     </div>
 </template>
 <script lang="ts">
@@ -109,18 +148,24 @@
 	import Api from '@/api';
 	import {Getter} from 'vuex-class';
 	import UserTypeEnum from '@/constant/enums/UserTypeEnum';
+	import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
 	const SockJS = require('sockjs-client');
     const Stomp = require('stompjs');
 
 	@Component
 	export default class StaffChat extends Vue {
 		private staff: any = {};
+		private showSearchModel: boolean = false;
+		private searchedList: object[] = [];
+
 		private sessionList: any[] = [];
 		private talkSkillList: string[] = [];
         private chatExpressionChoose: boolean = false;
 		private current = {
 			id: '',
 			visitorId: '',
+			visitorName: '',
+			staffName: '',
 			messages: [{}]
 		};
 
@@ -277,7 +322,7 @@
 					content: reader.result,
 					sessionId: that.current.id,
 					receiveId: that.current.visitorId,
-					contentType: 2
+					contentType: ChatContentTypeEnum.FILE
 				}).then((res: any) => {
 
 					that.current.messages.push(res.data);
@@ -285,6 +330,10 @@
 				});
 			};
 			reader.readAsDataURL(event.srcElement.files[0]);
+        }
+
+		private showSearch(){
+            this.showSearchModel = true;
         }
 	}
 </script>

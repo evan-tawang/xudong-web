@@ -7,7 +7,7 @@
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
                         <div class="msg">
-                            <template v-if="msg.msgType===2">
+                            <template v-if="msg.contentType == 2">
                                 <img :src="msg.content">
                             </template>
                             <template v-else>
@@ -15,14 +15,14 @@
                             </template>
                         </div>
                     </div>
-                    <img :src="msg.avatar" alt="头像">
+                    <img src="/images/logo.jpg" alt="头像">
                 </div>
                 <div v-if="msg.sendUserType === 1" class="chat_history_area service" :key="msg.id">
-                    <img :src="msg.avatar" alt="头像">
+                    <img src="/images/logo.jpg" alt="头像">
                     <div class="chat_msg">
                         <div class="title">{{msg.name}} {{msg.timeStr}}</div>
                         <div class="msg">
-                            <template v-if="msg.msgType === 2">
+                            <template v-if="msg.contentType == 2">
                                 <img :src="msg.content">
                             </template>
                             <template v-else>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="file_choose">
                     <img src="/images/image.png" alt="">
-                    <input class="file" type="file" accept=".png,.jpg,.jpeg" style="opacity: 0;" @change="chooseFile">
+                    <input class="file" type="file" accept=".png,.jpg,.jpeg" style="opacity: 0;" @change="changeFile">
                 </div>
                 <el-input v-model="input" size="small" @focus="expand=false" @blur="handleBlur" @keyup.enter.native="sendMsg"></el-input>
             </div>
@@ -55,6 +55,7 @@
 	import Api from '@/api';
 	import Utils from "@/utils";
 	import UserTypeEnum from "@/constant/enums/UserTypeEnum";
+	import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
 	const SockJS = require("sockjs-client");
 	const Stomp = require("stompjs");
 
@@ -137,6 +138,28 @@
 				this.msgs = res.data;
 				this.scrollToBottom();
 			});
+		}
+
+		private changeFile(event:any){
+			if (event.srcElement.files.length == 0) {
+				return;
+			}
+
+			let that = this;
+			const reader = new FileReader();
+
+			reader.onload = function(event){
+				Api.$post('/chat/sendMsg', {
+					content: reader.result,
+					sessionId: that.chatSession.id,
+					contentType: ChatContentTypeEnum.FILE
+				}).then((res: any) => {
+
+					that.msgs.push(res.data);
+					that.scrollToBottom();
+				});
+			};
+			reader.readAsDataURL(event.srcElement.files[0]);
 		}
 
         private scrollToBottom() {

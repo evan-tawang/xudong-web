@@ -19,12 +19,17 @@
                         <div>{{ session.name ? session.name : '游客' + (index + 1) }}</div>
                         <div class="visitor-info-msg">
                             <template v-if="session.messages && session.messages.length > 0">
-                                {{ session.messages[session.messages.length-1].content }}
+                                <template v-if="session.messages[session.messages.length-1].contentType == 2">
+                                    [图片]
+                                </template>
+                                <template v-else>
+                                    {{ session.messages[session.messages.length-1].content }}
+                                </template>
                             </template>
                         </div>
                     </div>
-                    <div class="visitor-item-num">{{session.messages.length > 99 ? '99+' : session.messages.length}}
-                    </div>
+<!--                    <div class="visitor-item-num">{{session.messages.length > 99 ? '99+' : session.messages.length}}-->
+<!--                    </div>-->
                 </div>
             </div>
             <div class="chat-main-center">
@@ -217,6 +222,8 @@
                     that.subscribeReceiveMsg(chatSession);
                     chatSession.messages = [];
                     that.sessionList.push(chatSession);
+
+					that.messageHistory(chatSession);
                 });
             });
         }

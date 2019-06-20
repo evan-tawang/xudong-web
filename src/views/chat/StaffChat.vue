@@ -37,7 +37,7 @@
                             <div class="service-info">
                                 <div class="title">客服 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
                                 <div class="service-msg msg img-msg" v-if="message.contentType == 2">
-                                    <img :src="message.content">
+                                    <img :src="message.content" @click="zoomImage(message.content)">
                                 </div>
                                 <div v-else class="service-msg msg" v-html="message.content"></div>
                             </div>
@@ -48,7 +48,7 @@
                             <div class="custom-info">
                                 <div class="title">顾客 18:00:00</div>
                                 <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
-                                    <img :src="message.content">
+                                    <img :src="message.content" @click="zoomImage(message.content)">
                                 </div>
                                 <div v-else class="custom-msg msg" v-html="message.content"></div>
                             </div>
@@ -162,6 +162,14 @@
             </el-pagination>
             -->
         </el-dialog>
+        <el-dialog
+            :visible.sync="imagePreviewVisible"
+            width="80%"
+            height="80%">
+                <div class="image-preview">
+                    <img :src="imagePreview">
+                </div>
+        </el-dialog>
     </div>
 </template>
 <script lang="ts">
@@ -183,6 +191,8 @@
         private sessionList: any[] = [];
         private talkSkillList: string[] = [];
         private chatExpressionChoose: boolean = false;
+        private imagePreviewVisible: boolean = false;
+        private imagePreview: string = '';
         private current = {
             id: "",
             visitorId: "",
@@ -357,6 +367,11 @@
 
         private showSearch() {
             this.showSearchModel = true;
+        }
+
+        private zoomImage(content: string) {
+            this.imagePreviewVisible = true;
+            this.imagePreview = content;
         }
     }
 </script>
@@ -678,6 +693,13 @@
                     background: #eee;
                 }
             }
+        }
+    }
+    .image-preview {
+        width: 100%;
+        height: 100%;
+        img {
+            width: 100%;
         }
     }
 </style>

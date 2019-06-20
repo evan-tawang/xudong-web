@@ -23,6 +23,7 @@
                             </template>
                         </div>
                     </div>
+                    <div class="visitor-item-num">{{session.messages.length > 99 ? '99+' : session.messages.length}}</div>
                 </div>
             </div>
             <div class="chat-main-center">
@@ -34,19 +35,19 @@
                         <template v-if="message.sendUserType == 1" >
                             <div class="service-info">
                                 <div class="title">客服 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
-                                <div v-if="message.contentType == 2">
-                                    <img width="16" height="16" :src="message.content">
+                                <div class="service-msg msg img-msg" v-if="message.contentType == 2">
+                                    <img :src="message.content">
                                 </div>
                                 <div v-else class="service-msg msg" v-html="message.content"></div>
                             </div>
-                            <img src="/images/logo.jpg">
+                            <img class="avatar-img" src="/images/logo.jpg">
                         </template>
                         <template v-else>
-                            <img src="/images/logo.jpg">
+                            <img class="avatar-img" src="/images/logo.jpg">
                             <div class="custom-info">
                                 <div class="title">顾客 18:00:00</div>
-                                <div v-if="message.contentType == 2">
-                                    <img width="16" height="16" :src="message.content">
+                                <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
+                                    <img  :src="message.content">
                                 </div>
                                 <div v-else class="custom-msg msg" v-html="message.content"></div>
                             </div>
@@ -374,6 +375,7 @@
             .visitor-item {
                 height: 64px;
                 width: 100%;
+                position: relative;
                 display: flex;
                 align-items: center;
                 border-bottom: 1px solid #ddd;
@@ -393,13 +395,26 @@
                     margin-right: 6px;
                 }
                 .visitor-info {
-                    width: calc(100% - 42px);
+                    width: calc(100% - 62px);
                     .visitor-info-msg {
                         overflow: hidden;
                         text-overflow: ellipsis;
                         white-space: nowrap;
                         font-size: 12px;
+                        margin-top: 4px;
+                        color: #aaa;
                     }
+                }
+                .visitor-item-num {
+                    position: absolute;
+                    top: calc(50% - 12px);
+                    right: 10px;
+                    border-radius: 12px;
+                    padding: 2px;
+                    text-align: center;
+                    background: #aaa;
+                    color: #fff;
+                    font-size: 12px;
                 }
             }
         }
@@ -411,7 +426,7 @@
                 height: 70%;
                 padding: 16px;
                 overflow-y: auto;
-                img {
+                .avatar-img {
                     width: 36px;
                     height: 36px;
                     border-radius: 18px;
@@ -424,6 +439,14 @@
                         width: 70%;
                         padding: 12px;
                         border-radius: 4px;
+                        word-break: break-all;
+                        &.img-msg {
+                            padding: 0;
+                            border-radius: 0;
+                            img {
+                                width: 100%;
+                            }
+                        }
                     }
                     .title {
                         margin-bottom: 8px;
@@ -435,9 +458,16 @@
                     width: 100%;
                     justify-content: flex-end;
                     .service-info {
+                        .title {
+                            text-align: right;
+                        }
                         .service-msg {
                             background: #dbba7e;
                             color: #fff;
+                            float: right;
+                            &.img-msg {
+                                background: transparent;
+                            }
                         }
                     }
                 }
@@ -447,6 +477,9 @@
                     .custom-info {
                         .custom-msg {
                             background: #f4eee1;
+                            &.img-msg {
+                                background: transparent;
+                            }
                         }
                     }
 
@@ -503,10 +536,12 @@
                 }
                 .chat_input {
                     position: relative;
+                    height: calc(100% - 37px);
                     .chat_input_area{
                         outline: none;
-                        height: 70px;
-                        overflow: scroll;
+                        height: calc(100% - 40px);
+                        overflow-y: auto;
+                        overflow-x: hidden;
                         padding: 0 10px;
                         font-size: 12px;
                     }

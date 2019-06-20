@@ -1,0 +1,45 @@
+<div>
+    <!--    <div class="search__wrapper">-->
+    <!--    </div>-->
+
+    <div class="panel_main list__wrapper">
+        <div class="list__tools">
+            <div class="left">
+                <el-form :model="query" :inline="true">
+                    <el-input v-model="query.queryKey" class="input-350" placeholder="可输入内容、账号模糊搜索"></el-input>
+                    <el-button type="primary" @click="searchData" icon="el-icon-search">搜索</el-button>
+                    <el-button @click="resetQuery">清空</el-button>
+                </el-form>
+            </div>
+            <div class="right">
+            </div>
+        </div>
+
+        <el-table :data="list" ref="listData" class="list__data" highlight-current-row  v-loading="loading.list">
+            <el-table-column type="index" label="序号" align="center" width="70"></el-table-column>
+            <el-table-column prop="content" label="留言内容" min-width="400"></el-table-column>
+            <el-table-column prop="visitorId" label="访客账号" min-width="100" show-overflow-tooltip>
+                <template slot-scope="scope">{{ scope.row.visitorId == null ?  '游客' : scope.row.visitorId}}</template>
+            </el-table-column>
+            <!--<el-table-column prop="visitorIp" label="访客ip" min-width="100" show-overflow-tooltip></el-table-column>-->
+            <el-table-column prop="gmtCreate" label="留言时间" min-width="120">
+                <template slot-scope="scope">{{ scope.row.gmtCreate | dateTime }}</template>
+            </el-table-column>
+        </el-table>
+
+        <el-pagination class="list__page"
+                       @size-change="pageSizeChange"
+                       @current-change="currentPageChange"
+                       :current-page="query.pageNo"
+                       :page-sizes="[10, 20, 50, 100]"
+                       :page-size="query.pageSize"
+                       layout="total, sizes, prev, pager, next, jumper"
+                       :total="this.page.recordCount">
+        </el-pagination>
+
+    </div>
+
+    <el-dialog title="详情" :visible="showDetailWin" width="70%" :close-on-click-modal="false" :close-on-press-escape="false" >
+
+    </el-dialog>
+</div>

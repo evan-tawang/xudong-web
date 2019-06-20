@@ -68,20 +68,23 @@
             padding: 9px 15px
         }
 
+        .el-form{
+            .el-input{
+                margin-right: 12px;
+            }
+            .el-input__inner {
+                height: 34px;
+                line-height: 34px;
+            }
+        }
+
         .left{
             display: inline-block;
         }
         .right{
+            display: inline-block;
             float:right;
-            .el-form{
-                .el-input{
-                    margin-right: 12px;
-                }
-                .el-input__inner {
-                    height: 34px;
-                    line-height: 34px;
-                }
-            }
+
         }
         //.el-button + .el-button {
         //    margin-left: 5px;

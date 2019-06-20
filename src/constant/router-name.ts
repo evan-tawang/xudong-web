@@ -8,6 +8,7 @@ const RouterName = {
 	BLACKLIST: 'blacklist',
 	SENSITIVE_WORD: 'sensitive_word',
   	TALK_SKILL_LIST: 'talk_skill',
+	GUEST_BOOK: 'guestbook_list',
 };
 
 export default RouterName;

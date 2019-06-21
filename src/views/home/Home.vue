@@ -62,5 +62,5 @@
     }
 </script>
 <style lang='scss'>
-    @import '../assets/css/module/home';
+    @import 'home';
 </style>

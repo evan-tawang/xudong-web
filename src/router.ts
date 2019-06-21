@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import RouterName from '@/constant/router-name';
 import Login from '@/views/user/Login.vue';
-import Home from './views/Home.vue';
+import Home from './views/home/Home.vue';
 
 import Mobile from './views/mobile/Mobile.vue';
 import Message from './views/mobile/message/Message.vue';

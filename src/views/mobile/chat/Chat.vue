@@ -166,7 +166,10 @@
             // 滚动到最下
             this.$nextTick(() => {
                 const dom = this.$refs.chatHistory as HTMLDivElement;
-                dom.scrollTo(0, dom.offsetHeight);
+                console.log(dom.scrollHeight)
+				dom.scrollTop = (dom.scrollHeight + 100);
+				console.log(dom.scrollTop)
+                // dom.scrollTo(0, dom.offsetHeight);
             });
         }
     }

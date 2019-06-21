@@ -229,33 +229,43 @@
             stompClient.connect({}, () => {
                 stompClient.subscribe(`/chat/${that.userAgent.id}/allocate`, (resp: any) => {
                     const chatSession = JSON.parse(resp.body);
-                    that.subscribeReceiveMsg(chatSession);
-                    chatSession.messages = [];
-                    that.sessionList.push(chatSession);
+					chatSession.messages = [];
 
+					that.subscribeReceiveMsg(chatSession, JSON.parse(JSON.stringify(that.sessionList)));
 					that.messageHistory(chatSession);
+
+                    that.sessionList.push(chatSession);
                 });
             });
+
+
         }
 
-        private subscribeReceiveMsg(chatSession: any) {
-            for (let session of this.sessionList) {
-                if (session.id === chatSession.id) {
-                    return;
-                }
-            }
-            const that = this;
-            this.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
-                const message = JSON.parse(resp.body);
-                that.sessionList.forEach((o: any) => {
-                    if (o.visitorId === message.visitorId) {
-                        const messages = o.messages || [];
-                        messages.push(message);
-                    }
-                });
+        private subscribeReceiveMsg(chatSession: any,currentSessionList:any[]) {
 
-                this.scrollToBottom();
-            });
+			if (currentSessionList && currentSessionList.length > 0) {
+				for (let session of currentSessionList) {
+					if (session.id === chatSession.id) {
+						return;
+					}
+				}
+            }
+
+			const that = this;
+			setTimeout(function () {
+				that.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
+					const message = JSON.parse(resp.body);
+					that.sessionList.forEach((o: any) => {
+						if (o.visitorId === message.visitorId) {
+							console.log(1111111111)
+							o.messages = o.messages ? o.messages : [];
+							o.messages.push(message);
+							that.$forceUpdate()
+						}
+					});
+					that.scrollToBottom();
+				})
+			},5000)
         }
 
         // private loadStaff() {
@@ -279,7 +289,7 @@
 
                 this.sessionList = res.data;
                 res.data.forEach((o: any) => {
-                    this.subscribeReceiveMsg(o);
+					this.subscribeReceiveMsg(o, []);
                     this.messageHistory(o);
                 });
             });
@@ -321,13 +331,15 @@
                 return;
             }
             const content = dom.innerHTML;
+			const that = this;
             Api.$post("/chat/sendMsg", {
                 content: content,
                 sessionId: this.current.id,
                 receiveId: this.current.visitorId
             }).then((res: any) => {
                 dom.innerHTML = "";
-                this.current.messages.push(res.data);
+                that.current.messages.push(res.data);
+                this.$forceUpdate();
                 this.scrollToBottom();
             });
         }
@@ -340,7 +352,8 @@
             // 滚动到最下
             this.$nextTick(() => {
                 const dom = this.$refs.chatHistory as HTMLDivElement;
-                dom.scrollTo(0, dom.offsetHeight);
+				dom.scrollTop = dom.scrollHeight;
+                // dom.scrollTo(0, dom.offsetHeight);
             });
         }
 
@@ -364,8 +377,10 @@
                     receiveId: that.current.visitorId,
                     contentType: ChatContentTypeEnum.FILE
                 }).then((res: any) => {
+					that.$nextTick(() => {
+						that.current.messages.push(res.data);
+					});
 
-                    that.current.messages.push(res.data);
                     that.scrollToBottom();
                 });
             };

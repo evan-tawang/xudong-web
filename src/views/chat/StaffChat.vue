@@ -1,7 +1,7 @@
 <template src="./StaffChat.html">
 </template>
 <script lang="ts">
-    import {Component, Vue} from "vue-property-decorator";
+	import {Component, Vue, Watch} from "vue-property-decorator";
     import Api from "@/api";
     import {Getter} from "vuex-class";
     import UserTypeEnum from "@/constant/enums/UserTypeEnum";
@@ -38,7 +38,7 @@
         private hisQueryDatePickerOptions: object = {
             shortcuts: [{
                 text: "最近一周",
-                onClick(picker) {
+                onClick(picker:any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -46,7 +46,7 @@
                 }
             }, {
                 text: "最近一个月",
-                onClick(picker) {
+                onClick(picker:any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -54,7 +54,7 @@
                 }
             }, {
                 text: "最近三个月",
-                onClick(picker) {
+                onClick(picker:any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -63,7 +63,7 @@
             }]
         };
 
-        private stompClient: any = {};
+		private stompClient: any = {connected: false};
         @Getter private userAgent: any;
 
         private created() {
@@ -88,41 +88,39 @@
                     const chatSession = JSON.parse(resp.body);
                     chatSession.messages = [];
 
-                    that.subscribeReceiveMsg(chatSession, JSON.parse(JSON.stringify(that.sessionList)));
+                    that.subscribeReceiveMsg(chatSession);
                     that.messageHistory(chatSession);
 
                     that.sessionList.push(chatSession);
                 });
             });
-
-
         }
 
-        private subscribeReceiveMsg(chatSession: any, currentSessionList: any[]) {
-
-            if (currentSessionList && currentSessionList.length > 0) {
-                for (let session of currentSessionList) {
-                    if (session.id === chatSession.id) {
-                        return;
-                    }
-                }
+        @Watch('stompClient.connected')
+        private webSocketConnected(){
+        	if(!this.stompClient.connected){
+        		return;
             }
+        	console.log(this.stompClient.connected)
+			this.sessionList.forEach((o: any) => {
+				this.subscribeReceiveMsg(o);
+			})
+        }
+
+        private subscribeReceiveMsg(chatSession: any) {
 
             const that = this;
-            setTimeout(function() {
-                that.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
-                    const message = JSON.parse(resp.body);
-                    that.sessionList.forEach((o: any) => {
-                        if (o.visitorId === message.visitorId) {
-                            console.log(1111111111);
-                            o.messages = o.messages ? o.messages : [];
-                            o.messages.push(message);
-                            that.$forceUpdate();
-                        }
-                    });
-                    that.scrollToBottom();
+            that.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
+                const message = JSON.parse(resp.body);
+                that.sessionList.forEach((o: any) => {
+                    if (o.visitorId === message.visitorId) {
+                        o.messages = o.messages ? o.messages : [];
+                        o.messages.push(message);
+                        that.$forceUpdate();
+                    }
                 });
-            }, 5000);
+                that.scrollToBottom();
+            });
         }
 
         // private loadStaff() {
@@ -146,7 +144,6 @@
 
                 this.sessionList = res.data;
                 res.data.forEach((o: any) => {
-                    this.subscribeReceiveMsg(o, []);
                     this.messageHistory(o);
                 });
             });

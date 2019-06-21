@@ -201,7 +201,7 @@
                 content: '';
                 position: absolute;
                 bottom: -21px;
-                display: blcok;
+                display: block;
                 border: 10px solid transparent;
                 border-top: 10px solid #ddd;
               }
@@ -209,7 +209,7 @@
               &::after {
                 content: '';
                 position: absolute;
-                display: blcok;
+                display: block;
                 bottom: -20px;
                 border: 10px solid transparent;
                 border-top: 10px solid #fff;
@@ -217,13 +217,13 @@
             }
           }
 
-          .talk_sikill, .talk_disconect {
-            i {
-              font-size: 24px;
-              color: #ccc;
-              margin-left: 4px;
-            }
+
+          i {
+            font-size: 24px;
+            color: #ccc;
+            margin-left: 4px;
           }
+
         }
 
         .chat_input {
@@ -326,3 +326,24 @@
     width: 100%;
   }
 }
+
+
+.staffchat_his_data_wrapper {
+  height: 400px;
+  overflow: auto;
+  padding: 0 10px;
+  margin: 15px 0;
+  border: solid 1px #dedede;
+
+  .item {
+    margin: 12px 0;
+    .name {
+      color: #999;
+      font-size: 11px;
+    }
+    .content {
+      font-size: 14px;
+    }
+  }
+}
+

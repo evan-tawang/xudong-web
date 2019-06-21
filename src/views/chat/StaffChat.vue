@@ -10,23 +10,57 @@
     const SockJS = require("sockjs-client");
     const Stomp = require("stompjs");
 
+    const DEFAULT_QUERY = {pageNo: 1, pageSize: 50};
+
     @Component
     export default class StaffChat extends Vue {
         private staff: any = {};
-        private showSearchModel: boolean = false;
-        private searchedList: object[] = [];
+        private showHistoryDialog: boolean = false;
 
         private sessionList: any[] = [];
         private talkSkillList: string[] = [];
         private chatExpressionChoose: boolean = false;
         private imagePreviewVisible: boolean = false;
-        private imagePreview: string = '';
+        private imagePreview: string = "";
         private current = {
             id: "",
             visitorId: "",
             visitorName: "",
             staffName: "",
             messages: [{}]
+        };
+
+        private hisPage: any = {recordCount: 0};
+        private hisList: any = [];
+        private hisQuery: any = DEFAULT_QUERY;
+        private hisQueryDate = "";
+
+        private hisQueryDatePickerOptions: object = {
+            shortcuts: [{
+                text: "最近一周",
+                onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit("pick", [start, end]);
+                }
+            }, {
+                text: "最近一个月",
+                onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                    picker.$emit("pick", [start, end]);
+                }
+            }, {
+                text: "最近三个月",
+                onClick(picker) {
+                    const end = new Date();
+                    const start = new Date();
+                    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                    picker.$emit("pick", [start, end]);
+                }
+            }]
         };
 
         private stompClient: any = {};
@@ -52,10 +86,10 @@
             stompClient.connect({}, () => {
                 stompClient.subscribe(`/chat/${that.userAgent.id}/allocate`, (resp: any) => {
                     const chatSession = JSON.parse(resp.body);
-					chatSession.messages = [];
+                    chatSession.messages = [];
 
-					that.subscribeReceiveMsg(chatSession, JSON.parse(JSON.stringify(that.sessionList)));
-					that.messageHistory(chatSession);
+                    that.subscribeReceiveMsg(chatSession, JSON.parse(JSON.stringify(that.sessionList)));
+                    that.messageHistory(chatSession);
 
                     that.sessionList.push(chatSession);
                 });
@@ -64,31 +98,31 @@
 
         }
 
-        private subscribeReceiveMsg(chatSession: any,currentSessionList:any[]) {
+        private subscribeReceiveMsg(chatSession: any, currentSessionList: any[]) {
 
-			if (currentSessionList && currentSessionList.length > 0) {
-				for (let session of currentSessionList) {
-					if (session.id === chatSession.id) {
-						return;
-					}
-				}
+            if (currentSessionList && currentSessionList.length > 0) {
+                for (let session of currentSessionList) {
+                    if (session.id === chatSession.id) {
+                        return;
+                    }
+                }
             }
 
-			const that = this;
-			setTimeout(function () {
-				that.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
-					const message = JSON.parse(resp.body);
-					that.sessionList.forEach((o: any) => {
-						if (o.visitorId === message.visitorId) {
-							console.log(1111111111)
-							o.messages = o.messages ? o.messages : [];
-							o.messages.push(message);
-							that.$forceUpdate()
-						}
-					});
-					that.scrollToBottom();
-				})
-			},5000)
+            const that = this;
+            setTimeout(function() {
+                that.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
+                    const message = JSON.parse(resp.body);
+                    that.sessionList.forEach((o: any) => {
+                        if (o.visitorId === message.visitorId) {
+                            console.log(1111111111);
+                            o.messages = o.messages ? o.messages : [];
+                            o.messages.push(message);
+                            that.$forceUpdate();
+                        }
+                    });
+                    that.scrollToBottom();
+                });
+            }, 5000);
         }
 
         // private loadStaff() {
@@ -112,7 +146,7 @@
 
                 this.sessionList = res.data;
                 res.data.forEach((o: any) => {
-					this.subscribeReceiveMsg(o, []);
+                    this.subscribeReceiveMsg(o, []);
                     this.messageHistory(o);
                 });
             });
@@ -154,7 +188,7 @@
                 return;
             }
             const content = dom.innerHTML;
-			const that = this;
+            const that = this;
             Api.$post("/chat/sendMsg", {
                 content: content,
                 sessionId: this.current.id,
@@ -175,7 +209,7 @@
             // 滚动到最下
             this.$nextTick(() => {
                 const dom = this.$refs.chatHistory as HTMLDivElement;
-				dom.scrollTop = dom.scrollHeight;
+                dom.scrollTop = dom.scrollHeight;
                 // dom.scrollTo(0, dom.offsetHeight);
             });
         }
@@ -200,9 +234,9 @@
                     receiveId: that.current.visitorId,
                     contentType: ChatContentTypeEnum.FILE
                 }).then((res: any) => {
-					that.$nextTick(() => {
-						that.current.messages.push(res.data);
-					});
+                    that.$nextTick(() => {
+                        that.current.messages.push(res.data);
+                    });
 
                     that.scrollToBottom();
                 });
@@ -210,16 +244,50 @@
             reader.readAsDataURL(event.srcElement.files[0]);
         }
 
-        private showSearch() {
-            this.showSearchModel = true;
+        private showHistory() {
+            this.showHistoryDialog = true;
+            this.hisSearch();
         }
 
+        private hisGet() {
+            Api.$get('/chat/all-history', this.hisQuery).then((res: any) => {
+                //console.log(res.data)
+                this.hisList = res.data;
+            });
+        }
+        private hisSearch() {
+            this.hisGet();
+        }
+        private hisPageSizeChange() {
+            this.hisGet();
+        }
+        private hisCurrentPageChange() {
+            this.hisGet();
+        }
         private zoomImage(content: string) {
             this.imagePreviewVisible = true;
             this.imagePreview = content;
         }
     }
 </script>
+<style lang="scss">
+    .staffchat_his_dialog {
+        .el-dialog__body {
+            padding-top: 0!important;
+        }
+    }
+    .staffchat_his_search_wrapper {
+        text-align: right;
+
+        .el-date-editor .el-range-separator {
+            padding: 0!important;
+        }
+
+        .el-button {
+            margin-left: 10px;
+        }
+    }
+</style>
 <style lang="scss" scoped>
     @import 'StaffChat';
 </style>

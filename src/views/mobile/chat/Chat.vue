@@ -54,7 +54,7 @@
     import {Component, Vue} from 'vue-property-decorator';
 	import Api from '@/api';
 	import Utils from "@/utils";
-	import UserTypeEnum from "@/constant/enums/UserTypeEnum";
+	import UserEnum from "@/constant/enums/UserEnum";
 	import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
 	const SockJS = require("sockjs-client");
 	const Stomp = require("stompjs");
@@ -84,7 +84,7 @@
 			const that = this;
 			const stompClient = that.stompClient;
 			stompClient.connect({}, () => {
-				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserTypeEnum.STAFF}/receiveMsg`, (resp: any) => {
+				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserEnum.STAFF}/receiveMsg`, (resp: any) => {
 					let message = JSON.parse(resp.body);
 					that.msgs.push(message);
 					that.scrollToBottom();

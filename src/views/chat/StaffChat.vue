@@ -1,10 +1,10 @@
 <template src="./StaffChat.html">
 </template>
 <script lang="ts">
-	import {Component, Vue, Watch} from "vue-property-decorator";
+    import {Component, Vue, Watch} from "vue-property-decorator";
     import Api from "@/api";
-    import {Getter} from "vuex-class";
-    import UserTypeEnum from "@/constant/enums/UserTypeEnum";
+    import {Getter, Mutation} from "vuex-class";
+    import UserEnum from "@/constant/enums/UserEnum";
     import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
 
     const SockJS = require("sockjs-client");
@@ -12,7 +12,8 @@
 
     const DEFAULT_QUERY = {pageNo: 1, pageSize: 50};
 
-    @Component
+    @Component({
+    })
     export default class StaffChat extends Vue {
         private staff: any = {};
         private showHistoryDialog: boolean = false;
@@ -29,6 +30,14 @@
             staffName: "",
             messages: [{}]
         };
+
+        private onlineStatusColor = '#1d953f';
+        private onlineStatusList = [
+            {text:"在线",value:UserEnum.OnlineStatus.ON_LINE,color:'#1d953f'},
+            {text:"忙碌",value:UserEnum.OnlineStatus.BE_BUSY,color:'#f47920'},
+            {text:"离线",value:UserEnum.OnlineStatus.OFF_LINE,color:'red'},
+
+        ];
 
         private hisPage: any = {recordCount: 0};
         private hisList: any = [];
@@ -65,8 +74,13 @@
 
 		private stompClient: any = {connected: false};
         @Getter private userAgent: any;
+        @Mutation private changStaffOnlineStatus: any;
+
+
 
         private created() {
+
+
             // TODO: 兼容tslint
             this.current.messages = [];
 
@@ -74,6 +88,8 @@
             // this.loadStaff();
             this.loadConnected();
             this.loadTalkSkillList();
+
+            this.refreshOnlineStatusColor();
         }
 
         // init
@@ -110,7 +126,7 @@
         private subscribeReceiveMsg(chatSession: any) {
 
             const that = this;
-            that.stompClient.subscribe(`/chat/${chatSession.id}-${UserTypeEnum.VISITOR}/receiveMsg`, (resp: any) => {
+            that.stompClient.subscribe(`/chat/${chatSession.id}-${UserEnum.Type.VISITOR}/receiveMsg`, (resp: any) => {
                 const message = JSON.parse(resp.body);
                 that.sessionList.forEach((o: any) => {
                     if (o.visitorId === message.visitorId) {
@@ -145,22 +161,41 @@
                 this.sessionList = res.data;
                 res.data.forEach((o: any) => {
                     this.messageHistory(o);
+                    this.messageNotReadCount(o);
                 });
             });
         }
 
+        /**
+         * 历史消息
+         */
         private messageHistory(chatSession: any) {
             Api.$get("/chat/history", {sessionId: chatSession.id}).then((res: any) => {
-                this.sessionList.forEach((o: any) => {
-                    if (o.id == chatSession.id) {
-                        o.messages = res.data;
-                    }
-                });
+                chatSession.messages = res.data;
             });
         }
 
-        private changeSession(visitor: any) {
-            this.current = visitor;
+        /**
+         * 未读取消息条数
+         */
+        private messageNotReadCount(chatSession: any) {
+            Api.$get("/chat/queryNonReadCount", {sessionId: chatSession.id}).then((res: any) => {
+                chatSession.nonReadCount = res.data;
+            });
+        }
+
+        /**
+         * 消息已读
+         */
+        private messageRead(sessionId: any) {
+            Api.$get("/chat/read", {sessionId: sessionId}).then((res: any) => {
+
+            });
+        }
+
+        private changeSession(chatSession: any) {
+            this.current = chatSession;
+            this.messageRead(chatSession.id)
             this.scrollToBottom();
         }
 
@@ -169,8 +204,39 @@
             dom.innerHTML = dom.innerHTML + talkSkill;
         }
 
+        /**
+         * 拉黑
+         */
+        private pullBlack() {
+            Api.$post("/chat/pullBlack", {
+                sessionId: this.current.id,
+            }).then((res: any) => {
+                this.$message({message: '拉黑成功！', type: "success"});
+            });
+        }
+
+        /**
+         * 更改状态
+         */
+        private  changeOnlineStatus(newOnline){
+            if(!newOnline){
+                return;
+            }
+            Api.$post("/userAgent/updateOnlineStatus", {
+                newStatus: newOnline.value,
+            }).then((res: any) => {
+                this.changStaffOnlineStatus(newOnline);
+                this.refreshOnlineStatusColor();
+                // this.$message({message: '拉黑成功！', type: "success"});
+            });
+        }
+
+        /**
+         * 断开连接
+         *
+         */
         private disconnect() {
-            Api.$post("/chat/disconnect", {
+            Api.$post("/userAgent/updateOnlineStatus", {
                 sessionId: this.current.id,
             }).then((res: any) => {
                 for (let i in this.sessionList) {
@@ -265,7 +331,16 @@
             this.imagePreviewVisible = true;
             this.imagePreview = content;
         }
+
+        private refreshOnlineStatusColor(){
+            const  onlineStatus = this.userAgent.onlineStatus;
+            let current = this.onlineStatusList.find((o: any) => {
+                return o.value === onlineStatus;
+            });
+            this.onlineStatusColor =  current ? current.color : '';
+        }
     }
+
 </script>
 <style lang="scss">
     .staffchat_his_dialog {
@@ -288,3 +363,4 @@
 <style lang="scss" scoped>
     @import 'StaffChat';
 </style>
+

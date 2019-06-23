@@ -7,6 +7,13 @@ const filters: any = {
 	dateTime(date: Date | number, format: string = 'YYYY-MM-DD HH:mm') {
 		return moment(date).format(format);
 	},
+	onlineStatusColor(userAgent: any, onlineStatusList: any) {
+		const  onlineStatus = userAgent.onlineStatus;
+		let current = onlineStatusList.find((o: any) => {
+			return o.onlineStatus === onlineStatus;
+		});
+		return current ? current.color : '';
+	}
 };
 
 export default (Vue: any) => {

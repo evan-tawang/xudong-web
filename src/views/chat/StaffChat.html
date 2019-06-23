@@ -90,8 +90,12 @@
                             <i slot="reference" class="el-icon-chat-dot-round"></i>
                         </el-popover>
                     </div>
+
                     <div>
                         <i class="el-icon-time" @click="showHistory()"></i>
+                    </div>
+                    <div>
+                        <i class="el-icon-delete" @click="pullBlack()"></i>
                     </div>
                     <div class="talk_disconect">
                         <i class="el-icon-close" @click="disconnect()"></i>
@@ -110,6 +114,26 @@
                 <div class="service-info">
                     <div>客服1:xxx</div>
                     <div>服务时间</div>
+
+                    <div>
+                        <el-popover
+                                popper-class="skills_popover"
+                                placement="top-start"
+                                width="10"
+                                trigger="hover">
+                            <ul>
+                                <li v-for="(o, index) in onlineStatusList" :style="{color:o.color}" :key="index"
+                                    @click="changeOnlineStatus(o)">{{ o.text }}
+                                </li>
+                            </ul>
+                            <div slot="reference" >
+                                <span :style="{ color: onlineStatusColor}">
+                                    {{ userAgent.onlineStatusText ? userAgent.onlineStatusText : '在线' }}
+                                </span>
+                            </div>
+                        </el-popover>
+
+                    </div>
                 </div>
             </div>
         </div>

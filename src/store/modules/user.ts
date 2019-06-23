@@ -1,4 +1,4 @@
-import {ActionTree} from 'vuex';
+import {ActionTree, mapMutations} from 'vuex';
 import Api from '@/api';
 import {sha256} from 'js-sha256';
 import {Base64} from 'js-base64';
@@ -35,6 +35,12 @@ const mutations = {
 		// 存储
 		window.localStorage.setItem('userAgent', userAgentStoreOnCahe);
 		state.userAgent = userAgent;
+	},
+	changStaffOnlineStatus(commit: any, newOnline: any) {
+		const userAgent = getters.userAgent(state);
+		userAgent.onlineStatus = newOnline.value;
+		userAgent.onlineStatusText = newOnline.text;;
+		mutations.saveUserAgent(state, userAgent);
 	},
 	cleanUserAgent(state: any) {
 		window.localStorage.removeItem('userAgent');

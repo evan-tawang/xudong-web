@@ -12,8 +12,7 @@
 
     const DEFAULT_QUERY = {pageNo: 1, pageSize: 50};
 
-    @Component({
-    })
+    @Component({})
     export default class StaffChat extends Vue {
         private staff: any = {};
         private showHistoryDialog: boolean = false;
@@ -33,9 +32,9 @@
 
         private onlineStatusColor = '#1d953f';
         private onlineStatusList = [
-            {text:"在线",value:UserEnum.OnlineStatus.ON_LINE,color:'#1d953f'},
-            {text:"忙碌",value:UserEnum.OnlineStatus.BE_BUSY,color:'#f47920'},
-            {text:"离线",value:UserEnum.OnlineStatus.OFF_LINE,color:'red'},
+            {text: "在线", value: UserEnum.OnlineStatus.ON_LINE, color: '#1d953f'},
+            {text: "忙碌", value: UserEnum.OnlineStatus.BE_BUSY, color: '#f47920'},
+            {text: "离线", value: UserEnum.OnlineStatus.OFF_LINE, color: 'red'},
 
         ];
 
@@ -47,7 +46,7 @@
         private hisQueryDatePickerOptions: object = {
             shortcuts: [{
                 text: "最近一周",
-                onClick(picker:any) {
+                onClick(picker: any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
@@ -55,7 +54,7 @@
                 }
             }, {
                 text: "最近一个月",
-                onClick(picker:any) {
+                onClick(picker: any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
@@ -63,7 +62,7 @@
                 }
             }, {
                 text: "最近三个月",
-                onClick(picker:any) {
+                onClick(picker: any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
@@ -72,10 +71,9 @@
             }]
         };
 
-		private stompClient: any = {connected: false};
+        private stompClient: any = {connected: false};
         @Getter private userAgent: any;
         @Mutation private changStaffOnlineStatus: any;
-
 
 
         private created() {
@@ -113,14 +111,14 @@
         }
 
         @Watch('stompClient.connected')
-        private webSocketConnected(){
-        	if(!this.stompClient.connected){
-        		return;
+        private webSocketConnected() {
+            if (!this.stompClient.connected) {
+                return;
             }
-        	console.log(this.stompClient.connected)
-			this.sessionList.forEach((o: any) => {
-				this.subscribeReceiveMsg(o);
-			})
+            console.log(this.stompClient.connected)
+            this.sessionList.forEach((o: any) => {
+                this.subscribeReceiveMsg(o);
+            })
         }
 
         private subscribeReceiveMsg(chatSession: any) {
@@ -133,6 +131,8 @@
                         o.messages = o.messages ? o.messages : [];
                         o.messages.push(message);
                         that.$forceUpdate();
+                    } else {
+                        o.nonReadCount++;
                     }
                 });
                 that.scrollToBottom();
@@ -218,8 +218,8 @@
         /**
          * 更改状态
          */
-        private  changeOnlineStatus(newOnline){
-            if(!newOnline){
+        private changeOnlineStatus(newOnline) {
+            if (!newOnline) {
                 return;
             }
             Api.$post("/userAgent/updateOnlineStatus", {
@@ -290,7 +290,7 @@
             let that = this;
             const reader = new FileReader();
 
-            reader.onload = function(event) {
+            reader.onload = function (event) {
                 Api.$post("/chat/sendMsg", {
                     content: reader.result,
                     sessionId: that.current.id,
@@ -318,26 +318,30 @@
                 this.hisList = res.data;
             });
         }
+
         private hisSearch() {
             this.hisGet();
         }
+
         private hisPageSizeChange() {
             this.hisGet();
         }
+
         private hisCurrentPageChange() {
             this.hisGet();
         }
+
         private zoomImage(content: string) {
             this.imagePreviewVisible = true;
             this.imagePreview = content;
         }
 
-        private refreshOnlineStatusColor(){
-            const  onlineStatus = this.userAgent.onlineStatus;
+        private refreshOnlineStatusColor() {
+            const onlineStatus = this.userAgent.onlineStatus;
             let current = this.onlineStatusList.find((o: any) => {
                 return o.value === onlineStatus;
             });
-            this.onlineStatusColor =  current ? current.color : '';
+            this.onlineStatusColor = current ? current.color : '';
         }
     }
 
@@ -345,14 +349,15 @@
 <style lang="scss">
     .staffchat_his_dialog {
         .el-dialog__body {
-            padding-top: 0!important;
+            padding-top: 0 !important;
         }
     }
+
     .staffchat_his_search_wrapper {
         text-align: right;
 
         .el-date-editor .el-range-separator {
-            padding: 0!important;
+            padding: 0 !important;
         }
 
         .el-button {

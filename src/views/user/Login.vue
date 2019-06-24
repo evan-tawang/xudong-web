@@ -15,7 +15,7 @@
                 <el-input v-model="user.pwd" type="password" placeholder="请输入您的密码" prefix-icon="el-icon-lock"></el-input>
             </li>
             <li class="submit">
-                <el-button type="primary" @click="login">登录</el-button>
+                <el-button type="primary" @click="login" :loading="isLoading">登录</el-button>
             </li>
             <!-- <li class="more">
             <span>注册</span>
@@ -37,6 +37,8 @@ import Types from '@/store/types';
 
 @Component
 export default class Login extends Vue {
+    private isLoading: boolean = false;
+
     private user: any = {
         account: '',
         pwd: '',
@@ -53,11 +55,15 @@ export default class Login extends Vue {
             this.$alert('请输入账户密码！', {type: 'warning'});
             return;
         }
+
+        this.isLoading = true;
         const res = await this.userLogin(this.user);
-        console.log(res);
+
+        //console.log(res);
         if (!res.success) {
-            console.log('login result is null');
+            //console.log('login result is null');
             this.$alert(res.msg, {type: 'warning', title: '温馨提示'});
+            this.isLoading = false;
             return;
         }
         this.$router.push({name: RouterName.HOME});

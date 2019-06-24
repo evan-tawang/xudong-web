@@ -84,7 +84,7 @@
 			const that = this;
 			const stompClient = that.stompClient;
 			stompClient.connect({}, () => {
-				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserEnum.STAFF}/receiveMsg`, (resp: any) => {
+				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserEnum.Type.STAFF}/receiveMsg`, (resp: any) => {
 					let message = JSON.parse(resp.body);
 					that.msgs.push(message);
 					that.scrollToBottom();
@@ -112,8 +112,11 @@
 		private createChatSession() {
         	const that = this;
 			Api.$post('/chat/createSession').then((res: any) => {
-				that.chatSession = res.data;
+                if(!res.data){
+                	return;
+                }
 
+				that.chatSession = res.data;
 				that.initWebSocket();
 				that.messageHistory();
 			});
@@ -121,9 +124,10 @@
 
 		// 发送信息 ==> 清空信息，并且增加一条custom信息
         private sendMsg() {
-			if (!this.input) {
+			if (!this.chatSession.id || !this.input) {
 				return;
 			}
+
 			let that = this;
 			Api.$post('/chat/sendMsg', {content: this.input, sessionId: this.chatSession.id}).then((res: any) => {
 				that.msgs.push(res.data);
@@ -134,6 +138,9 @@
         }
 
 		private messageHistory() {
+			if (!this.chatSession.id) {
+				return;
+			}
 			Api.$get('/chat/history', {sessionId: this.chatSession.id}).then((res: any) => {
 				this.msgs = res.data;
 				this.scrollToBottom();
@@ -141,6 +148,11 @@
 		}
 
 		private changeFile(event:any){
+
+			if (!this.chatSession.id) {
+				return;
+			}
+
 			if (event.srcElement.files.length == 0) {
 				return;
 			}
@@ -166,9 +178,7 @@
             // 滚动到最下
             this.$nextTick(() => {
                 const dom = this.$refs.chatHistory as HTMLDivElement;
-                console.log(dom.scrollHeight)
 				dom.scrollTop = (dom.scrollHeight + 100);
-				console.log(dom.scrollTop)
                 // dom.scrollTo(0, dom.offsetHeight);
             });
         }

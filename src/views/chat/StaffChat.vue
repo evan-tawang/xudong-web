@@ -27,6 +27,7 @@
             visitorId: "",
             visitorName: "",
             staffName: "",
+			nonReadCount: 0,
             messages: [{}]
         };
 
@@ -127,15 +128,20 @@
             that.stompClient.subscribe(`/chat/${chatSession.id}-${UserEnum.Type.VISITOR}/receiveMsg`, (resp: any) => {
                 const message = JSON.parse(resp.body);
                 that.sessionList.forEach((o: any) => {
-                    if (o.visitorId === message.visitorId) {
+                    if (o.id === message.sessionId) {
                         o.messages = o.messages ? o.messages : [];
                         o.messages.push(message);
-                        that.$forceUpdate();
-                    } else {
-                        o.nonReadCount++;
+
+						if (o.id == that.current.id) {
+							that.messageRead(o); //是当前则已读
+							that.scrollToBottom();
+						} else {
+							o.nonReadCount = o.nonReadCount ? o.nonReadCount+1 : 1;
+						}
                     }
                 });
-                that.scrollToBottom();
+				that.$forceUpdate();
+
             });
         }
 
@@ -172,6 +178,7 @@
         private messageHistory(chatSession: any) {
             Api.$get("/chat/history", {sessionId: chatSession.id}).then((res: any) => {
                 chatSession.messages = res.data;
+                this.$forceUpdate();
             });
         }
 
@@ -187,15 +194,19 @@
         /**
          * 消息已读
          */
-        private messageRead(sessionId: any) {
-            Api.$get("/chat/read", {sessionId: sessionId}).then((res: any) => {
-
+        private messageRead(chatSession: any) {
+			if (!chatSession.nonReadCount) {
+        		return
+            }
+            Api.$post("/chat/read", {sessionId: chatSession.id}).then((res: any) => {
+				chatSession.nonReadCount = 0;
+				this.$forceUpdate();
             });
         }
 
         private changeSession(chatSession: any) {
             this.current = chatSession;
-            this.messageRead(chatSession.id)
+			this.messageRead(chatSession);
             this.scrollToBottom();
         }
 
@@ -225,7 +236,7 @@
         /**
          * 更改状态
          */
-        private changeOnlineStatus(newOnline) {
+		private changeOnlineStatus(newOnline: any) {
             if (!newOnline) {
                 return;
             }
@@ -243,7 +254,7 @@
          *
          */
         private disconnect() {
-            Api.$post("/userAgent/updateOnlineStatus", {
+			Api.$post("/chat/disconnect", {
                 sessionId: this.current.id,
             }).then((res: any) => {
                 for (let i in this.sessionList) {
@@ -253,6 +264,10 @@
         }
 
         private sendMsg() {
+			if (!this.current.id) {
+				return;
+			}
+
             const dom = this.$refs.chatInputArea as HTMLElement;
             if (!dom.innerHTML) {
                 return;
@@ -279,7 +294,9 @@
             // 滚动到最下
             this.$nextTick(() => {
                 const dom = this.$refs.chatHistory as HTMLDivElement;
-                dom.scrollTop = dom.scrollHeight;
+                if(dom){
+					dom.scrollTop = dom.scrollHeight;
+                }
                 // dom.scrollTo(0, dom.offsetHeight);
             });
         }

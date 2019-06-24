@@ -22,9 +22,6 @@
         private async created() {
 			this.activeMenu(this.$route, null);
             document.title = this.pageTitle;
-
-
-
             this.welcome = '欢迎您，' + this.userAgent.account+ ' ！';
         }
 

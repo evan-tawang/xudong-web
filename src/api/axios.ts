@@ -35,7 +35,6 @@ axios.interceptors.response.use((config: any) => {
         return config.data;
     }
     if (config.data.code === 'NO_LOGIN') {
-        Message.error(config.data.msg);
         router.push({name: RouterName.USER.LOGIN});
     }
     if (config.data.success) {

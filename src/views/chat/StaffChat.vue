@@ -351,6 +351,10 @@
             this.hisGet();
         }
         private hisGet() {
+        	if(!this.current.id){
+        		return;
+            }
+			this.hisQuery.sessionId = this.current.id;
             Api.$get('/chat/all-history', this.hisQuery).then((res: any) => {
                 //console.log(res.data)
                 this.hisList = res.data;

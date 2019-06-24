@@ -6,6 +6,7 @@
     import {Getter, Mutation} from "vuex-class";
     import UserEnum from "@/constant/enums/UserEnum";
     import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
+    import Utils from '@/utils';
 
     const SockJS = require("sockjs-client");
     const Stomp = require("stompjs");
@@ -41,7 +42,7 @@
         private hisPage: any = {recordCount: 0};
         private hisList: any = [];
         private hisQuery: any = DEFAULT_QUERY;
-        private hisQueryDate = "";
+        private hisQueryDate: any = [] ;
 
         private hisQueryDatePickerOptions: object = {
             shortcuts: [{
@@ -314,30 +315,6 @@
             reader.readAsDataURL(event.srcElement.files[0]);
         }
 
-        private showHistory() {
-            this.showHistoryDialog = true;
-            this.hisSearch();
-        }
-
-        private hisGet() {
-            Api.$get('/chat/all-history', this.hisQuery).then((res: any) => {
-                //console.log(res.data)
-                this.hisList = res.data;
-            });
-        }
-
-        private hisSearch() {
-            this.hisGet();
-        }
-
-        private hisPageSizeChange() {
-            this.hisGet();
-        }
-
-        private hisCurrentPageChange() {
-            this.hisGet();
-        }
-
         private zoomImage(content: string) {
             this.imagePreviewVisible = true;
             this.imagePreview = content;
@@ -349,6 +326,36 @@
                 return o.value === onlineStatus;
             });
             this.onlineStatusColor = current ? current.color : '';
+        }
+
+        private showHistory() {
+            this.showHistoryDialog = true;
+            this.hisQuery = DEFAULT_QUERY;
+            this.hisGet();
+        }
+        private hisGet() {
+            Api.$get('/chat/all-history', this.hisQuery).then((res: any) => {
+                //console.log(res.data)
+                this.hisList = res.data;
+                this.hisPage = res.page;
+            });
+        }
+        private hisSearch() {
+            console.log(this.hisQueryDate);
+            this.hisQuery.beginDate = Utils.dateFormat(this.hisQueryDate[0], 'YYYY/MM/DD');
+            let endDate = new Date(this.hisQueryDate[1]);
+            endDate.setDate(endDate.getDate() + 1);
+            console.log(endDate);
+            this.hisQuery.endDate =   Utils.dateFormat(endDate, 'YYYY/MM/DD');
+            this.hisGet();
+        }
+        private hisPageSizeChange(pageSize:number) {
+            this.hisQuery.pageSize = pageSize;
+            this.hisGet();
+        }
+        private hisCurrentPageChange(pageNo:number) {
+            this.hisQuery.pageNo = pageNo;
+            this.hisGet();
         }
     }
 

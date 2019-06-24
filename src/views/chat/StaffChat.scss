@@ -178,6 +178,10 @@
           display: flex;
           padding: 5px 0;
 
+          > div{
+            cursor: pointer;
+          }
+
           img {
             width: 24px;
             margin: 0 5px;

@@ -208,10 +208,17 @@
          * 拉黑
          */
         private pullBlack() {
-            Api.$post("/chat/pullBlack", {
-                sessionId: this.current.id,
-            }).then((res: any) => {
-                this.$message({message: '拉黑成功！', type: "success"});
+            this.$confirm('确定要将当前用户加入黑名单?', {
+                // confirmButtonText: '确定',
+                // cancelButtonText: '取消',
+                type: 'info',
+                showClose: false,
+            }).then(() => {
+                Api.$post("/chat/pullBlack", {
+                    sessionId: this.current.id,
+                }).then((res: any) => {
+                    this.$message({message: '加入黑名单成功！', type: "success"});
+                });
             });
         }
 

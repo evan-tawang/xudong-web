@@ -92,13 +92,19 @@
                     </div>
 
                     <div>
+                        <el-tooltip content="历史记录" :open-delay="400" placement="top">
                         <i class="el-icon-time" @click="showHistory()"></i>
+                        </el-tooltip>
                     </div>
                     <div>
-                        <i class="el-icon-delete" @click="pullBlack()"></i>
+                        <el-tooltip content="将当前用户加入黑名单" :open-delay="400" placement="top">
+                            <i class="el-icon-delete" @click="pullBlack()"></i>
+                        </el-tooltip>
                     </div>
                     <div class="talk_disconect">
+                        <el-tooltip content="断开连接" :open-delay="400" placement="top">
                         <i class="el-icon-close" @click="disconnect()"></i>
+                        </el-tooltip>
                     </div>
 
                 </div>

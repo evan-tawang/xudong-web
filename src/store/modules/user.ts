@@ -52,7 +52,7 @@ const mutations = {
 const actions: ActionTree<any, any> = {
 	[Types.USER.LOGIN]({commit}, {account, pwd, validateCode}: any) {
 		
-		console.log(md5.hex("111111111"))
+		//console.log(md5.hex("111111111"))
 		
 		if (!account || !pwd) {
 			console.warn('>>>>>>>>> login params is has null');
@@ -61,7 +61,7 @@ const actions: ActionTree<any, any> = {
 		const random = new Date().getTime();
 		const login = {
 			account,
-			pwd,
+			pwd:md5.hex(pwd),
 			validateCode,
 			//sign: sha256.hex(account + random + sha256.hex(pwd)),
 			//random,

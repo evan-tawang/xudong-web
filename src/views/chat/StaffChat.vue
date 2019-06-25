@@ -241,7 +241,7 @@
             if (!newOnline) {
                 return;
             }
-            Api.$post("/userAgent/updateOnlineStatus", {
+            Api.$post("/staff/updateOnlineStatus", {
                 newStatus: newOnline.value,
             }).then((res: any) => {
                 this.changStaffOnlineStatus(newOnline);

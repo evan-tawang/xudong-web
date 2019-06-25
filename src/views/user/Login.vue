@@ -57,13 +57,13 @@ export default class Login extends Vue {
         }
 
         this.isLoading = true;
-        const res = await this.userLogin(this.user);
-
+        const res = this.userLogin(this.user);
+        this.isLoading = false;
         //console.log(res);
         if (!res.success) {
             //console.log('login result is null');
             this.$alert(res.msg, {type: 'warning', title: '温馨提示'});
-            this.isLoading = false;
+
             return;
         }
         this.$router.push({name: RouterName.HOME});

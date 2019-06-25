@@ -72,8 +72,8 @@ const actions: ActionTree<any, any> = {
 			}
 			return res;
 		}).catch((e: any) => {
-			console.error(e);
-			return {success: false, msg: '登录失败！'};
+			return e;
+			// return {success: false, msg: '登录失败！'};
 		});
 	},
 	[Types.USER.LOGOUT]({commit}) {

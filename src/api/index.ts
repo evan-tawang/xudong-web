@@ -22,9 +22,8 @@ class Api {
                 // axios.post(url, null, {params}).then((res: any) => {
                 resolve(res);
             }).catch((err: any) => {
-                if (isOwnCatch) {
-                    reject(err);
-                } else {
+                reject(err);
+                if (!isOwnCatch) {
                     MessageBox.alert(err.msg, {title: '温馨提示', type: 'warning'});
                 }
             });
@@ -41,9 +40,8 @@ class Api {
             axios.get(url, {params}).then((res: any) => {
                 resolve(res);
             }).catch((err: any) => {
-                if (isOwnCatch) {
-                    reject(err);
-                } else {
+                reject(err);
+                if (!isOwnCatch) {
                     Message.error({message: err.msg, type: 'error'});
                 }
             });

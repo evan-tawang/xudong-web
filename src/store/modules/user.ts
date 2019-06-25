@@ -67,8 +67,8 @@ const actions: ActionTree<any, any> = {
 			//random,
 		};
 
-		let url = '/staff/login';
-		url += '/debug'
+		//let url = '/staff/login';
+		let url = '/staff/virtual-login';
 
 		return Api.$post(url, login).then((res: any) => {
 			if (res.success) {

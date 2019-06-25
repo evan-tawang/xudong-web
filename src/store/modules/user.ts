@@ -67,8 +67,8 @@ const actions: ActionTree<any, any> = {
 			//random,
 		};
 
-		//let url = '/staff/login';
-		let url = '/staff/virtual-login';
+		//let url = '/staff/login'; //真实登录，调用mes登录接口
+		let url = '/staff/virtual-login';//虚拟登录，脱离mes时使用
 
 		return Api.$post(url, login).then((res: any) => {
 			if (res.success) {

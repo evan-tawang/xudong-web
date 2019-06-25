@@ -10,19 +10,21 @@
   },
   "dependencies": {
     "@types/js-base64": "^2.3.1",
+    "@types/js-md5": "^0.4.2",
     "axios": "^0.18.0",
+    "js-md5": "^0.7.3",
     "core-js": "^2.6.5",
     "element-ui": "2.8.2",
+    "js-sha256": "^0.9.0",
     "moment": "^2.24.0",
+    "sockjs-client": "^1.1.4",
+    "stompjs": "^2.3.3",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1",
-    "vuex-class": "^0.3.2",
-    "js-sha256": "^0.9.0",
-    "sockjs-client": "^1.1.4",
-    "stompjs": "^2.3.3"
+    "vuex-class": "^0.3.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",

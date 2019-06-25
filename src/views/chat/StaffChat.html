@@ -27,8 +27,10 @@
                         </template>
                     </div>
                 </div>
-                <!--                    <div class="visitor-item-num">{{session.messages.length > 99 ? '99+' : session.messages.length}}-->
-                <!--                    </div>-->
+                <div class="visitor-item-num" v-if="session.nonReadCount">
+                        {{session.nonReadCount > 99 ? '99+' : session.nonReadCount}}
+                    </template>
+                </div>
             </div>
         </div>
         <div class="chat-main-center">
@@ -50,7 +52,7 @@
                     <template v-else>
                         <img class="avatar-img" src="/images/logo.jpg">
                         <div class="custom-info">
-                            <div class="title">顾客 18:00:00</div>
+                            <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
                             <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
                                 <img :src="message.content" @click="zoomImage(message.content)">
                             </div>
@@ -61,7 +63,7 @@
             </div>
             <div class="chat-edit">
 
-                <div class="chat_attachment">
+                <div class="chat_attachment" v-show="current.id">
                     <div class="chat_expression">
                         <img src="/images/smile.png" alt="" @click="chatExpressionToggle">
                         <div v-if="chatExpressionChoose" class="chat_expression_choose">

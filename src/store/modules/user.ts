@@ -56,12 +56,13 @@ const actions: ActionTree<any, any> = {
 		}
 		const random = new Date().getTime();
 		const login = {
-			random,
 			account,
+			pwd,
 			validateCode,
-			sign: sha256.hex(account + random + sha256.hex(pwd)),
+			//sign: sha256.hex(account + random + sha256.hex(pwd)),
+			//random,
 		};
-		return Api.$post('/login', login).then((res: any) => {
+		return Api.$post('/staff/login', login).then((res: any) => {
 			if (res.success) {
 				commit('saveUserAgent', res.data);
 			}
@@ -72,7 +73,7 @@ const actions: ActionTree<any, any> = {
 		});
 	},
 	[Types.USER.LOGOUT]({commit}) {
-		Api.$post('/logout').then((res: any) => {
+		Api.$post('/staff/logout').then((res: any) => {
 			commit('cleanUserAgent');
 		}).catch((e: any) => {
 			console.error(e);

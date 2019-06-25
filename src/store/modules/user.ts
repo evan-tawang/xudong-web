@@ -2,6 +2,7 @@ import {ActionTree, mapMutations} from 'vuex';
 import Api from '@/api';
 import {sha256} from 'js-sha256';
 import {Base64} from 'js-base64';
+import md5 from 'js-md5';
 import {UserAgent} from '@/model/user/user';
 import Types from '@/store/types';
 
@@ -50,6 +51,9 @@ const mutations = {
 
 const actions: ActionTree<any, any> = {
 	[Types.USER.LOGIN]({commit}, {account, pwd, validateCode}: any) {
+		
+		console.log(md5.hex("111111111"))
+		
 		if (!account || !pwd) {
 			console.warn('>>>>>>>>> login params is has null');
 			return;

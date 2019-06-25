@@ -66,7 +66,11 @@ const actions: ActionTree<any, any> = {
 			//sign: sha256.hex(account + random + sha256.hex(pwd)),
 			//random,
 		};
-		return Api.$post('/staff/login', login).then((res: any) => {
+
+		let url = '/staff/login';
+		url += '/debug'
+
+		return Api.$post(url, login).then((res: any) => {
 			if (res.success) {
 				commit('saveUserAgent', res.data);
 			}

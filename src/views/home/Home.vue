@@ -30,8 +30,13 @@
         }
 
         private logout() {
-            this.userLogout();
-            this.$router.push({name: RouterName.USER.LOGIN});
+            this.$confirm('确定退出系统?', {
+                type: 'warning',
+                showClose: false,
+            }).then(() => {
+                this.userLogout();
+                this.$router.push({name: RouterName.USER.LOGIN});
+            });
         }
 
         //折叠和展开

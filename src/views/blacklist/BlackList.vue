@@ -39,11 +39,9 @@
                 {required: true, message: '请输入黑名单内容', trigger: 'change'},
             ],
         };
-
         public created() {
             this.getListData();
         }
-
         /**
          * 查询
          */
@@ -56,7 +54,6 @@
                 this.loading.list = false;
             });
         }
-
         /**
          * 查询
          */
@@ -64,7 +61,6 @@
             this.query.pageNo = DEFAULT_QUERY.pageNo;
             this.getListData();
         }
-
         /**
          * 清空
          */
@@ -72,30 +68,25 @@
             this.query = {pageNo: DEFAULT_QUERY.pageNo, pageSize: DEFAULT_QUERY.pageSize};
             this.getListData();
         }
-
         private pageSizeChange(val: number) {
             this.query.pageNo = DEFAULT_QUERY.pageNo;
             this.query.pageSize = val;
             this.getListData();
 
         }
-
         private currentPageChange(val: number) {
             this.query.pageNo = val;
             this.getListData();
         }
-
         private openAddWin() {
             this.loading.add = false;
             this.showAddWin = true;
         }
-
         private closeAddWin() {
             // console.log( this.$refs['addForm']);
             // this.$refs['addForm'].resetFields();
             this.showAddWin = false;
         }
-
         private submitAdd() {
             const _this = this;
             const form = this.$refs.addForm as HTMLFormElement;
@@ -123,7 +114,6 @@
                 }
             });
         }
-
         private openModifyWin(id: number) {
             this.loading.modifyWin = true;
             this.loading.modify = false;
@@ -135,13 +125,11 @@
             });
             this.showModifyWin = true;
         }
-
         private closeMofifyWin() {
             const form = this.$refs.modifyForm as HTMLFormElement;
             form.resetFields();
             this.showModifyWin = false;
         }
-
         private submitModify() {
             const form = this.$refs.modifyForm as HTMLFormElement;
             form.validate((valid: any) => {
@@ -166,11 +154,9 @@
                 }
             });
         }
-
         private selectListRow(val: any) {
             this.selectedDatas = val;
         }
-
         private updateStatus(operateText: string, newStatus: number) {
             if (this.selectedDatas.length === 0) {
                 this.$alert('请选择需要 [' + operateText + '] 的黑名单！', {
@@ -209,15 +195,12 @@
                 });
             }
         }
-
         private startUsing() {
             this.updateStatus('启用', BlackListStatus.NORMAL);
         }
-
         private stopUsing() {
             this.updateStatus('停用', BlackListStatus.STOP);
         }
-
         private remove(id: number) {
             this.$confirm('确定 [删除] 该黑名单?', {
                 // confirmButtonText: '确定',

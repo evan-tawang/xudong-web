@@ -4,10 +4,8 @@ const resolve = dir => {
     return path.join(__dirname, dir)
 };
 
-// node 去掉前两位参数信息
 const rawArgv = process.argv.slice(2);
-// 开发 打包 注意 test:e2e 模式 走 build 模式
-const NODE_ENV = rawArgv[0] === 'build' ? 'production' : 'development';
+const NODE_ENV = rawArgv[2] === 'production' ? 'production' : 'development';
 
 // 设置环境
 process.env.NODE_ENV = NODE_ENV;
@@ -26,6 +24,16 @@ module.exports = {
         // 配置路径别名
         config.resolve.alias
             .set('@', resolve('src'))
+
+        //开发环境拷贝到编译后目录下
+        config.plugin('copy')
+            .tap(args => {
+                if(!IS_PROD){
+                    args[0][0].from = './portal';
+                    args[0][0].to = './';
+                }
+                return args;
+            });
     },
     css: {
         modules: false, // 启用 CSS modules
@@ -34,6 +42,7 @@ module.exports = {
         loaderOptions: {} // css预设器配置项
     },
     devServer: {
+        publicPath:'/',
         // overlay 同时显示警告和错误
         overlay: {
             warnings: true,
@@ -52,6 +61,7 @@ module.exports = {
                     '/service': '',
                 },
             },
-        }
+        },
+
     }
 };

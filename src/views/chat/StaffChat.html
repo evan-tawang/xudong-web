@@ -15,7 +15,7 @@
                  class="visitor-item">
                 <img :src="session.avatar ? session.avatar : '/images/logo.jpg' ">
                 <div class="visitor-info">
-                    <div>{{ session.name ? session.name : '游客' + (index + 1) }}</div>
+                    <div>{{ session.otherSideName ? session.otherSideName : '游客' + (index + 1) }}</div>
                     <div class="visitor-info-msg">
                         <template v-if="session.messages && session.messages.length > 0">
                             <template v-if="session.messages[session.messages.length-1].contentType == 2">
@@ -120,8 +120,8 @@
             <div class="service-item">
                 <img src="/images/logo.jpg">
                 <div class="service-info">
-                    <div>客服1:xxx</div>
-                    <div>服务时间</div>
+                    <div>客服:{{ userAgent.userName }}</div>
+                    <div>服务时间 </div>
 
                     <div>
                         <el-popover

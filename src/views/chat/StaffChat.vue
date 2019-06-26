@@ -28,6 +28,7 @@
             visitorId: "",
             visitorName: "",
             staffName: "",
+			otherSideName:'',
 			nonReadCount: 0,
             messages: [{}]
         };
@@ -37,7 +38,6 @@
             {text: "在线", value: UserEnum.OnlineStatus.ON_LINE, color: '#1d953f'},
             {text: "忙碌", value: UserEnum.OnlineStatus.BE_BUSY, color: '#f47920'},
             {text: "离线", value: UserEnum.OnlineStatus.OFF_LINE, color: 'red'},
-
         ];
 
         private hisPage: any = {recordCount: 0};
@@ -142,7 +142,7 @@
                     }
                 });
 				that.$forceUpdate();
-
+                that.scrollToBottom();
             });
         }
 

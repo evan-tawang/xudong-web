@@ -23,18 +23,18 @@
             remove: false,
             add: false,
             modifyWin: false,
-            modify: false
+            modify: false,
         };
-        private selectedDatas: any = [];
-        private showAddWin: boolean = false;
-        private showModifyWin: boolean = false;
-        private addModel: any = {content:''};
-        private modifyModel: any = {content:''};
-        private rules: object = {
-            content: [
-                {required: true, message: '请输入常用话术内容', trigger: 'change'},
-            ],
-        };
+		private selectedDatas: any = [];
+		private showAddWin: boolean = false;
+		private showModifyWin: boolean = false;
+		private addModel: any = {content: ''};
+		private modifyModel: any = {content: ''};
+		private rules: object = {
+			content: [
+				{required: true, message: '请输入常用话术内容', trigger: 'change'},
+			],
+		};
 
         public created() {
             this.getListData();
@@ -92,22 +92,22 @@
             this.showAddWin = false;
         }
 
-        private submitAdd(){
-            let _this = this;
-            const form = this.$refs.addForm as HTMLFormElement
+		private submitAdd() {
+            const that = this;
+            const form = this.$refs.addForm as HTMLFormElement;
             form.validate((valid: boolean) => {
                 if (valid) {
                     this.loading.add = true;
-                    Api.$post(API_URL_PREFIX + '/add', {'content': this.addModel.content}).then((res: any) => {
+                    Api.$post(API_URL_PREFIX + '/add', { content : this.addModel.content }).then((res: any) => {
                         this.$message({
                             type: 'success',
                             message: '添加成功!',
                             duration: 1500,
                             onClose() {
-                                _this.addModel.content = '';
-                                _this.loading.add = false;
-                                _this.getListData();
-                                _this.showAddWin = false;
+                                that.addModel.content = '';
+                                that.loading.add = false;
+                                that.getListData();
+                                that.showAddWin = false;
                             },
                         });
                     });
@@ -119,23 +119,23 @@
             this.loading.modifyWin = true;
             this.loading.modify = false;
             Api.$get(API_URL_PREFIX + '/getOne', { id }).then((res: any) => {
-                if(res.data) {
+				if (res.data) {
                     this.modifyModel = res.data;
                 }
-                this.loading.modifyWin=false;
+				this.loading.modifyWin = false;
             });
             this.showModifyWin = true;
         }
 
-        private closeMofifyWin(){
-            const form = this.$refs.modifyForm as HTMLFormElement
+		private closeMofifyWin() {
+            const form = this.$refs.modifyForm as HTMLFormElement;
             form.resetFields();
             this.showModifyWin = false;
         }
 
-        private submitModify(){
-            let _this = this;
-            const form = this.$refs.modifyForm as HTMLFormElement
+		private submitModify() {
+            const that = this;
+            const form = this.$refs.modifyForm as HTMLFormElement;
             form.validate((valid: boolean) => {
                 if (valid) {
                     this.loading.modify = true;
@@ -148,9 +148,9 @@
                             message: '修改成功!',
                             duration: 1500,
                             onClose() {
-                                _this.loading.modify = false;
-                                _this.getListData();
-                                _this.showModifyWin = false;
+                                that.loading.modify = false;
+                                that.getListData();
+                                that.showModifyWin = false;
                             },
                         });
                     });
@@ -169,7 +169,7 @@
                     showClose: false,
                 });
             } else {
-                let _this = this;
+                const that = this;
                 this.$confirm('确定 [' + operateText + '] 所选常用话术?', {
                     // confirmButtonText: '确定',
                     // cancelButtonText: '取消',
@@ -178,22 +178,22 @@
                 }).then(() => {
                     let ids: string = '';
                     // let count = this.selectedDatas.length;
-                    this.selectedDatas.forEach(function(e: any) {
+					that.selectedDatas.forEach((e: any) => {
                         // ids.push(e.id);
                         ids += ',' + e.id;
                     });
                     ids = ids.substr(1);
                     // console.log(ids);
                     Api.$post(API_URL_PREFIX + '/updateStatusGroup', {
-                        'ids': ids,
-                        'newStatus': newStatus,
+                        ids,
+                        newStatus,
                     }).then((res: any) => {
                         this.$message({
                             type: 'success',
                             message: '操作成功!',
                             duration: 1000,
                             onClose() {
-                                _this.getListData();
+                                that.getListData();
                             },
                         });
                     });
@@ -214,16 +214,16 @@
                 // confirmButtonText: '确定',
                 // cancelButtonText: '取消',
                 type: 'warning',
-                showClose: false
+                showClose: false,
             }).then(() => {
-                let _this = this;
+                const that = this;
                 Api.$post(API_URL_PREFIX + '/delete', { id }).then((res: any) => {
                     this.$message({
                         type: 'success',
                         message: '操作成功!',
                         duration: 1000,
                         onClose() {
-                            _this.getListData();
+							that.getListData();
                         },
                     });
                 });

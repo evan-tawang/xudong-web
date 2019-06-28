@@ -12,12 +12,10 @@
 </template>
 <script lang="ts">
 
-    import {Component, Vue} from 'vue-property-decorator';
-    import {Getter, Action} from 'vuex-class';
-    import RouterName from '@/constant/router-name';
-    import Api from '@/api';
+	import {Component, Vue} from 'vue-property-decorator';
+	import Api from '@/api';
 
-    const API_URL_PREFIX = '/sensitiveWord/manage';
+	const API_URL_PREFIX = '/sensitiveWord/manage';
 
     @Component
     export default class SensitiveWordList extends Vue {

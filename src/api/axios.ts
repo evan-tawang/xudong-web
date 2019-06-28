@@ -3,7 +3,6 @@ import store from '../store';
 import axios from 'axios';
 import RouterName from '@/constant/router-name';
 import {sha256} from 'js-sha256';
-import {Message} from 'element-ui';
 
 axios.defaults.headers = {
     // 'X-Requested-With': 'XMLHttpRequest',
@@ -12,9 +11,7 @@ axios.defaults.headers = {
 axios.defaults.timeout = 20000;
 
 axios.interceptors.request.use((config: any) => {
-    
     config.url = 'service/' + config.url;
-    
     const userAgent = store.getters.userAgent;
     if (!userAgent || Object.keys(userAgent).length === 0) {
         return config;
@@ -31,7 +28,6 @@ axios.interceptors.request.use((config: any) => {
 
 // 请求到结果的拦截处理
 axios.interceptors.response.use((config: any) => {
-   
     if (config.data.code === 'NO_LOGIN') {
         router.push({name: RouterName.USER.LOGIN});
     }

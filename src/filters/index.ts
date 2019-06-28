@@ -8,16 +8,16 @@ const filters: any = {
 		return moment(date).format(format);
 	},
 	onlineStatusColor(userAgent: any, onlineStatusList: any) {
-		const  onlineStatus = userAgent.onlineStatus;
-		let current = onlineStatusList.find((o: any) => {
+		const onlineStatus = userAgent.onlineStatus;
+		const current = onlineStatusList.find((o: any) => {
 			return o.onlineStatus === onlineStatus;
 		});
 		return current ? current.color : '';
-	}
+	},
 };
 
 export default (Vue: any) => {
 	Object.keys(filters).forEach((key) => {
 		Vue.filter(key, filters[key]);
 	});
-}
+};

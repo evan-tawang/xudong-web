@@ -40,7 +40,7 @@ const mutations = {
 	changStaffOnlineStatus(commit: any, newOnline: any) {
 		const userAgent = getters.userAgent(state);
 		userAgent.onlineStatus = newOnline.value;
-		userAgent.onlineStatusText = newOnline.text;;
+		userAgent.onlineStatusText = newOnline.text;
 		mutations.saveUserAgent(state, userAgent);
 	},
 	cleanUserAgent(state: any) {
@@ -51,9 +51,6 @@ const mutations = {
 
 const actions: ActionTree<any, any> = {
 	[Types.USER.LOGIN]({commit}, {account, pwd, validateCode}: any) {
-		
-		//console.log(md5.hex("111111111"))
-		
 		if (!account || !pwd) {
 			console.warn('>>>>>>>>> login params is has null');
 			return;
@@ -61,15 +58,13 @@ const actions: ActionTree<any, any> = {
 		const random = new Date().getTime();
 		const login = {
 			account,
-			pwd:md5.hex(pwd),
+			pwd: md5.hex(pwd),
 			validateCode,
-			//sign: sha256.hex(account + random + sha256.hex(pwd)),
-			//random,
+			// sign: sha256.hex(account + random + sha256.hex(pwd)),
+			// random,
 		};
-
-		let url = '/staff/login'; //真实登录，调用mes登录接口
-		//let url = '/staff/virtual-login';//虚拟登录，脱离mes时使用
-
+		const url = '/staff/login'; // 真实登录，调用mes登录接口
+		// let url = '/staff/virtual-login';//虚拟登录，脱离mes时使用
 		return Api.$post(url, login).then((res: any) => {
 			if (res.success) {
 				commit('saveUserAgent', res.data);

@@ -1,15 +1,15 @@
-<template src="./StaffChat.html">
+<template src='./StaffChat.html'>
 </template>
-<script lang="ts">
-    import {Component, Vue, Watch} from "vue-property-decorator";
-    import Api from "@/api";
-    import {Getter, Mutation} from "vuex-class";
-    import UserEnum from "@/constant/enums/UserEnum";
-    import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
+<script lang='ts'>
+    import {Component, Vue, Watch} from 'vue-property-decorator';
+    import Api from '@/api';
+    import {Getter, Mutation} from 'vuex-class';
+    import UserEnum from '@/constant/enums/UserEnum';
+    import {ChatContentTypeEnum} from '@/constant/enums/ChatContentTypeEnum';
     import Utils from '@/utils';
 
-    const SockJS = require("sockjs-client");
-    const Stomp = require("stompjs");
+    const SockJS = require('sockjs-client');
+    const Stomp = require('stompjs');
 
     const DEFAULT_QUERY = {pageNo: 1, pageSize: 50};
 
@@ -22,12 +22,12 @@
         private talkSkillList: string[] = [];
         private chatExpressionChoose: boolean = false;
         private imagePreviewVisible: boolean = false;
-        private imagePreview: string = "";
+        private imagePreview: string = '';
         private current = {
-            id: "",
-            visitorId: "",
-            visitorName: "",
-            staffName: "",
+            id: '',
+            visitorId: '',
+            visitorName: '',
+            staffName: '',
 			otherSideName:'',
 			nonReadCount: 0,
             messages: [{}]
@@ -35,9 +35,9 @@
 
         private onlineStatusColor = '#1d953f';
         private onlineStatusList = [
-            {text: "在线", value: UserEnum.OnlineStatus.ON_LINE, color: '#1d953f'},
-            {text: "忙碌", value: UserEnum.OnlineStatus.BE_BUSY, color: '#f47920'},
-            {text: "离线", value: UserEnum.OnlineStatus.OFF_LINE, color: 'red'},
+            {text: '在线', value: UserEnum.OnlineStatus.ON_LINE, color: '#1d953f'},
+            {text: '忙碌', value: UserEnum.OnlineStatus.BE_BUSY, color: '#f47920'},
+            {text: '离线', value: UserEnum.OnlineStatus.OFF_LINE, color: 'red'},
         ];
 
         private hisPage: any = {recordCount: 0};
@@ -47,28 +47,28 @@
 
         private hisQueryDatePickerOptions: object = {
             shortcuts: [{
-                text: "最近一周",
+                text: '最近一周',
                 onClick(picker: any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                    picker.$emit("pick", [start, end]);
+                    picker.$emit('pick', [start, end]);
                 }
             }, {
-                text: "最近一个月",
+                text: '最近一个月',
                 onClick(picker: any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                    picker.$emit("pick", [start, end]);
+                    picker.$emit('pick', [start, end]);
                 }
             }, {
-                text: "最近三个月",
+                text: '最近三个月',
                 onClick(picker: any) {
                     const end = new Date();
                     const start = new Date();
                     start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                    picker.$emit("pick", [start, end]);
+                    picker.$emit('pick', [start, end]);
                 }
             }]
         };
@@ -94,7 +94,7 @@
 
         // init
         private initWebSocket() {
-            const socket = new SockJS("/" + "ws");
+            const socket = new SockJS('/' + 'ws');
             this.stompClient = Stomp.over(socket);
 
             const that = this;
@@ -150,7 +150,7 @@
         // }
 
         private loadTalkSkillList() {
-            Api.$get("/talkSkill/service/list").then((res: any) => {
+            Api.$get('/talkSkill/service/list').then((res: any) => {
                 res.data.forEach((o: any) => {
                     if (o && o.content) {
                         this.talkSkillList.push(o.content);
@@ -160,7 +160,7 @@
         }
 
         private loadConnected() {
-            Api.$get("/chat/connected").then((res: any) => {
+            Api.$get('/chat/connected').then((res: any) => {
                 if (!res.data || res.data.length === 0) {
                     return;
                 }
@@ -177,7 +177,7 @@
          * 历史消息
          */
         private messageHistory(chatSession: any) {
-            Api.$get("/chat/history", {sessionId: chatSession.id}).then((res: any) => {
+            Api.$get('/chat/history', {sessionId: chatSession.id}).then((res: any) => {
                 chatSession.messages = res.data;
                 this.$forceUpdate();
             });
@@ -187,7 +187,7 @@
          * 未读取消息条数
          */
         private messageNotReadCount(chatSession: any) {
-            Api.$get("/chat/queryNonReadCount", {sessionId: chatSession.id}).then((res: any) => {
+            Api.$get('/chat/queryNonReadCount', {sessionId: chatSession.id}).then((res: any) => {
                 chatSession.nonReadCount = res.data;
             });
         }
@@ -199,7 +199,7 @@
 			if (!chatSession.nonReadCount) {
         		return
             }
-            Api.$post("/chat/read", {sessionId: chatSession.id}).then((res: any) => {
+            Api.$post('/chat/read', {sessionId: chatSession.id}).then((res: any) => {
 				chatSession.nonReadCount = 0;
 				this.$forceUpdate();
             });
@@ -226,10 +226,10 @@
                 type: 'info',
                 showClose: false,
             }).then(() => {
-                Api.$post("/chat/pullBlack", {
+                Api.$post('/chat/pullBlack', {
                     sessionId: this.current.id,
                 }).then((res: any) => {
-                    this.$message({message: '加入黑名单成功！', type: "success"});
+                    this.$message({message: '加入黑名单成功！', type: 'success'});
                 });
             });
         }
@@ -241,12 +241,12 @@
             if (!newOnline) {
                 return;
             }
-            Api.$post("/staff/updateOnlineStatus", {
+            Api.$post('/staff/updateOnlineStatus', {
                 newStatus: newOnline.value,
             }).then((res: any) => {
                 this.changStaffOnlineStatus(newOnline);
                 this.refreshOnlineStatusColor();
-                // this.$message({message: '拉黑成功！', type: "success"});
+                // this.$message({message: '拉黑成功！', type: 'success'});
             });
         }
 
@@ -255,7 +255,7 @@
          *
          */
         private disconnect() {
-			Api.$post("/chat/disconnect", {
+			Api.$post('/chat/disconnect', {
                 sessionId: this.current.id,
             }).then((res: any) => {
                 for (let i in this.sessionList) {
@@ -275,12 +275,12 @@
             }
             const content = dom.innerHTML;
             const that = this;
-            Api.$post("/chat/sendMsg", {
+            Api.$post('/chat/sendMsg', {
                 content: content,
                 sessionId: this.current.id,
                 receiveId: this.current.visitorId
             }).then((res: any) => {
-                dom.innerHTML = "";
+                dom.innerHTML = '';
                 that.current.messages.push(res.data);
                 this.$forceUpdate();
                 this.scrollToBottom();
@@ -316,7 +316,7 @@
             const reader = new FileReader();
 
             reader.onload = function (event) {
-                Api.$post("/chat/sendMsg", {
+                Api.$post('/chat/sendMsg', {
                     content: reader.result,
                     sessionId: that.current.id,
                     receiveId: that.current.visitorId,
@@ -381,7 +381,7 @@
     }
 
 </script>
-<style lang="scss">
+<style lang='scss'>
     .staffchat_his_dialog {
         .el-dialog__body {
             padding-top: 0 !important;
@@ -400,7 +400,7 @@
         }
     }
 </style>
-<style lang="scss" scoped>
+<style lang='scss' scoped>
     @import 'StaffChat';
 </style>
 

@@ -88,7 +88,7 @@
             this.showAddWin = false;
         }
         private submitAdd() {
-            const _this = this;
+            const that = this;
             const form = this.$refs.addForm as HTMLFormElement;
             form.validate((valid: any) => {
                 if (valid) {
@@ -102,9 +102,9 @@
                             message: '添加成功!',
                             duration: 1500,
                             onClose() {
-                                _this.loading.add = false;
-                                _this.getListData();
-                                _this.showAddWin = false;
+                                that.loading.add = false;
+                                that.getListData();
+                                that.showAddWin = false;
                             },
                         });
                     });
@@ -134,7 +134,7 @@
             const form = this.$refs.modifyForm as HTMLFormElement;
             form.validate((valid: any) => {
                 if (valid) {
-                    const _this = this;
+                    const that = this;
                     this.loading.modify = true;
                     Api.$post(API_URL_PREFIX + '/update', {
                         id: this.modifyModel.id,
@@ -145,9 +145,9 @@
                             message: '修改成功!',
                             duration: 1500,
                             onClose() {
-                                _this.loading.modify = false;
-                                _this.getListData();
-                                _this.showModifyWin = false;
+                                that.loading.modify = false;
+                                that.getListData();
+                                that.showModifyWin = false;
                             },
                         });
                     });
@@ -164,7 +164,7 @@
                     showClose: false,
                 });
             } else {
-                const _this = this;
+                const that = this;
                 this.$confirm('确定 [' + operateText + '] 所选黑名单?', {
                     // confirmButtonText: '确定',
                     // cancelButtonText: '取消',
@@ -188,7 +188,7 @@
                             message: '操作成功!',
                             duration: 1000,
                             onClose() {
-                                _this.getListData();
+                                that.getListData();
                             },
                         });
                     });
@@ -208,14 +208,14 @@
                 type: 'warning',
                 showClose: false,
             }).then(() => {
-                const _this = this;
+                const that = this;
                 Api.$post(API_URL_PREFIX + '/delete', {id}).then((res: any) => {
                     this.$message({
                         type: 'success',
                         message: '操作成功!',
                         duration: 1000,
                         onClose() {
-                            _this.getListData();
+                            that.getListData();
                         },
                     });
                 });

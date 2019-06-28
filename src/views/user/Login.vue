@@ -64,7 +64,7 @@ export default class Login extends Vue {
 				return;
 			}
 			this.$router.push({name: RouterName.HOME});
-		})
+		});
     }
 }
 </script>

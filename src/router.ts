@@ -72,12 +72,12 @@ export default new Router({
             component: Mobile,
             children: [
                 {
-                    path: 'message',
+                    path: 'message/:identity',
                     name: 'mobileMessage',
                     component: Message,
                 },
                 {
-                    path: 'chat',
+                    path: 'chat/:identity',
                     name: 'mobileChat',
                     component: Chat,
                 },

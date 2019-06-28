@@ -54,10 +54,10 @@
     import {Component, Vue} from 'vue-property-decorator';
 	import Api from '@/api';
 	import Utils from "@/utils";
-	import UserEnum from "@/constant/enums/UserEnum";
-	import {ChatContentTypeEnum} from "@/constant/enums/ChatContentTypeEnum";
-	const SockJS = require("sockjs-client");
-	const Stomp = require("stompjs");
+	import UserEnum from '@/constant/enums/UserEnum';
+	import {ChatContentTypeEnum} from '@/constant/enums/ChatContentTypeEnum';
+	const SockJS = require('sockjs-client');
+	const Stomp = require('stompjs');
 
     @Component
     export default class Chat extends Vue {
@@ -66,26 +66,41 @@
         private msgs: object[] = []; // 消息数据
 		private stompClient: any = {};
 		private chatSession: any = {};
+		private user: any = {};
 
         public created() { // 初始化数据
             this.handleData(this.msgs);
             this.init();
         }
-
 		// init
         private init() {
 			this.createChatSession();
+			this.parseIdentity();
+        }
+
+		private parseIdentity() {
+			const user = this.$route.params.identity;
+			if (!user) {
+				return;
+            }
+			const arr = Base64.encode(user).split(',');
+			// CustomerId,CustomerName,CustomerTel
+			this.user = {
+				id: arr[0],
+				userName: arr[1],
+				mobile: arr[2],
+				account: arr[2]
+			}
         }
 
 		private initWebSocket() {
 			const socket = new SockJS('/' + 'ws');
 			this.stompClient = Stomp.over(socket);
-
 			const that = this;
 			const stompClient = that.stompClient;
 			stompClient.connect({}, () => {
 				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserEnum.Type.STAFF}/receiveMsg`, (resp: any) => {
-					let message = JSON.parse(resp.body);
+					const message = JSON.parse(resp.body);
 					that.msgs.push(message);
 					that.scrollToBottom();
 				});
@@ -115,7 +130,6 @@
                 if(!res.data){
                 	return;
                 }
-
 				that.chatSession = res.data;
 				that.initWebSocket();
 				that.messageHistory();
@@ -127,12 +141,10 @@
 			if (!this.chatSession.id || !this.input) {
 				return;
 			}
-
-			let that = this;
-			Api.$post('/chat/sendMsg', {content: this.input, sessionId: this.chatSession.id}).then((res: any) => {
+			const that = this;
+			Api.$post('/chat/sendMsg', { content : this.input, sessionId: this.chatSession.id}).then((res: any) => {
 				that.msgs.push(res.data);
 			});
-
             this.input = '';
             this.scrollToBottom();
         }
@@ -147,24 +159,20 @@
 			});
 		}
 
-		private changeFile(event:any){
-
+		private changeFile(event: any) {
 			if (!this.chatSession.id) {
 				return;
 			}
-
-			if (event.srcElement.files.length == 0) {
+			if (event.srcElement.files.length === 0) {
 				return;
 			}
-
-			let that = this;
+			const that = this;
 			const reader = new FileReader();
-
-			reader.onload = function(event){
+			reader.onload = (event) => {
 				Api.$post('/chat/sendMsg', {
 					content: reader.result,
 					sessionId: that.chatSession.id,
-					contentType: ChatContentTypeEnum.FILE
+					contentType: ChatContentTypeEnum.FILE,
 				}).then((res: any) => {
 
 					that.msgs.push(res.data);
@@ -178,7 +186,7 @@
             // 滚动到最下
             this.$nextTick(() => {
                 const dom = this.$refs.chatHistory as HTMLDivElement;
-				dom.scrollTop = (dom.scrollHeight + 100);
+                dom.scrollTop = (dom.scrollHeight + 100);
                 // dom.scrollTo(0, dom.offsetHeight);
             });
         }

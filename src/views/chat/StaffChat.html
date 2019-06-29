@@ -13,7 +13,7 @@
                  :class="{'current': current.visitorId == session.visitorId}"
                  @click="changeSession(session)"
                  class="visitor-item">
-                <img :src="session.avatar ? session.avatar : '/images/logo.jpg' ">
+                <img :src="session.avatar ? session.avatar : '/images/custom.jpg' ">
                 <div class="visitor-info">
                     <div>{{ session.otherSideName ? session.otherSideName : '游客' + (index + 1) }}</div>
                     <div class="visitor-info-msg">

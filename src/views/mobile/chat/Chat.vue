@@ -2,32 +2,37 @@
     <div class="chat">
         <div class="chat_header">在线客服</div>
         <div class="chat_history" :class="{'expand': expand}" ref="chatHistory">
-            <template v-for="msg in msgs">
-                <div v-if="msg.sendUserType === 2"  class="chat_history_area custom" :key="msg.id">
-                    <div class="chat_msg">
-                        <div class="title">{{msg.name}} {{msg.timeStr}}</div>
-                        <div class="msg">
-                            <template v-if="msg.contentType == 2">
-                                <img :src="msg.content">
-                            </template>
-                            <template v-else>
-                                {{msg.content }}
-                            </template>
-                        </div>
+            <template v-for="(msg, index) in msgs">
+                <div :key="msg.id">
+                    <div class="splice_line" v-if="handleSpliceLine(msg, msgs, index)">
+                        <span>{{msg.spliceTime}}</span>
                     </div>
-                    <img src="/images/logo.jpg" alt="头像">
-                </div>
-                <div v-if="msg.sendUserType === 1" class="chat_history_area service" :key="msg.id">
-                    <img src="/images/logo.jpg" alt="头像">
-                    <div class="chat_msg">
-                        <div class="title">{{msg.name}} {{msg.timeStr}}</div>
-                        <div class="msg">
-                            <template v-if="msg.contentType == 2">
-                                <img :src="msg.content">
-                            </template>
-                            <template v-else>
-                                {{msg.content}}
-                            </template>
+                    <div v-if="msg.sendUserType === 1"  class="chat_history_area custom">
+                        <div class="chat_msg">
+                            <div class="title">{{msg.name}} {{msg.timeStr}}</div>
+                            <div class="msg">
+                                <template v-if="msg.contentType == 2">
+                                    <img :src="msg.content">
+                                </template>
+                                <template v-else>
+                                    {{msg.content }}
+                                </template>
+                            </div>
+                        </div>
+                        <img class="avatar" :src="msg.avatar" alt="头像">
+                    </div>
+                    <div v-if="msg.sendUserType === 2" class="chat_history_area service">
+                        <img class="avatar" :src="msg.avatar" alt="头像">
+                        <div class="chat_msg">
+                            <div class="title">{{msg.name}} {{msg.timeStr}}</div>
+                            <div class="msg">
+                                <template v-if="msg.contentType == 2">
+                                    <img :src="msg.content">
+                                </template>
+                                <template v-else>
+                                    {{msg.content}}
+                                </template>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -69,7 +74,6 @@
 		private user: any = {};
 
         public created() { // 初始化数据
-            this.handleData(this.msgs);
             this.init();
         }
 		// init
@@ -109,7 +113,10 @@
 
         private handleData(arr: object[]) { // 处理原始数据
             arr.forEach((item: any) => {
-                item.timeStr = Utils.dateFormat(item.time, 'HH:mm:ss');
+                item.timeStr = Utils.dateFormat(item.gmtCreate, 'HH:mm:ss');
+                if (!item.avatar) {
+                    item.avatar = item.sendUserType === 2 ? '/images/logo.jpg' :'/images/custom.png';
+                }
             });
         }
         private chooseFile(ev: any) { // 选择文件发送
@@ -154,7 +161,8 @@
 				return;
 			}
 			Api.$get('/chat/history', {sessionId: this.chatSession.id}).then((res: any) => {
-				this.msgs = res.data;
+                this.msgs = res.data;
+                this.handleData(this.msgs);
 				this.scrollToBottom();
 			});
 		}
@@ -190,6 +198,14 @@
                 // dom.scrollTo(0, dom.offsetHeight);
             });
         }
+        private handleSpliceLine(msg: any, msgs: any[], index: number) {
+            if (index === 0 || msg.gmtCreate - msgs[index - 1].gmtCreate > 5*60*1000) { // 大于5min或者第一条信息
+                this.$set(msg, 'spliceTime', Utils.dateFormat(msg.gmtCreate, 'HH:mm:ss'));
+                return Utils.dateFormat(msg.gmtCreate, 'HH:mm:ss');
+            } else {
+                return ''
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -206,13 +222,37 @@
             width: 100vw;
             overflow: auto;
             -webkit-overflow-scrolling: touch;
-            padding: 20px 10px 54px;
+            padding: 10px 10px 54px;
+            color: #aaa;
             &.expand {
                 padding-bottom: 154px;
             }
-            img{
+            .avatar{
                 width: 48px;
                 height: 48px;
+                border-radius: 24px;
+            }
+            .splice_line {
+                position: relative;
+                height: 40px;
+                line-height: 40px;
+                text-align: center;
+                span {
+                    position: relative;
+                    background: #fff;
+                    z-index: 2;
+                    padding: 6px;
+                }
+                &::after {
+                    content: '';
+                    display: block;
+                    width: 100px;
+                    height: 1px;
+                    background: #aaa;
+                    position: absolute;
+                    top: 20px;
+                    left: calc(50% - 50px);
+                }
             }
             .chat_history_area {
                 position: relative;
@@ -226,6 +266,8 @@
                     .msg {
                         border-radius: 2px;
                         padding: 12px 16px;
+                        word-break: break-all;
+                        color: #000;
                         img {
                             width: 100%;
                             height: 100%;

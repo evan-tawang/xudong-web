@@ -103,6 +103,28 @@
           border-radius: 18px;
           margin: 0 12px;
         }
+        .splice_line {
+          position: relative;
+          height: 40px;
+          line-height: 40px;
+          text-align: center;
+          span {
+              position: relative;
+              background: #F8F8F8;
+              z-index: 2;
+              padding: 6px;
+          }
+          &::after {
+              content: '';
+              display: block;
+              width: 100px;
+              height: 1px;
+              background: #aaa;
+              position: absolute;
+              top: 20px;
+              left: calc(50% - 50px);
+          }
+      }
 
         .column {
           padding: 12px;

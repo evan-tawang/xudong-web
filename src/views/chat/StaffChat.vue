@@ -378,6 +378,14 @@
             this.hisQuery.pageNo = pageNo;
             this.hisGet();
         }
+        private handleSpliceLine(msg: any, msgs: any[], index: number) {
+            if (index === 0 || msg.gmtCreate - msgs[index - 1].gmtCreate > 5*60*1000) { // 大于5min或者第一条信息
+                this.$set(msg, 'spliceTime', Utils.dateFormat(msg.gmtCreate, 'HH:mm:ss'));
+                return Utils.dateFormat(msg.gmtCreate, 'HH:mm:ss');
+            } else {
+                return ''
+            }
+        }
     }
 
 </script>

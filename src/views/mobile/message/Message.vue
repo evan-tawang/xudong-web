@@ -42,7 +42,7 @@
         }
         .operate {
             text-align: right;
-            padding: 10px 0;
+            padding: 10px;
             .send_btn {
                 padding: 8px 20px;
                 border-radius: 2px;

@@ -35,31 +35,36 @@
         </div>
         <div class="chat-main-center">
             <div class="chat-history" ref="chatHistory">
-                <div v-for="(message, index) in current.messages"
-                     :key="index"
-                     class="column"
-                     :class="{'service': message.sendUserType == 1, 'custom': message.sendUserType != 1 }">
-                    <template v-if="message.sendUserType == 1">
-                        <div class="service-info">
-                            <div class="title">客服 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
-                            <div class="service-msg msg img-msg" v-if="message.contentType == 2">
-                                <img :src="message.content" @click="zoomImage(message.content)">
-                            </div>
-                            <div v-else class="service-msg msg" v-html="message.content"></div>
+                <template v-for="(message, index) in current.messages">
+                    <div :key="index">
+                        <div class="splice_line" v-if="handleSpliceLine(message, current.messages, index)">
+                            <span>{{message.spliceTime}}</span>
                         </div>
-                        <img class="avatar-img" src="/images/logo.jpg">
-                    </template>
-                    <template v-else>
-                        <img class="avatar-img" src="/images/logo.jpg">
-                        <div class="custom-info">
-                            <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
-                            <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
-                                <img :src="message.content" @click="zoomImage(message.content)">
-                            </div>
-                            <div v-else class="custom-msg msg" v-html="message.content"></div>
+                        <div class="column"
+                            :class="{'service': message.sendUserType == 1, 'custom': message.sendUserType != 1 }">
+                            <template v-if="message.sendUserType == 1">
+                                <div class="service-info">
+                                    <div class="title">客服 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
+                                    <div class="service-msg msg img-msg" v-if="message.contentType == 2">
+                                        <img :src="message.content" @click="zoomImage(message.content)">
+                                    </div>
+                                    <div v-else class="service-msg msg" v-html="message.content"></div>
+                                </div>
+                                <img class="avatar-img" src="/images/logo.jpg">
+                            </template>
+                            <template v-else>
+                                <img class="avatar-img" src="/images/logo.jpg">
+                                <div class="custom-info">
+                                    <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
+                                    <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
+                                        <img :src="message.content" @click="zoomImage(message.content)">
+                                    </div>
+                                    <div v-else class="custom-msg msg" v-html="message.content"></div>
+                                </div>
+                            </template>
                         </div>
-                    </template>
-                </div>
+                    </div>
+                </template>
             </div>
             <div class="chat-edit">
 

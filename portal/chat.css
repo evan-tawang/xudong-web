@@ -182,7 +182,7 @@
     padding: 0 10px;
     font-size: 12px;
 }
-.chat_main .chat_input .chat_btn {
+.chat_btn {
     float: right;
     margin: 5px;
     padding: 5px 15px;
@@ -192,4 +192,20 @@
     border-radius: 2px;
     font-size: 12px;
     cursor: pointer;
+}
+.chat_record {
+    position: absolute;
+    box-shadow: 1px 1px 10px #ddd;
+    width: 300px;
+    height: 150px;
+}
+.chat_record .chat_record_area {
+    outline: none;
+    height: 60%;
+    overflow: scroll;
+    margin: 5px;
+    font-size: 12px;
+    padding: 4px;
+    border: 1px solid #eee;
+    border-radius: 4px;
 }

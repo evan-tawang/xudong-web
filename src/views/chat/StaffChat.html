@@ -13,7 +13,7 @@
                  :class="{'current': current.visitorId == session.visitorId}"
                  @click="changeSession(session)"
                  class="visitor-item">
-                <img :src="session.avatar ? session.avatar : '/images/custom.jpg' ">
+                <img :src="session.avatar ? session.avatar : '/images/custom.png' ">
                 <div class="visitor-info">
                     <div>{{ session.otherSideName ? session.otherSideName : '游客' + (index + 1) }}</div>
                     <div class="visitor-info-msg">
@@ -22,7 +22,7 @@
                                 [图片]
                             </template>
                             <template v-else>
-                                {{ session.messages[session.messages.length-1].content }}
+                                <span v-html="session.messages[session.messages.length-1].content"></span>
                             </template>
                         </template>
                     </div>
@@ -44,7 +44,7 @@
                             :class="{'service': message.sendUserType == 1, 'custom': message.sendUserType != 1 }">
                             <template v-if="message.sendUserType == 1">
                                 <div class="service-info">
-                                    <div class="title">客服 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
+                                    <div class="title">我 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
                                     <div class="service-msg msg img-msg" v-if="message.contentType == 2">
                                         <img :src="message.content" @click="zoomImage(message.content)">
                                     </div>
@@ -53,7 +53,7 @@
                                 <img class="avatar-img" src="/images/logo.jpg">
                             </template>
                             <template v-else>
-                                <img class="avatar-img" src="/images/logo.jpg">
+                                <img class="avatar-img" src="/images/custom.png">
                                 <div class="custom-info">
                                     <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
                                     <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
@@ -69,14 +69,14 @@
             <div class="chat-edit">
 
                 <div class="chat_attachment" v-show="current.id">
-                    <div class="chat_expression">
-                        <img src="/images/smile.png" alt="" @click="chatExpressionToggle">
-                        <div v-if="chatExpressionChoose" class="chat_expression_choose">
-                            <div data-value="0">1</div>
-                            <div data-value="1">2</div>
-                            <div data-value="2">3</div>
-                        </div>
-                    </div>
+                    <!--<div class="chat_expression">-->
+                        <!--<img src="/images/smile.png" alt="" @click="chatExpressionToggle">-->
+                        <!--<div v-if="chatExpressionChoose" class="chat_expression_choose">-->
+                            <!--<div data-value="0">1</div>-->
+                            <!--<div data-value="1">2</div>-->
+                            <!--<div data-value="2">3</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
                     <div class="chat_image">
                         <img src="/images/image.png" alt="" @click="chooseFile">
                         <input @change="changeFile($event)" ref="imageFile" type="file" accept=".png,.jpg,.jpeg"
@@ -125,7 +125,7 @@
             <div class="service-item">
                 <img src="/images/logo.jpg">
                 <div class="service-info">
-                    <div>客服:{{ userAgent.userName }}</div>
+                    <div>客服：{{ userAgent.userName }}</div>
                     <div>服务时间 </div>
 
                     <div>

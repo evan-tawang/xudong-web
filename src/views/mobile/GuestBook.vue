@@ -14,21 +14,37 @@
     </div>
 </template>
 <script lang="ts">
+    import Api from '../../api';
     import {Component, Vue} from 'vue-property-decorator';
+    import Utils from "@/utils";
+
     @Component
-    export default class Message extends Vue {
+    export default class GuestBook extends Vue {
         private textarea: string = '';
+        private visitor: object = {};
+
+        private created() {
+            this.visitor = Utils.parseIdentity(this.$route.params.identity)
+        }
 
         private sendMessage() {
-            // TODO 发送留言
-            if (this.textarea) {
-                console.log('send message');
+            if (!this.textarea) {
+                return;
             }
+            const visitorId = this.visitor && this.visitor.id ? this.visitor.id : '';
+            Api.$post('guestBook/save', {content: this.textarea, visitorId}).then(res => {
+                this.textarea = '';
+                this.$message({
+                    message: '留言已收到，请等待反馈',
+                    type: 'success'
+                });
+            })
+
         }
     }
 </script>
 <style lang="scss" scoped>
-    @import '../../../assets/element-variables.scss';
+    @import '../../assets/element-variables';
     .message {
         .message_header {
             text-align: center;

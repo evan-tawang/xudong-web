@@ -7,7 +7,7 @@
                     <div class="splice_line" v-if="handleSpliceLine(msg, msgs, index)">
                         <span>{{msg.spliceTime}}</span>
                     </div>
-                    <div v-if="msg.sendUserType === 1"  class="chat_history_area custom">
+                    <div v-if="msg.sendUserType === 2"  class="chat_history_area custom">
                         <div class="chat_msg">
                             <div class="title">{{msg.name}} {{msg.timeStr}}</div>
                             <div class="msg">
@@ -15,13 +15,13 @@
                                     <img :src="msg.content">
                                 </template>
                                 <template v-else>
-                                    {{msg.content }}
+                                    <span v-html="msg.content"></span>
                                 </template>
                             </div>
                         </div>
                         <img class="avatar" :src="msg.avatar" alt="头像">
                     </div>
-                    <div v-if="msg.sendUserType === 2" class="chat_history_area service">
+                    <div v-if="msg.sendUserType === 1" class="chat_history_area service">
                         <img class="avatar" :src="msg.avatar" alt="头像">
                         <div class="chat_msg">
                             <div class="title">{{msg.name}} {{msg.timeStr}}</div>
@@ -30,7 +30,7 @@
                                     <img :src="msg.content">
                                 </template>
                                 <template v-else>
-                                    {{msg.content}}
+                                    <span v-html="msg.content"></span>
                                 </template>
                             </div>
                         </div>
@@ -40,9 +40,9 @@
         </div>
         <div class="chat_bottom">
             <div class="chat_input">
-                <div class="expression_choose">
-                    <img @click="openExpression" src="/images/smile.png" alt="">
-                </div>
+                <!--<div class="expression_choose">-->
+                    <!--<img @click="openExpression" src="/images/smile.png" alt="">-->
+                <!--</div>-->
                 <div class="file_choose">
                     <img src="/images/image.png" alt="">
                     <input class="file" type="file" accept=".png,.jpg,.jpeg" style="opacity: 0;" @change="changeFile">
@@ -57,10 +57,10 @@
 </template>
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-	import Api from '@/api';
-	import Utils from "@/utils";
-	import UserEnum from '@/constant/enums/UserEnum';
-	import {ChatContentTypeEnum} from '@/constant/enums/ChatContentTypeEnum';
+	import Api from '../../api';
+	import Utils from "../../utils";
+	import UserEnum from '../../constant/enums/UserEnum';
+	import {ChatContentTypeEnum} from '../../constant/enums/ChatContentTypeEnum';
 	const SockJS = require('sockjs-client');
 	const Stomp = require('stompjs');
 
@@ -71,7 +71,7 @@
         private msgs: object[] = []; // 消息数据
 		private stompClient: any = {};
 		private chatSession: any = {};
-		private user: any = {};
+		private visitor: any = {};
 
         public created() { // 初始化数据
             this.init();
@@ -83,18 +83,7 @@
         }
 
 		private parseIdentity() {
-			const user = this.$route.params.identity;
-			if (!user) {
-				return;
-            }
-			const arr = Base64.encode(user).split(',');
-			// CustomerId,CustomerName,CustomerTel
-			this.user = {
-				id: arr[0],
-				userName: arr[1],
-				mobile: arr[2],
-				account: arr[2]
-			}
+            this.visitor = Utils.parseIdentity(this.$route.params.identity)
         }
 
 		private initWebSocket() {
@@ -105,6 +94,7 @@
 			stompClient.connect({}, () => {
 				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserEnum.Type.STAFF}/receiveMsg`, (resp: any) => {
 					const message = JSON.parse(resp.body);
+                    that.handelMsg(message);
 					that.msgs.push(message);
 					that.scrollToBottom();
 				});
@@ -113,12 +103,17 @@
 
         private handleData(arr: object[]) { // 处理原始数据
             arr.forEach((item: any) => {
-                item.timeStr = Utils.dateFormat(item.gmtCreate, 'HH:mm:ss');
-                if (!item.avatar) {
-                    item.avatar = item.sendUserType === 2 ? '/images/logo.jpg' :'/images/custom.png';
-                }
+                this.handelMsg(item);
             });
         }
+
+        private handelMsg(item: any) {
+            item.timeStr = Utils.dateFormat(item.gmtCreate, 'HH:mm:ss');
+            if (!item.avatar) {
+                item.avatar = item.sendUserType === UserEnum.Type.VISITOR ? '/images/custom.png' :'/images/logo.jpg';
+            }
+        }
+
         private chooseFile(ev: any) { // 选择文件发送
             console.log(ev);
             // 文件上传并反馈
@@ -133,7 +128,8 @@
 		// 创建聊天会话
 		private createChatSession() {
         	const that = this;
-			Api.$post('/chat/createSession').then((res: any) => {
+            const visitorId = this.visitor && this.visitor.id ? this.visitor.id : '';
+            Api.$post('/chat/createSession', {connectId: visitorId}).then((res: any) => {
                 if(!res.data){
                 	return;
                 }
@@ -150,10 +146,12 @@
 			}
 			const that = this;
 			Api.$post('/chat/sendMsg', { content : this.input, sessionId: this.chatSession.id}).then((res: any) => {
-				that.msgs.push(res.data);
+			    let message = res.data;
+                that.handelMsg(message);
+				that.msgs.push(message);
+                that.scrollToBottom();
 			});
             this.input = '';
-            this.scrollToBottom();
         }
 
 		private messageHistory() {

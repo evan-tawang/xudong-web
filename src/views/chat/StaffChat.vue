@@ -259,8 +259,19 @@
                 sessionId: this.current.id,
             }).then((res: any) => {
                 for (let i in this.sessionList) {
-                    this.sessionList.splice(parseInt(i), 1);
+                    if(this.sessionList[i].id === this.current.id){
+                        this.sessionList.splice(parseInt(i), 1);
+                    }
                 }
+                this.current = {
+                    id: '',
+                    visitorId: '',
+                    visitorName: '',
+                    staffName: '',
+                    otherSideName:'',
+                    nonReadCount: 0,
+                    messages: []
+                };
             });
         }
 

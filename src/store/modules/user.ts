@@ -83,6 +83,10 @@ const actions: ActionTree<any, any> = {
 			commit('cleanUserAgent');
 		});
 	},
+	[Types.USER.CHECK_IS_LOGIN]({commit}) {
+		Api.$post('/staff/isLogin').then((res: any) => {
+		})
+	},
 };
 
 export default {

@@ -18,11 +18,18 @@
         @Getter private userAgent: any;
 
         @Action(Types.USER.LOGOUT) private userLogout: any;
+        @Action(Types.USER.CHECK_IS_LOGIN) private userIsLogin: any;
 
         private async created() {
 			this.activeMenu(this.$route, null);
             document.title = this.pageTitle;
             this.welcome = '欢迎您，' + this.userAgent.account+ ' ！';
+
+            this.checkIsLogin();
+        }
+
+        private checkIsLogin() {
+            this.userIsLogin();
         }
 
         private jump(menu: any) {

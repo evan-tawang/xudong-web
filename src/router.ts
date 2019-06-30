@@ -4,9 +4,9 @@ import RouterName from '@/constant/router-name';
 import Login from '@/views/user/Login.vue';
 import Home from './views/home/Home.vue';
 
-import Mobile from './views/mobile/Mobile.vue';
-import Message from './views/mobile/message/Message.vue';
-import Chat from './views/mobile/chat/Chat.vue';
+import MobileRouter from './views/mobile/MobileRouter.vue';
+import GuestBook from './views/mobile/GuestBook.vue';
+import Chat from './views/mobile/Chat.vue';
 
 import StaffChat from './views/chat/StaffChat.vue';
 import TalkSkillList from '@/views/talk-skill/TalkSkillList.vue';
@@ -69,15 +69,25 @@ export default new Router({
         {
             path: '/mobile',
             name: 'mobile',
-            component: Mobile,
+            component: MobileRouter,
             children: [
                 {
-                    path: 'message/:identity',
+                    path: 'guest-book/:identity',
+                    name: 'mobileMessage-id',
+                    component: GuestBook,
+                },
+                {
+                    path: 'guest-book',
                     name: 'mobileMessage',
-                    component: Message,
+                    component: GuestBook,
                 },
                 {
                     path: 'chat/:identity',
+                    name: 'mobileChat-id',
+                    component: Chat,
+                },
+                {
+                    path: 'chat',
                     name: 'mobileChat',
                     component: Chat,
                 },

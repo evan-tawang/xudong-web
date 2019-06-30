@@ -263,20 +263,19 @@
                     }
                     .msg {
                         border-radius: 2px;
-                        padding: 12px 16px;
+                        padding: 6px;
                         word-break: break-all;
                         color: #000;
                         img {
                             width: 100%;
                             height: 100%;
-                            padding: 10px;
                         }
                     }
                 }
                 &.custom {
                     justify-content: flex-end;
-                    img {
-                        margin-left: 10px;
+                    .avatar {
+                        margin-left: 8px;
                     }
                     .chat_msg{
                         width: 70%;
@@ -290,8 +289,8 @@
                     }
                 }
                 &.service {
-                    img {
-                        margin-right: 10px;
+                    .avatar {
+                        margin-right: 8px;
                     }
                     .chat_msg{
                         .msg{

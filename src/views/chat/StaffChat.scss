@@ -127,12 +127,11 @@
       }
 
         .column {
-          padding: 12px;
+          padding: 8px 0;
           width: 70%;
 
           .msg {
-            width: 70%;
-            padding: 12px;
+            padding: 6px;
             border-radius: 4px;
             word-break: break-all;
 
@@ -158,6 +157,7 @@
           justify-content: flex-end;
 
           .service-info {
+            width: 70%;
             .title {
               text-align: right;
             }
@@ -179,9 +179,10 @@
           width: 100%;
 
           .custom-info {
+            width: 70%;
             .custom-msg {
               background: #f4eee1;
-
+              float: left;
               &.img-msg {
                 background: transparent;
               }

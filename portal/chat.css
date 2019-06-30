@@ -72,15 +72,20 @@
     padding: 5px 0;
 }
 /* 聊天主窗口-聊天历史 */
-.chat_main .chat_history {
+.chat_main .chat_history_wrapper {
     height: 300px;
-    padding: 0 20px;
+    padding: 0 10px;
     border-bottom: 1px solid #ddd;
     overflow: auto;
     font-size: 12px;
 }
-.chat_main .chat_history img{
-    width: 24px;
+.chat_main .chat_history {
+    overflow: auto;
+}
+.chat_main .chat_history .avatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
 }
 .chat_main .chat_history .msg {
     border-radius: 2px;
@@ -93,7 +98,7 @@
     margin-bottom: 20px;
 }
 .chat_main .chat_history .chat_history_custom .chat_msg{
-    margin-right: 36px;
+    margin-right: 50px;
 }
 .chat_main .chat_history .chat_history_custom .chat_msg .title{
     text-align: right;
@@ -115,7 +120,7 @@
     margin-bottom: 20px;
 }
 .chat_main .chat_history .chat_history_service .chat_msg{
-    margin-left: 36px;
+    margin-left: 50px;
 }
 .chat_main .chat_history .chat_history_service .chat_msg .title{
     margin-bottom: 5px;

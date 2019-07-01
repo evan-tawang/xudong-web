@@ -54,9 +54,7 @@
                                 <img class="avatar-img" src="/images/custom.png">
                                 <div class="custom-info">
                                     <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
-                                    <div class="custom-msg img-msg" v-if="message.contentType == 2">
-                                        <img :src="message.content" @click="zoomImage(message.content)">
-                                    </div>
+                                    <img class="custom-msg img-msg" v-if="message.contentType == 2":src="message.content" @click="zoomImage(message.content)">
                                     <div v-else class="custom-msg msg" v-html="message.content"></div>
                                 </div>
                             </template>

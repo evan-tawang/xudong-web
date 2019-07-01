@@ -9,7 +9,7 @@ export default class Utils {
     }
     public static parseIdentity(identity: string) {
         if (!identity) {
-            return;
+            return {};
         }
         const arr = Base64.encode(identity).split(',');
         // CustomerId,CustomerName,CustomerTel

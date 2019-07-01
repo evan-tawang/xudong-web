@@ -179,6 +179,7 @@
             Api.$get('/chat/history', {sessionId: chatSession.id}).then((res: any) => {
                 chatSession.messages = res.data;
                 this.$forceUpdate();
+                this.scrollToBottom();
             });
         }
 

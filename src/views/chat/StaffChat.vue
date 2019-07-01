@@ -80,7 +80,6 @@
 
         private created() {
 
-
             // TODO: 兼容tslint
             this.current.messages = [];
 

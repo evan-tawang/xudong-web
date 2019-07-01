@@ -58,7 +58,7 @@
     height: 40px;
     display: flex;
     align-items: center;
-    background: #dbba7e;
+    background: #CAA96A;
     padding: 0 20px;
     color: #fff;
 }
@@ -76,7 +76,8 @@
     height: 300px;
     padding: 0 10px;
     border-bottom: 1px solid #ddd;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     font-size: 12px;
 }
 .chat_main .chat_history {
@@ -105,7 +106,7 @@
     margin-bottom: 5px;
 }
 .chat_main .chat_history .chat_history_custom .chat_msg .msg{
-    background: #dbba7e;
+    background: #CAA96A;
     color: #fff;
 }
 .chat_main .chat_history .chat_history_custom img{
@@ -178,7 +179,8 @@
 .chat_main .chat_input .chat_input_area{
     outline: none;
     height: 70px;
-    overflow: scroll;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 0 10px;
     font-size: 12px;
 }
@@ -186,10 +188,10 @@
     float: right;
     margin: 5px;
     padding: 5px 15px;
-    background: #dbba7e;
+    background: #CAA96A;;
     color: #fff;
     text-align: center;
-    border-radius: 2px;
+    border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
 }

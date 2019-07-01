@@ -45,9 +45,7 @@
                             <template v-if="message.sendUserType == 1">
                                 <div class="service-info">
                                     <div class="title">我 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
-                                    <div class="service-msg msg img-msg" v-if="message.contentType == 2">
-                                        <img :src="message.content" @click="zoomImage(message.content)">
-                                    </div>
+                                    <img v-if="message.contentType == 2" class="service-msg img-msg" :src="message.content" @click="zoomImage(message.content)">
                                     <div v-else class="service-msg msg" v-html="message.content"></div>
                                 </div>
                                 <img class="avatar-img" src="/images/logo.jpg">
@@ -56,7 +54,7 @@
                                 <img class="avatar-img" src="/images/custom.png">
                                 <div class="custom-info">
                                     <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
-                                    <div class="custom-msg msg img-msg" v-if="message.contentType == 2">
+                                    <div class="custom-msg img-msg" v-if="message.contentType == 2">
                                         <img :src="message.content" @click="zoomImage(message.content)">
                                     </div>
                                     <div v-else class="custom-msg msg" v-html="message.content"></div>

@@ -15,6 +15,23 @@
     font-weight: 100;
     cursor: pointer;
 }
+.chat_record_tip {
+    font-family: "PingFang SC", "Microsoft YaHei",微软雅黑;
+    position: fixed;
+    right: 20px;
+    bottom: 40px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-radius: 2px;
+    box-shadow: 1px 1px 10px #ddd;
+    background: #dbba7e;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 100;
+    cursor: pointer;
+    padding: 0 16px;
+}
 .chat_tip .chat_left {
     align-items: center;
     display: flex;
@@ -88,12 +105,15 @@
     height: 36px;
     border-radius: 18px;
 }
+.chat_main .chat_history .img-msg {
+    max-width: 100%;
+}
 .chat_main .chat_history .msg {
     border-radius: 2px;
     padding: 12px 16px;
 }
 .chat_main .chat_history .chat_history_custom {
-    position: relative;s
+    position: relative;
     float: right;
     width: 70%;
     margin-bottom: 20px;
@@ -109,7 +129,7 @@
     background: #CAA96A;
     color: #fff;
 }
-.chat_main .chat_history .chat_history_custom img{
+.chat_main .chat_history .chat_history_custom .avatar{
     position: absolute;
     top: 5px;
     right: 5px;
@@ -188,18 +208,32 @@
     float: right;
     margin: 5px;
     padding: 5px 15px;
-    background: #CAA96A;;
+    background: #dbba7e;;
     color: #fff;
     text-align: center;
     border-radius: 4px;
     font-size: 12px;
     cursor: pointer;
 }
+.chat_btn.cancel{
+    background: #fff;
+    color: #dbba7e;
+    cursor: pointer;
+}
+
 .chat_record {
-    position: absolute;
-    box-shadow: 1px 1px 10px #ddd;
+    font-family: "PingFang SC", "Microsoft YaHei",微软雅黑;
+    position: fixed;
+    font-size: 14px;
+    font-weight: 100;
     width: 300px;
     height: 150px;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 1px 1px 10px #ddd;
+    border: 1px solid #ddd;
+    display: none;
+    background: #fff;
 }
 .chat_record .chat_record_area {
     outline: none;

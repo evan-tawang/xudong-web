@@ -10,14 +10,14 @@
                     <div v-if="msg.sendUserType === 2"  class="chat_history_area custom">
                         <div class="chat_msg">
                             <div class="title">{{msg.name}} {{msg.timeStr}}</div>
-                            <div class="msg">
-                                <template v-if="msg.contentType == 2">
-                                    <img :src="msg.content">
-                                </template>
-                                <template v-else>
+                            <template v-if="msg.contentType == 2">
+                                <img class="img-msg" :src="msg.content">
+                            </template>
+                            <template v-else>
+                                <div class="msg">
                                     <span v-html="msg.content"></span>
-                                </template>
-                            </div>
+                                </div>
+                            </template>
                         </div>
                         <img class="avatar" :src="msg.avatar" alt="头像">
                     </div>
@@ -25,14 +25,14 @@
                         <img class="avatar" :src="msg.avatar" alt="头像">
                         <div class="chat_msg">
                             <div class="title">{{msg.name}} {{msg.timeStr}}</div>
-                            <div class="msg">
-                                <template v-if="msg.contentType == 2">
-                                    <img :src="msg.content">
-                                </template>
-                                <template v-else>
+                            <template v-if="msg.contentType == 2">
+                                <img class="img-msg" :src="msg.content">
+                            </template>
+                            <template v-else>
+                                <div class="msg">
                                     <span v-html="msg.content"></span>
-                                </template>
-                            </div>
+                                </div>
+                            </template>
                         </div>
                     </div>
                 </div>
@@ -267,10 +267,9 @@
                         padding: 6px;
                         word-break: break-all;
                         color: #000;
-                        img {
-                            width: 100%;
-                            height: 100%;
-                        }
+                    }
+                    .img-msg {
+                        max-width: 100%;
                     }
                 }
                 &.custom {

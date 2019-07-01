@@ -111,6 +111,7 @@
 .chat_main .chat_history .msg {
     border-radius: 2px;
     padding: 12px 16px;
+    display: inline-block;
 }
 .chat_main .chat_history .chat_history_custom {
     position: relative;

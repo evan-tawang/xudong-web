@@ -1,0 +1,197 @@
+/* 页面的聊天挂在窗口 */
+.chat_tip {
+    font-family: "PingFang SC", "Microsoft YaHei",微软雅黑;
+    position: fixed;
+    right: 20px;
+    bottom: 100px;
+    display: flex;
+    align-items: center;
+    height: 50px;
+    border-radius: 2px;
+    box-shadow: 1px 1px 10px #ddd;
+    background: #dbba7e;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 100;
+    cursor: pointer;
+}
+.chat_tip .chat_left {
+    align-items: center;
+    display: flex;
+    height: 100%;
+    padding: 0 10px;
+}
+.chat_tip .chat_left img {
+    height: 50%;
+    margin-right: 10px;
+}
+.chat_tip .chat_split_line {
+    width: 1px;
+    height: 50%;
+    background: #fff;
+}
+.chat_tip .chat_right {
+    font-size: 12px;
+    padding: 0 10px;
+    line-height: 1.5;
+}
+.chat_tip .chat_right p {
+    padding: 0;
+    margin: 0;
+}
+/* 聊天主窗口 */
+.chat_main {
+    font-family: "PingFang SC", "Microsoft YaHei",微软雅黑;
+    position: fixed;
+    font-size: 14px;
+    font-weight: 100;
+    position: fixed;
+    width: 500px;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: 1px 1px 10px #ddd;
+    border: 1px solid #ddd;
+    display: none;
+}
+/* 聊天主窗口-头部 */
+.chat_main .chat_header {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    background: #CAA96A;
+    padding: 0 20px;
+    color: #fff;
+}
+.chat_main .chat_header .chat_service_name {
+    flex: 1;
+}
+.chat_main .chat_header img {
+    width: 16px;
+}
+.chat_main .chat_container {
+    padding: 5px 0;
+}
+/* 聊天主窗口-聊天历史 */
+.chat_main .chat_history_wrapper {
+    height: 300px;
+    padding: 0 10px;
+    border-bottom: 1px solid #ddd;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-size: 12px;
+}
+.chat_main .chat_history {
+    overflow: auto;
+}
+.chat_main .chat_history .avatar{
+    width: 36px;
+    height: 36px;
+    border-radius: 18px;
+}
+.chat_main .chat_history .msg {
+    border-radius: 2px;
+    padding: 12px 16px;
+}
+.chat_main .chat_history .chat_history_custom {
+    position: relative;s
+    float: right;
+    width: 70%;
+    margin-bottom: 20px;
+}
+.chat_main .chat_history .chat_history_custom .chat_msg{
+    margin-right: 50px;
+}
+.chat_main .chat_history .chat_history_custom .chat_msg .title{
+    text-align: right;
+    margin-bottom: 5px;
+}
+.chat_main .chat_history .chat_history_custom .chat_msg .msg{
+    background: #CAA96A;
+    color: #fff;
+}
+.chat_main .chat_history .chat_history_custom img{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+.chat_main .chat_history .chat_history_service {
+    position: relative;
+    float: left;
+    width: 70%;
+    margin-bottom: 20px;
+}
+.chat_main .chat_history .chat_history_service .chat_msg{
+    margin-left: 50px;
+}
+.chat_main .chat_history .chat_history_service .chat_msg .title{
+    margin-bottom: 5px;
+}
+.chat_main .chat_history .chat_history_service .chat_msg .msg{
+    background: #f4eee1;
+}
+.chat_main .chat_history .chat_history_service img{
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+/* 聊天主窗口-聊天输入 */
+.chat_main .chat_attachment {
+    display: flex;
+    padding: 5px 0;
+}
+.chat_main .chat_attachment img{
+    width: 24px;
+    margin: 0 5px;
+}
+.chat_main .chat_attachment .chat_expression {
+    position: relative;
+}
+.chat_main .chat_attachment .chat_expression .chat_expression_choose {
+    position: absolute;
+    left: 5px;
+    bottom: 35px;
+    height: 80px;
+    width: 200px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    display: none;
+}
+.chat_main .chat_attachment .chat_expression .chat_expression_choose::before {
+    content: '';
+    position: absolute;
+    bottom: -21px;
+    display: blcok;
+    border: 10px solid transparent;
+    border-top: 10px solid #ddd;
+}
+.chat_main .chat_attachment .chat_expression .chat_expression_choose::after {
+    content: '';
+    position: absolute;
+    display: blcok;
+    bottom: -20px;
+    border: 10px solid transparent;
+    border-top: 10px solid #fff;
+}
+.chat_main .chat_input {
+    position: relative;
+}
+.chat_main .chat_input .chat_input_area{
+    outline: none;
+    height: 70px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 10px;
+    font-size: 12px;
+}
+.chat_main .chat_input .chat_btn {
+    float: right;
+    margin: 5px;
+    padding: 5px 15px;
+    background: #CAA96A;;
+    color: #fff;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+}

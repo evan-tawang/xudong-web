@@ -76,6 +76,7 @@
         public created() { // 初始化数据
             this.init();
         }
+
 		// init
         private init() {
 			this.createChatSession();

@@ -215,11 +215,6 @@
     font-size: 12px;
     cursor: pointer;
 }
-.chat_btn.cancel{
-    background: #fff;
-    color: #dbba7e;
-    cursor: pointer;
-}
 
 .chat_record {
     font-family: "PingFang SC", "Microsoft YaHei",微软雅黑;
@@ -235,13 +230,26 @@
     display: none;
     background: #fff;
 }
+.chat_record .chat_record_header {
+    padding: 6px;
+    background: #dbba7e;
+    color: #fff;
+}
+.chat_record .chat_record_header .cancel{
+    float: right;
+    cursor: pointer;
+    font-size: 20px;
+    line-height: 16px;
+}
 .chat_record .chat_record_area {
     outline: none;
-    height: 60%;
-    overflow: scroll;
+    height: 40%;
+    overflow-y: scroll;
+    overflow-x: hidden;
     margin: 5px;
     font-size: 12px;
     padding: 4px;
     border: 1px solid #eee;
     border-radius: 4px;
+    background: #fafafa;
 }

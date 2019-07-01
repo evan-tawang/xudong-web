@@ -146,8 +146,12 @@
                         }
                         function initRecordArea() {
                             var html = '<div class="chat_record" id="chatRecordMain">' + 
+                                '<div class="chat_record_header">' + 
+                                '<span>请您留言</span>' +
+                                '<div id="cancelRecord" class="cancel">-</div>' + 
+                                '</div>' +
                                 '<div id="chatRecordArea" contenteditable="true" class="chat_record_area"></div>' +
-                                '<div id="recordBtn" class="chat_btn">留言</div><div id="cancelRecord" class="chat_btn cancel">取消</div>' +
+                                '<div id="recordBtn" class="chat_btn">留言</div>' +
                             '</div>'
                             $('body').append(html);
                         }
@@ -273,7 +277,11 @@
                         dom2.append(msgDom);
                         // 设置用户头像
                         var avatarDom = document.createElement('img');
-                        avatarDom.src = msg.avatar || ChatRoom.options.staff.avatar;
+                        if (msg.sendUserType === sendUserTypes.STAFF.value) {
+                            avatarDom.src = msg.avatar || ChatRoom.options.staff.avatar;
+                        } else {
+                            avatarDom.src = msg.avatar || ChatRoom.options.visitor.avatar;
+                        }
                         avatarDom.className = 'avatar';
                         // 追加节点
                         if (msg.sendUserType === sendUserTypes.VISITOR.value) {
@@ -393,28 +401,28 @@
                     }
 
                     // 上传图片文件
-                    function uploadFile() {
-                        $.ajax({
-                            url: host + '/upload',
-                            type: 'POST',
-                            cache: false,
-                            data: new FormData($('#imageFile')[0]),
-                            processData: false,
-                            contentType: false
-                        }).done(function (res) {
-                            // 文件上传成功聊天记录追加图片
-                            createChatMsg({
-                                sendUserType: sendUserTypes.VISITOR.value,
-                                contentType: contentTypes.IMAGE.value,
-                                content: res,
-                                avatar: ChatRoom.options.visitor.avatar,
-                                name: ChatRoom.options.visitor.name,
-                                time: dateFormat(Date.now(), 'HH:mm:ss'),
-                            })
-                        }).fail(function (res) {
-                            alert('上传图片失败', res)
-                        });
-                    }
+                    // function uploadFile() {
+                    //     $.ajax({
+                    //         url: host + '/upload',
+                    //         type: 'POST',
+                    //         cache: false,
+                    //         data: new FormData($('#imageFile')[0]),
+                    //         processData: false,
+                    //         contentType: false
+                    //     }).done(function (res) {
+                    //         // 文件上传成功聊天记录追加图片
+                    //         createChatMsg({
+                    //             sendUserType: sendUserTypes.VISITOR.value,
+                    //             contentType: contentTypes.IMAGE.value,
+                    //             content: res,
+                    //             avatar: ChatRoom.options.visitor.avatar,
+                    //             name: ChatRoom.options.visitor.name,
+                    //             time: dateFormat(Date.now(), 'HH:mm:ss'),
+                    //         })
+                    //     }).fail(function (res) {
+                    //         alert('上传图片失败', res)
+                    //     });
+                    // }
                     // 发送留言
                     function sendRecord (content) {
                         var data = {
@@ -429,6 +437,7 @@
                             cache: false,
                             data: data,
                         }).done(function(res) {
+                            $('#chatRecordArea').html('');
                             // 发送留言，关闭窗口
                             $('#chatRecordMain').hide();
                         }).fail(function(res) {

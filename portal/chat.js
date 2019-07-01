@@ -40,10 +40,10 @@
                 sessionId: null,
                 socket: null,
             },
-            setOptions(options) { // 设置ChatRoom的参数
+            setOptions: function (options) {
                 Object.assign({}, this.options, options);
             },
-            instance(options) {
+            instance: function (options) {
                 // 设置各种系统常量
                 var host = ''
                 var sendUserTypes = {
@@ -284,7 +284,7 @@
                             dom1.append(dom2);
                         }
                         $('#chatHistory').append(dom1);
-                        setTimeout(() => {
+                        setTimeout(function() {
                             $('#chatHistoryWrapper').scrollTop($('#chatHistory').innerHeight());
                         }, 0);
                     }
@@ -363,7 +363,9 @@
                         }).done(function (res) {
                             var data = res.data;
                             // 构建数据节点
-                            data.forEach(item => {
+
+                            for(var i in data){
+                                var item = data[i]
                                 createChatMsg({
                                     sendUserType: item.sendUserType,
                                     contentType: item.contentType,
@@ -372,7 +374,7 @@
                                     name: item.name,
                                     time: dateFormat(item.gmtCreate, 'HH:mm:ss'),
                                 })
-                            })
+                            }
                         }).fail(function (res) {
                             alert('获取聊天数据失败', res.msg);
                         });
@@ -443,7 +445,7 @@
                         };
 
                         var formData = new FormData();
-                        for (const k in data) {
+                        for (var k in data) {
                             if (data.hasOwnProperty(k)) {
                                 formData.append(k, data[k]);
                             }
@@ -482,8 +484,8 @@
                         }
                         var socket = new SockJS(host + '/ws');
                         var stompClient = Stomp.over(socket);
-                        stompClient.connect({}, () => {
-                            stompClient.subscribe('/chat/' + ChatRoom.options.sessionId + '-1/receiveMsg', (resp) => {
+                        stompClient.connect({}, function ()  {
+                            stompClient.subscribe('/chat/' + ChatRoom.options.sessionId + '-1/receiveMsg',function (resp) {
                                 var data = JSON.parse(resp.body);
                                 createChatMsg({
                                     sendUserType: data.sendUserType,

@@ -7,7 +7,9 @@
         <script src="chat.js"></script>
         <script>
             // 传递参数初始化，在需要调用到时候进行调用，也可以之后调用setOptions方法来进行设置
-            ChatRoom.instance()
+            $(document).ready(function () {
+                ChatRoom.instance()
+            })
         </script>
     </head>
     <body>

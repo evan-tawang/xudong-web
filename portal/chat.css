@@ -149,7 +149,7 @@
 .chat_main .chat_history .chat_history_service .chat_msg .msg{
     background: #f4eee1;
 }
-.chat_main .chat_history .chat_history_service img{
+.chat_main .chat_history .chat_history_service .avatar{
     position: absolute;
     top: 5px;
     left: 5px;

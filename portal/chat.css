@@ -120,6 +120,7 @@
 }
 .chat_main .chat_history .chat_history_custom .chat_msg{
     margin-right: 50px;
+    text-align: right;
 }
 .chat_main .chat_history .chat_history_custom .chat_msg .title{
     text-align: right;

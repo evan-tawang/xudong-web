@@ -429,7 +429,6 @@
                             visitorIp: ChatRoom.options.visitor.ip,
                             content: content,
                             visitorId: ChatRoom.options.visitor.id,
-                            gmtCreate: Date.now()
                         }
                         $.ajax({
                             url: host + '/guestBook/save',

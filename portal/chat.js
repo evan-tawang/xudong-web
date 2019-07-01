@@ -277,7 +277,11 @@
                         dom2.append(msgDom);
                         // 设置用户头像
                         var avatarDom = document.createElement('img');
-                        avatarDom.src = msg.avatar || ChatRoom.options.staff.avatar;
+                        if (msg.sendUserType === sendUserTypes.STAFF.value) {
+                            avatarDom.src = msg.avatar || ChatRoom.options.staff.avatar;
+                        } else {
+                            avatarDom.src = msg.avatar || ChatRoom.options.visitor.avatar;
+                        }
                         avatarDom.className = 'avatar';
                         // 追加节点
                         if (msg.sendUserType === sendUserTypes.VISITOR.value) {

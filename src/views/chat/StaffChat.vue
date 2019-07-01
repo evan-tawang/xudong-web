@@ -291,7 +291,9 @@
                 receiveId: this.current.visitorId
             }).then((res: any) => {
                 dom.innerHTML = '';
+
                 that.current.messages.push(res.data);
+
                 this.$forceUpdate();
                 this.scrollToBottom();
             });
@@ -332,10 +334,9 @@
                     receiveId: that.current.visitorId,
                     contentType: ChatContentTypeEnum.FILE
                 }).then((res: any) => {
-                    that.$nextTick(() => {
-                        that.current.messages.push(res.data);
-                    });
+                    that.current.messages.push(res.data);
 
+                    that.$forceUpdate();
                     that.scrollToBottom();
                 });
             };

@@ -21,7 +21,7 @@
     @Component
     export default class GuestBook extends Vue {
         private textarea: string = '';
-        private visitor: object = {};
+		private visitor: any = {};
 
         private created() {
             this.visitor = Utils.parseIdentity(this.$route.params.identity)

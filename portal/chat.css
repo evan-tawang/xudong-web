@@ -62,13 +62,16 @@
     position: fixed;
     font-size: 14px;
     font-weight: 100;
-    position: fixed;
     width: 500px;
     border-radius: 2px;
     overflow: hidden;
     box-shadow: 1px 1px 10px #ddd;
     border: 1px solid #ddd;
     display: none;
+    left: 50%;
+    top: 50%;
+    margin-left: -250px;
+    margin-top: -245px;
 }
 /* 聊天主窗口-头部 */
 .chat_main .chat_header {
@@ -231,6 +234,8 @@
     border: 1px solid #ddd;
     display: none;
     background: #fff;
+    right: 10%;
+    bottom: 10%;
 }
 .chat_record .chat_record_header {
     padding: 6px;

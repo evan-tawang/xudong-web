@@ -86,20 +86,25 @@
             return this;
         },
 
-        showChatDom: function () {
-            $('#chatMain')
-            // .css('right', window.innerWidth - $('#chatTip').offset().left - $('#chatTip').innerWidth())
-            // .css('bottom', window.innerHeight - $('#chatTip').offset().top)
-                .show();
+        showChatDom: function (opt) {
+            if (opt.left) {
+                $('#chatMain').css('left', opt.left)
+            }
+            if (opt.top) {
+                $('#chatMain').css('top', opt.top)
+            }
+            $('#chatMain').show();
             // 建立连接
             this.Request.createSession()
         },
-        showGuestBookDom: function () {
-            $('#chatRecordMain')
-            // .css('right', window.innerWidth - $('#chatRecordTip').offset().left - $('#chatRecordTip').innerWidth())
-            // .css('bottom', window.innerHeight - $('#chatRecordTip').offset().top)
-                .show();
-            // 建立连接
+        showGuestBookDom: function (opt) {
+            if (opt.left) {
+                $('#chatRecordMain').css('left', opt.left)
+            }
+            if (opt.top) {
+                $('#chatRecordMain').css('top', opt.top)
+            }
+            $('#chatRecordMain').show();
         },
 
         Request:  {

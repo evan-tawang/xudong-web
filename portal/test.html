@@ -3,12 +3,18 @@
     <link rel="stylesheet" href="chat.css"/>
     <script type="text/javascript" src="jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="chat.portal.js"></script>
-    <script>
-        $(document).ready(function() {
-            Chat.instance()
-        })
-    </script>
 </head>
 <body>
+<div id="showChat">显示聊天</div>
+<div id="showGuestDom">显示留言</div>
 </body>
+<script>
+    var Chat = window.Chat.instance();
+    $('#showChat').on('click',function () {
+        Chat.showChatDom();
+    });
+    $('#showGuestDom').on('click',function () {
+        Chat.showGuestBookDom();
+    })
+</script>
 </html>

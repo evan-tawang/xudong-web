@@ -9,12 +9,20 @@
 <div id="showGuestDom">显示留言</div>
 </body>
 <script>
-    var Chat = window.Chat.instance();
-    $('#showChat').on('click',function () {
-        Chat.showChatDom();
+    var loginUser = {};
+    $(document).ready(function () {
+        var Chat = window.Chat.instance();
+        Chat.setLogin({
+            id: loginUser.customerId,
+            userName: loginUser.customerName,
+            account: loginUser.customerTel
+        });
+        $('#showChat').on('click',function () {
+            Chat.showChatDom();
+        });
+        $('#showGuestDom').on('click',function () {
+            Chat.showGuestBookDom();
+        })
     });
-    $('#showGuestDom').on('click',function () {
-        Chat.showGuestBookDom();
-    })
 </script>
 </html>

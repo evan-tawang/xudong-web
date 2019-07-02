@@ -11,7 +11,7 @@ export default class Utils {
         if (!identity) {
             return {};
         }
-        const arr = Base64.encode(identity).split(',');
+        const arr = Base64.decode(identity).split(',');
         // CustomerId,CustomerName,CustomerTel
         return {
             id: arr[0],

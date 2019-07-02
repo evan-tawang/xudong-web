@@ -79,8 +79,8 @@
 
 		// init
         private init() {
-			this.createChatSession();
 			this.parseIdentity();
+			this.createChatSession();
         }
 
 		private parseIdentity() {
@@ -130,6 +130,7 @@
 		private createChatSession() {
         	const that = this;
             const visitorId = this.visitor && this.visitor.id ? this.visitor.id : '';
+            console.log(visitorId)
             Api.$post('/chat/createSession', {connectId: visitorId}).then((res: any) => {
                 if(!res.data){
                 	return;

@@ -1,0 +1,22 @@
+<html>
+<head>
+    <link rel="stylesheet" href="chat.css"/>
+    <script src="jquery-3.4.1.min.js"></script>
+    <script src="sockjs.min.js"></script>
+    <script src="stomp.min.js"></script>
+    <script src="chat.js"></script>
+</head>
+<body>
+    <div id="showChat">显示聊天</div>
+    <div id="showGuestDom">显示留言</div>
+</body>
+<script>
+    var Chat = window.Chat.instance();
+    $('#showChat').on('click',function () {
+        Chat.showChatDom();
+    });
+    $('#showGuestDom').on('click',function () {
+        Chat.showGuestBookDom();
+    })
+</script>
+</html>

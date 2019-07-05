@@ -56,6 +56,7 @@
     </div>
 </template>
 <script lang="ts">
+
     import {Component, Vue} from 'vue-property-decorator';
 	import Api from '../../api';
 	import Utils from "../../utils";
@@ -77,10 +78,17 @@
             this.init();
         }
 
+		public destroyed() { // 销毁
+			if (this.stompClient) {
+				this.stompClient.disconnect();
+			}
+		}
+
 		// init
         private init() {
 			this.parseIdentity();
 			this.createChatSession();
+			this.initWebSocket();
         }
 
 		private parseIdentity() {
@@ -90,71 +98,54 @@
 		private initWebSocket() {
 			const socket = new SockJS('/' + 'ws');
 			this.stompClient = Stomp.over(socket);
+		}
+
+		// 创建聊天会话
+		private createChatSession() {
+			const that = this;
+			const visitorId = this.visitor && this.visitor.id ? this.visitor.id : '';
+			Api.$post('/chat/createSession', {connectId: visitorId}).then((res: any) => {
+				if (!res.data) {
+					return;
+				}
+				that.chatSession = res.data;
+				that.initWebSocketReceiveMsg();
+				that.messageHistory();
+			}).catch(res => {
+				that.initWebSocketWaitStartSession(res.visitorId);
+			});
+		}
+
+		private initWebSocketReceiveMsg(){
+			if (!this.chatSession.id) {
+        		return;
+            }
 			const that = this;
 			const stompClient = that.stompClient;
 			stompClient.connect({}, () => {
 				this.stompClient.subscribe(`/chat/${that.chatSession.id}-${UserEnum.Type.STAFF}/receiveMsg`, (resp: any) => {
 					const message = JSON.parse(resp.body);
-                    that.handelMsg(message);
+					that.handelMsg(message);
 					that.msgs.push(message);
 					that.scrollToBottom();
 				});
 			});
-		}
-
-        private handleData(arr: object[]) { // 处理原始数据
-            arr.forEach((item: any) => {
-                this.handelMsg(item);
-            });
         }
 
-        private handelMsg(item: any) {
-            item.timeStr = Utils.dateFormat(item.gmtCreate, 'HH:mm:ss');
-            if (!item.avatar) {
-                item.avatar = item.sendUserType === UserEnum.Type.VISITOR ? '/images/custom.png' :'/images/logo.jpg';
-            }
-        }
-
-        private chooseFile(ev: any) { // 选择文件发送
-            console.log(ev);
-            // 文件上传并反馈
-        }
-        private openExpression() { // 打开表情选择
-            this.expand = !this.expand;
-        }
-        private handleBlur() {
-            window.scroll(0, 0);
-        }
-
-		// 创建聊天会话
-		private createChatSession() {
-        	const that = this;
-            const visitorId = this.visitor && this.visitor.id ? this.visitor.id : '';
-            console.log(visitorId)
-            Api.$post('/chat/createSession', {connectId: visitorId}).then((res: any) => {
-                if(!res.data){
-                	return;
-                }
-				that.chatSession = res.data;
-				that.initWebSocket();
-				that.messageHistory();
-			});
-		}
-
-		// 发送信息 ==> 清空信息，并且增加一条custom信息
-        private sendMsg() {
-			if (!this.chatSession.id || !this.input) {
+		private initWebSocketWaitStartSession(visitorId: string) {
+			if (!visitorId) {
 				return;
 			}
 			const that = this;
-			Api.$post('/chat/sendMsg', { content : this.input, sessionId: this.chatSession.id}).then((res: any) => {
-			    let message = res.data;
-                that.handelMsg(message);
-				that.msgs.push(message);
-                that.scrollToBottom();
+			const stompClient = that.stompClient;
+			stompClient.connect({}, () => {
+				this.stompClient.subscribe(`/chat/${visitorId}/waitSession`, (res: any) => {
+					that.chatSession = res.data;
+					that.initWebSocketReceiveMsg();
+					that.messageHistory();
+				});
 			});
-            this.input = '';
-        }
+		}
 
 		private messageHistory() {
 			if (!this.chatSession.id) {
@@ -167,6 +158,7 @@
 			});
 		}
 
+		// 文件
 		private changeFile(event: any) {
 			if (!this.chatSession.id) {
 				return;
@@ -177,27 +169,64 @@
 			const that = this;
 			const reader = new FileReader();
 			reader.onload = (event) => {
-				Api.$post('/chat/sendMsg', {
-					content: reader.result,
-					sessionId: that.chatSession.id,
-					contentType: ChatContentTypeEnum.FILE,
-				}).then((res: any) => {
-
-					that.msgs.push(res.data);
-					that.scrollToBottom();
-				});
+				that.send({content: reader.result, contentType: ChatContentTypeEnum.FILE});
 			};
 			reader.readAsDataURL(event.srcElement.files[0]);
 		}
 
-        private scrollToBottom() {
-            // 滚动到最下
-            this.$nextTick(() => {
-                const dom = this.$refs.chatHistory as HTMLDivElement;
-                dom.scrollTop = (dom.scrollHeight + 100);
-                // dom.scrollTo(0, dom.offsetHeight);
-            });
-        }
+		// 发送信息 ==> 清空信息，并且增加一条custom信息
+		private sendMsg() {
+			if (!this.chatSession.id || !this.input) {
+				return;
+			}
+			this.send({content: this.input, contentType: ChatContentTypeEnum.TEXT});
+			this.input = '';
+		}
+
+		//
+		private send({content, contentType}: any) {
+			if (!content) {
+				return;
+			}
+			const type = contentType ? contentType : ChatContentTypeEnum.TEXT;
+			const that = this;
+			Api.$post('/chat/sendMsg', {
+				content: content,
+				sessionId: this.chatSession.id,
+				contentType: type
+			}).then((res: any) => {
+				let message = res.data;
+				if (ChatContentTypeEnum.TEXT == type) {
+					that.handelMsg(message);
+                }
+				that.msgs.push(message);
+				that.scrollToBottom();
+			});
+			// this.input = '';
+		}
+
+		private handleData(arr: object[]) { // 处理原始数据
+			arr.forEach((item: any) => {
+				this.handelMsg(item);
+			});
+		}
+
+		private handelMsg(item: any) {
+			item.timeStr = Utils.dateFormat(item.gmtCreate, 'HH:mm:ss');
+			if (!item.avatar) {
+				item.avatar = item.sendUserType === UserEnum.Type.VISITOR ? '/images/custom.png' :'/images/logo.jpg';
+			}
+		}
+
+		// 滚动到最下
+		private scrollToBottom() {
+			this.$nextTick(() => {
+				const dom = this.$refs.chatHistory as HTMLDivElement;
+				dom.scrollTop = (dom.scrollHeight + 100);
+			});
+		}
+
+		//
         private handleSpliceLine(msg: any, msgs: any[], index: number) {
             if (index === 0 || msg.gmtCreate - msgs[index - 1].gmtCreate > 5*60*1000) { // 大于5min或者第一条信息
                 this.$set(msg, 'spliceTime', Utils.dateFormat(msg.gmtCreate, 'HH:mm:ss'));
@@ -206,6 +235,19 @@
                 return ''
             }
         }
+
+		private chooseFile(ev: any) { // 选择文件发送
+			console.log(ev);
+			// 文件上传并反馈
+		}
+
+		private openExpression() { // 打开表情选择
+			this.expand = !this.expand;
+		}
+
+		private handleBlur() {
+			window.scroll(0, 0);
+		}
     }
 </script>
 <style lang="scss" scoped>

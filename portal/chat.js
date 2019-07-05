@@ -65,9 +65,9 @@
             this.options.loginUser.name = user.userName;
             this.options.loginUser.account = user.account;
         },
-        setOptions: function (options) {
-            Object.assign({}, this.options, options);
-        },
+        // setOptions: function (options) {
+        //     Object.assign({}, this.options, options);
+        // },
         instance: function (options) {
             // 设置各种系统常量
             var host = ''
@@ -87,29 +87,33 @@
         },
 
         showChatDom: function (opt) {
-            if (opt.left) {
-                $('#chatMain').css('left', opt.left)
-            }
-            if (opt.top) {
-                $('#chatMain').css('top', opt.top)
+            if (opt) {
+                if (opt.left) {
+                    $('#chatMain').css('left', opt.left)
+                }
+                if (opt.top) {
+                    $('#chatMain').css('top', opt.top)
+                }
             }
             $('#chatMain').show();
             // 建立连接
             this.Request.createSession()
         },
         showGuestBookDom: function (opt) {
-            if (opt.left) {
-                $('#chatRecordMain').css('left', opt.left)
-            }
-            if (opt.top) {
-                $('#chatRecordMain').css('top', opt.top)
+            if(opt){
+                if (opt.left) {
+                    $('#chatRecordMain').css('left', opt.left)
+                }
+                if (opt.top) {
+                    $('#chatRecordMain').css('top', opt.top)
+                }
             }
             $('#chatRecordMain').show();
         },
 
         Request:  {
             options: {
-                host: '',
+                host: 'service',
                 sessionId:''
             },
             // 初始化session
@@ -128,7 +132,8 @@
                         connectId: connectId
                     },
                 }).done(function (res) {
-                    if (!res) {
+                    if (!res.data) {
+                        alert('客服繁忙中，请稍后');
                         return;
                     }
                     that.options.sessionId = res.data.id;
@@ -455,15 +460,6 @@
                 $('#chatBtn').on('click', function (event) {
                     // TODO Websocket发送文本消息，同添加代码块
                     if ($('#chatInputArea').html()) {
-                        // var dom = createChatMsg({
-                        //     sendUserType: sendUserTypes.VISITOR.value,
-                        //     contentType: contentTypes.TEXT.value,
-                        //     content: handleExpression($('#chatInputArea').html()),
-                        //     avatar: Chat.options.visitor.avatar,
-                        //     name: Chat.options.visitor.name,
-                        //     time: dateFormat(Date.now(), 'HH:mm:ss'),
-                        // })
-
                         // 发送消息
                         global.Chat.Request.sendMsg({
                             // 后端需要对文本内容进行转义

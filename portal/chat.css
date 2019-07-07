@@ -251,7 +251,7 @@
 .chat_record .chat_record_area {
     outline: none;
     height: 40%;
-    overflow-y: scroll;
+    overflow-y: auto;
     overflow-x: hidden;
     margin: 5px;
     font-size: 12px;

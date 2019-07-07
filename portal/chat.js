@@ -118,7 +118,16 @@
             },
             // 初始化session
              createSession:function () {
+
                  var connectId = global.Chat.options.loginUser.id;
+                 var data = connectId ? {connectId} : null;
+
+                 var formData = new FormData();
+                 for (var k in data) {
+                     if (data.hasOwnProperty(k)) {
+                         formData.append(k, data[k]);
+                     }
+                 }
 
                  var that = this;
                 // 获取历史记录
@@ -128,9 +137,7 @@
                     cache: false,
                     processData: false,
                     contentType: false,
-                    data: {
-                        connectId: connectId
-                    },
+                    data: formData,
                 }).done(function (res) {
                     if (!res.data) {
                         alert('客服繁忙中，请稍后');
@@ -159,6 +166,7 @@
                 $.ajax({
                     url: this.options.host + '/chat/history',
                     type: 'GET',
+                    contentType: "application/json;charset=utf-8",
                     data: {
                         sessionId: this.options.sessionId
                     }
@@ -290,6 +298,7 @@
                 }
                 var socket = new SockJS(this.options.host + '/ws');
                 var stompClient = Stomp.over(socket);
+                this.options.stompClient = stompClient;
                 stompClient.connect({}, function () {
                     stompClient.subscribe('/chat/' + that.options.sessionId + '-1/receiveMsg', function (resp) {
                         var data = JSON.parse(resp.body);
@@ -303,6 +312,15 @@
                         });
                     });
                 });
+            },
+
+            /** 断开websocket连接 **/
+            disconnectWebSocket:function  () {
+                if(!this.options.stompClient){
+                    return;
+                }
+                var stompClient = this.options.stompClient;
+                stompClient.disconnect();
             },
 
             // 时间转换
@@ -351,7 +369,7 @@
                 this.jquery();
             },
 
-            renderStaffName(name){
+            renderStaffName:function(name){
                 $('#chatServiceName').html('客服代表：' + name + ' 正在为您服务');
             },
 
@@ -419,7 +437,7 @@
                 $('body').append(html);
             },
 
-            jquery(){
+            jquery:function(){
                 /* 事件绑定 */
                 // 聊天浮窗点击事件
                 $('#chatTip').on('click', function (event) {
@@ -481,12 +499,63 @@
                 // 关闭聊天窗口
                 $('#chatClose').on('click', function (event) {
                     $('#chatMain').hide();
+                    global.Chat.Request.disconnectWebSocket();
                 });
 
                 // 绑定全局隐藏事件
                 $(document).on('click', function (event) {
                     $('#chatExpressionChoose').hide();
                 });
+
+                //点击关闭或重载按钮
+                window.onbeforeunload = function(event){
+                    return onBeforeUnload(event);
+                }
+                function onBeforeUnload(event){
+                    var clientBrowser = chargeBrowser();
+                    var isIE = document.all ? true : false;//另一方法
+                    var evt = event ? event : (window.event ? window.event : null);
+                    if(clientBrowser=="IE"){
+                        var n = evt.screenX - window.screenLeft;
+                        var b = n > document.documentElement.scrollWidth - 20;
+                        if(b && evt.clientY < 0 || evt.altKey){
+                            global.Chat.Request.disconnectWebSocket();
+                        }else{
+                            global.Chat.Request.disconnectWebSocket();
+                        }
+                    }else if (clientBrowser==="Chrome") {
+                        global.Chat.Request.disconnectWebSocket();
+                    }else{
+                        if(document.documentElement.scrollWidth != 0){
+                            global.Chat.Request.disconnectWebSocket();
+                        }else{
+                            global.Chat.Request.disconnectWebSocket();
+                        }
+                    }
+                }
+
+                function chargeBrowser() {
+                    var userAgent = navigator.userAgent;
+                    var isOpera = userAgent.indexOf("Opera") > -1;
+                    if (isOpera) {
+                        return "Opera"
+
+                    }else if(userAgent.indexOf("Firefox") > -1) {
+                        return "Firefox";
+                    }else if(userAgent.indexOf("Chrome") > -1){
+                        return "Chrome";
+                    }else if(userAgent.indexOf("Safari") > -1) {
+                        return "Safari";
+                    }else if(userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera) {
+                        return "IE";
+                    }else if(userAgent.indexOf("Trident") > -1) {
+                        return "Edge";
+                    }else if(userAgent.indexOf("QQ") > -1) {
+                        return "QQ";
+                    }else{
+                        return "";
+                    }
+                }
             },
 
             // function initExpression() {

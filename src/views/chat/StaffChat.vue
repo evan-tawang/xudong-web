@@ -91,6 +91,10 @@
             this.refreshOnlineStatusColor();
         }
 
+        private destroy(): void {
+            this.disconnectWebSocket();
+        }
+
         // init
         private initWebSocket() {
             const socket = new SockJS('/' + 'ws');
@@ -109,6 +113,14 @@
                     that.sessionList.push(chatSession);
                 });
             });
+        }
+
+        // discount
+        private disconnectWebSocket() {
+            if(!this.stompClient){
+                return;
+            }
+            this.stompClient.disconnect();
         }
 
         @Watch('stompClient.connected')

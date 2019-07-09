@@ -1,14 +1,18 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+var webpack = require('webpack');
 
 module.exports = {
     entry: ['./portal/sockjs.min.js','./portal/stomp.min.js', './portal/chat.js'],
     output:{
         path: path.resolve(__dirname, 'build-portal'),
         filename: 'chat.portal.js',
-        publicPath: './'
+        publicPath: './',
     },
     plugins: [
+        new webpack.ProvidePlugin({
+            SockJS: 'sockjs-client',
+        }),
         //拷贝static下的文件到dist下
         new CopyWebpackPlugin([
             {

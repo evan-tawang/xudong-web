@@ -10,14 +10,6 @@ const resolveEnv = (process)=>{
     return rawArgv[2] === 'production';
 };
 
-const getDirectories = (path)=>{
-    return fs.readdirSync(path).map((file)=>{
-        if(file.endsWith("js")){
-            return path + '/' + file;
-        }
-    })
-};
-
 // 设置环境
 const isProd = resolveEnv(process);
 

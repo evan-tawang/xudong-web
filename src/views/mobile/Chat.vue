@@ -62,6 +62,7 @@
 	import Utils from "../../utils";
 	import UserEnum from '../../constant/enums/UserEnum';
 	import {ChatContentTypeEnum} from '../../constant/enums/ChatContentTypeEnum';
+	import constant from "@/constant/constant";
 	const SockJS = require('sockjs-client');
 	const Stomp = require('stompjs');
 
@@ -96,7 +97,11 @@
         }
 
 		private initWebSocket() {
-			const socket = new SockJS('/' + 'ws');
+			let ws = '/ws';
+			if (!Utils.isLocal()) {
+				ws = '/' + constant.server + '/ws';
+			}
+			const socket = new SockJS(ws);
 			this.stompClient = Stomp.over(socket);
 		}
 

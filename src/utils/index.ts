@@ -20,4 +20,7 @@ export default class Utils {
             account: arr[2]
         }
     }
+    public static isLocal(){
+        return window.Location.hostname == 'localhost' || window.Location.hostname == '127.0.0.1';
+    }
 }

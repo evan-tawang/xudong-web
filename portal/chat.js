@@ -69,8 +69,11 @@
         //     Object.assign({}, this.options, options);
         // },
         instance: function (options) {
-            // 设置各种系统常量
-            var host = ''
+            console.log(options.host )
+            if(options){
+                // 设置各种系统常量
+                global.Chat.Request.options.host = options.host + '/' + global.Chat.Request.options.host;
+            }
 
             // 表情包
             // var expressArr = [
@@ -126,7 +129,7 @@
             },
             // 初始化session
              createSession:function () {
-
+                console.log(this.options.host)
                  var connectId = global.Chat.options.loginUser.id;
                  var data = connectId ? {connectId: connectId} : null;
 
@@ -202,29 +205,6 @@
                 reader.readAsDataURL(file);
             },
 
-            // 上传图片文件
-            // function uploadFile() {
-            //     $.ajax({
-            //         url: host + '/upload',
-            //         type: 'POST',
-            //         cache: false,
-            //         data: new FormData($('#imageFile')[0]),
-            //         processData: false,
-            //         contentType: false
-            //     }).done(function (res) {
-            //         // 文件上传成功聊天记录追加图片
-            //         createChatMsg({
-            //             sendUserType: sendUserTypes.VISITOR.value,
-            //             contentType: contentTypes.IMAGE.value,
-            //             content: res,
-            //             avatar: Chat.options.visitor.avatar,
-            //             name: Chat.options.visitor.name,
-            //             time: dateFormat(Date.now(), 'HH:mm:ss'),
-            //         })
-            //     }).fail(function (res) {
-            //         alert('上传图片失败', res)
-            //     });
-            // }
             // 发送留言
              sendRecord:function (content) {
                 var data = {
@@ -249,7 +229,6 @@
             // 发送消息
              sendMsg:function  (params) {
                 var that = this;
-                // TODO
                 var data = {
                     sessionId: that.options.sessionId,
                     content: params.content,

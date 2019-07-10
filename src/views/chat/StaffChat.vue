@@ -98,7 +98,10 @@
 
         // init
         private initWebSocket() {
-			let ws = window.isProd ? '/' + constant.server + '/ws' : '/ws';
+			let ws = '/ws';
+			if (!(window.Location.hostname == 'localhost' || window.Location.hostname == '127.0.0.1')){
+				ws = '/' + constant.server + '/ws';
+            }
             const socket = new SockJS(ws);
             this.stompClient = Stomp.over(socket);
 

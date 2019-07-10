@@ -29,7 +29,7 @@ module.exports = {
 
         config.plugin('provide')
             .use(webpack.ProvidePlugin, [{
-                isProd: isProd,
+                isProd: true,
             }]);
 
         //开发环境拷贝到编译后目录下

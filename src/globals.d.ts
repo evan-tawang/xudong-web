@@ -1,3 +1,6 @@
 interface Window {
-	isProd: string;
+	isProd: boolean;
+	Location: {
+		hostname: string
+	}
 }

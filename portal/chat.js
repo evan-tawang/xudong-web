@@ -128,7 +128,7 @@
              createSession:function () {
 
                  var connectId = global.Chat.options.loginUser.id;
-                 var data = connectId ? {connectId} : null;
+                 var data = connectId ? {connectId: connectId} : null;
 
                  var formData = new FormData();
                  for (var k in data) {
@@ -611,8 +611,8 @@
                     msgDom.className = 'img-msg';
                     msgDom.src = msg.content;
                 }
-                dom2.append(titleDom);
-                dom2.append(msgDom);
+                $(dom2).append(titleDom);
+                $(dom2).append(msgDom);
                 // 设置用户头像
                 var avatarDom = document.createElement('img');
                 if (msg.sendUserType === sendUserTypes.STAFF.value) {
@@ -623,11 +623,11 @@
                 avatarDom.className = 'avatar';
                 // 追加节点
                 if (msg.sendUserType === sendUserTypes.VISITOR.value) {
-                    dom1.append(dom2);
-                    dom1.append(avatarDom);
+                    $(dom2).append(dom2);
+                    $(dom2).append(avatarDom);
                 } else if (msg.sendUserType === sendUserTypes.STAFF.value) {
-                    dom1.append(avatarDom);
-                    dom1.append(dom2);
+                    $(dom2).append(avatarDom);
+                    $(dom2).append(dom2);
                 }
                 $('#chatHistory').append(dom1);
                 setTimeout(function () {

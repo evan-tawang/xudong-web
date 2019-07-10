@@ -95,11 +95,19 @@
                     $('#chatMain').css('top', opt.top)
                 }
             }
+            var isHidden = $("#chatMain").is(":hidden");
+            if (!isHidden) {
+                return;
+            }
             $('#chatMain').show();
             // 建立连接
             this.Request.createSession()
         },
         showGuestBookDom: function (opt) {
+            var isHidden = $("#chatMain").is(":hidden");
+            if (!isHidden) {
+                return;
+            }
             if(opt){
                 if (opt.left) {
                     $('#chatRecordMain').css('left', opt.left)
@@ -612,7 +620,6 @@
                 } else {
                     avatarDom.src =  Chat.options.visitor.avatar;
                 }
-                console.log(avatarDom)
                 avatarDom.className = 'avatar';
                 // 追加节点
                 if (msg.sendUserType === sendUserTypes.VISITOR.value) {

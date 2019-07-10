@@ -101,7 +101,7 @@
 			let ws = '/ws';
 			if (!Utils.isLocal()) {
 				ws = '/' + constant.server + '/ws';
-			}
+            }
             const socket = new SockJS(ws);
             this.stompClient = Stomp.over(socket);
 

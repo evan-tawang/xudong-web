@@ -1,6 +1,7 @@
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 var webpack = require('webpack');
+var argv = require('yargs').argv;
 
 module.exports = {
     entry: ['./portal/sockjs.min.js','./portal/stomp.min.js', './portal/chat.js'],
@@ -10,6 +11,9 @@ module.exports = {
         publicPath: './',
     },
     plugins: [
+        new webpack.DefinePlugin({
+            ChatHost: JSON.stringify(argv.host ? argv.host : ''),
+        }),
         new webpack.ProvidePlugin({
             SockJS: 'sockjs-client',
         }),

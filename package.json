@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build-dev": "vue-cli-service build",
-    "build-prod": "vue-cli-service build --mode production",
-    "build-portal": "webpack --config  vue.portal.config.js",
+    "serve": "vue-cli-service serve --server service",
+    "build-prod": "vue-cli-service build --mode production --server service",
+    "build-portal": "webpack --config vue.portal.config.js",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

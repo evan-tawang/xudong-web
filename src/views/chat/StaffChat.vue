@@ -7,6 +7,7 @@
     import UserEnum from '@/constant/enums/UserEnum';
     import {ChatContentTypeEnum} from '@/constant/enums/ChatContentTypeEnum';
     import Utils from '@/utils';
+	import constant from "@/constant/constant";
 
     const SockJS = require('sockjs-client');
     const Stomp = require('stompjs');
@@ -97,7 +98,8 @@
 
         // init
         private initWebSocket() {
-            const socket = new SockJS('/' + 'ws');
+			let ws = window.isProd ? '/' + constant.server + '/ws' : '/ws';
+            const socket = new SockJS(ws);
             this.stompClient = Stomp.over(socket);
 
             const that = this;

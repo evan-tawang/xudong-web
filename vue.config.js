@@ -1,19 +1,17 @@
 const path = require('path');
-const fs = require('fs');
+const webpack = require('webpack');
 
 const resolve = dir => {
     return path.join(__dirname, dir)
 };
 
-const resolveEnv = (process)=>{
+const resolveProd = (process)=>{
     const rawArgv = process.argv.slice(2);
     return rawArgv[2] === 'production';
 };
 
 // 设置环境
-const isProd = resolveEnv(process);
-
-console.log(isProd)
+const isProd = resolveProd(process);
 
 module.exports = {
     // entry: getDirectories('./portal'),
@@ -28,6 +26,11 @@ module.exports = {
         // 配置路径别名
         config.resolve.alias
             .set('@', resolve('src'))
+
+        config.plugin('provide')
+            .use(webpack.ProvidePlugin, [{
+                isProd: isProd,
+            }]);
 
         //开发环境拷贝到编译后目录下
         config.plugin('copy')

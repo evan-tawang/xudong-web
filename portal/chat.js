@@ -229,7 +229,6 @@
             // 发送留言
              sendRecord:function (content) {
                 var data = {
-                    visitorIp: Chat.options.visitor.ip,
                     content: content,
                     visitorId: Chat.options.visitor.id,
                 }
@@ -276,7 +275,10 @@
                         alert('发送失败');
                         return;
                     }
-                    $('#chatInputArea').html('');
+                    if( params.contentType == 1){
+                        $('#chatInputArea').html('');
+                    }
+
                     var data = res.data;
                     global.Chat.Dom.createChatMsg({
                         sendUserType: data.sendUserType,
@@ -306,7 +308,6 @@
                             sendUserType: data.sendUserType,
                             contentType: data.contentType,
                             content: data.content,
-                            avatar: data.avatar,
                             name: data.name,
                             time: that.dateFormat(data.gmtCreate, 'HH:mm:ss'),
                         });
@@ -607,10 +608,11 @@
                 // 设置用户头像
                 var avatarDom = document.createElement('img');
                 if (msg.sendUserType === sendUserTypes.STAFF.value) {
-                    avatarDom.src = msg.avatar || Chat.options.staff.avatar;
+                    avatarDom.src = Chat.options.staff.avatar;
                 } else {
-                    avatarDom.src = msg.avatar || Chat.options.visitor.avatar;
+                    avatarDom.src =  Chat.options.visitor.avatar;
                 }
+                console.log(avatarDom)
                 avatarDom.className = 'avatar';
                 // 追加节点
                 if (msg.sendUserType === sendUserTypes.VISITOR.value) {

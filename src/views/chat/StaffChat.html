@@ -185,7 +185,7 @@
                         <img width="16" height="16" :src="o.content">
                     </template>
                     <template v-else>
-                        {{ o.content }}
+                        <span v-html="o.content"></span>
                     </template>
                 </div>
             </div>

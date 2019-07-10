@@ -201,9 +201,7 @@
 				contentType: type
 			}).then((res: any) => {
 				let message = res.data;
-				if (ChatContentTypeEnum.TEXT == type) {
-					that.handelMsg(message);
-                }
+                that.handelMsg(message);
 				that.msgs.push(message);
 				that.scrollToBottom();
 			});

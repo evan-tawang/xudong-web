@@ -48,7 +48,7 @@
                     <input class="file" type="file" accept=".png,.jpg,.jpeg" style="opacity: 0;" @change="changeFile">
                 </div>
                 <el-input v-model="input" size="small" @focus="expand=false" @blur="handleBlur" @keyup.enter.native="sendMsg"></el-input>
-                <el-button class="btn" @clicke="sendMsg" size="small">发送</el-button>
+                <el-button class="btn" @click="sendMsg" size="small">发送</el-button>
             </div>
             <div class="expression_area" v-show="expand">
 

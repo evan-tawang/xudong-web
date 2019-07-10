@@ -335,8 +335,8 @@
 
             // 时间转换
              dateFormat:function (time, format) {
-                let date = new Date(time);
-                let res = format;
+                var date = new Date(time);
+                var res = format;
                 if (format.indexOf('HH') > -1) {
                     res = res.replace('HH', Number(date.getHours() + 1).toLocaleString('en', {minimumIntegerDigits: 2}));
                 } else if (format.indexOf('H') > -1) {

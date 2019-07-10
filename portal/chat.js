@@ -130,22 +130,13 @@
                  var connectId = global.Chat.options.loginUser.id;
                  var data = connectId ? {connectId: connectId} : null;
 
-                 var formData = new FormData();
-                 for (var k in data) {
-                     if (data.hasOwnProperty(k)) {
-                         formData.append(k, data[k]);
-                     }
-                 }
-
                  var that = this;
                 // 获取历史记录
                 $.ajax({
                     url: this.options.host + '/chat/createSession',
                     type: 'POST',
                     cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: formData,
+                    data: data,
                 }).done(function (res) {
                     if (!res.data) {
                         alert('客服繁忙中，请稍后');
@@ -240,6 +231,7 @@
                     content: content,
                     visitorId: Chat.options.visitor.id,
                 }
+
                 $.ajax({
                     url: this.options.host + '/guestBook/save',
                     type: 'POST',
@@ -264,20 +256,11 @@
                     contentType: params.contentType ? params.contentType : 1
                 };
 
-                var formData = new FormData();
-                for (var k in data) {
-                    if (data.hasOwnProperty(k)) {
-                        formData.append(k, data[k]);
-                    }
-                }
-
                 $.ajax({
                     url: this.options.host + '/chat/sendMsg',
                     type: 'POST',
                     cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: formData,
+                    data: data
                 }).done(function (res) {
                     if (!res.success) {
                         alert('发送失败');

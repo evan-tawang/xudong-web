@@ -23,6 +23,11 @@
 </body>
 <script>
     var Chat = window.Chat.instance();
+    Chat.setLogin({
+        id: '2222222',
+        userName: '李四',
+        account: '176821312121'
+    });
     $('#showChat').on('click',function () {
         Chat.showChatDom();
     });

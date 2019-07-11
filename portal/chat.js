@@ -22,7 +22,7 @@
             // 用于存放用户信息，需要在如果能获取用户信息时候调用
             loginUser: {
                 id: '',
-                name: '',
+                userName: '',
                 account: '',
             },
             staff: {
@@ -62,14 +62,12 @@
             if (!user) return;
 
             this.options.loginUser.id = user.id;
-            this.options.loginUser.name = user.userName;
+            this.options.loginUser.userName = user.userName;
             this.options.loginUser.account = user.account;
         },
         instance: function (options) {
-                // 设置各种系统常量
-            // if (window.ChatHost) {
-                global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
-            // }
+            // 设置各种系统常量
+            global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
 
             if (this.options._isInstance) return this;
             this.options.isInstance = true;
@@ -117,9 +115,12 @@
             },
             // 初始化session
              createSession:function () {
-                console.log(this.options.host)
                  var connectId = global.Chat.options.loginUser.id;
-                 var data = connectId ? {connectId: connectId} : null;
+                 var data = connectId ? {
+                     connectId: connectId,
+                     connectName: global.Chat.options.loginUser.userName,
+                     connectAccount: global.Chat.options.loginUser.account
+                 } : null;
 
                  var that = this;
                 // 获取历史记录

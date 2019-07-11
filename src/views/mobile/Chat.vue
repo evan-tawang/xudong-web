@@ -110,7 +110,11 @@
 		private createChatSession() {
 			const that = this;
 			const visitorId = this.visitor && this.visitor.id ? this.visitor.id : '';
-			Api.$post('/chat/createSession', {connectId: visitorId}).then((res: any) => {
+			Api.$post('/chat/createSession', {
+				connectId: this.visitor.id,
+				connectName: this.visitor.userName,
+				connectAccount: this.visitor.account,
+			}).then((res: any) => {
 				if (!res.data) {
 					return;
 				}

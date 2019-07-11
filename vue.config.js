@@ -26,12 +26,7 @@ module.exports = {
     chainWebpack: config => {
         // 配置路径别名
         config.resolve.alias
-            .set('@', resolve('src'))
-
-        // config.plugin('define')
-        //     .use(webpack.ProvidePlugin, [{
-        //         server: JSON.stringify(argv.server ? argv.server : ''),
-        //     }]);
+            .set('@', resolve('src'));
 
         //开发环境拷贝到编译后目录下
         config.plugin('copy')

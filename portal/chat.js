@@ -137,6 +137,7 @@
                     that.options.sessionId = res.data.id;
 
                     // 将职员名字设置到职员列表中
+
                     global.Chat.Dom.renderStaffName(res.data.otherSideName);
 
                     // 建立连接后获取历史记录
@@ -331,7 +332,11 @@
             },
 
             renderStaffName:function(name){
-                $('#chatServiceName').html('客服代表：' + name + ' 正在为您服务');
+                var html = '客服代表正在为您服务';
+                if(name){
+                    html = '客服代表：' + name + ' 正在为您服务';
+                }
+                $('#chatServiceName').html(html);
             },
 
             /* 页面组件渲染 */

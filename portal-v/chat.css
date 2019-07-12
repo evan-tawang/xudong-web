@@ -92,6 +92,7 @@
     border-radius: 2px;
     padding: 12px 16px;
     word-break: break-all;
+    text-align: left;
 }
 .chat_main .chat_history .chat_history_custom {
     position: relative;

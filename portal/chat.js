@@ -115,8 +115,12 @@
             },
             // 初始化session
              createSession:function () {
+
+                 var sessionId = global.Chat.Store.get(global.Chat.Store.SESSION_KEY);
+
                  var connectId = global.Chat.options.loginUser.id;
                  var data = connectId ? {
+                     sessionId: sessionId,
                      connectId: connectId,
                      connectName: global.Chat.options.loginUser.userName,
                      connectAccount: global.Chat.options.loginUser.account
@@ -136,8 +140,10 @@
                     }
                     that.options.sessionId = res.data.id;
 
-                    // 将职员名字设置到职员列表中
+                    //持久化缓存sessionId
+                    global.Chat.Store.put(global.Chat.Store.SESSION_KEY, res.data.id);
 
+                    // 将职员名字设置到职员列表中
                     global.Chat.Dom.renderStaffName(res.data.otherSideName);
 
                     // 建立连接后获取历史记录
@@ -222,7 +228,10 @@
                 var data = {
                     sessionId: that.options.sessionId,
                     content: params.content,
-                    contentType: params.contentType ? params.contentType : 1
+                    contentType: params.contentType ? params.contentType : 1,
+                    receiveId:  global.Chat.options.loginUser.id,
+                    receiveName: global.Chat.options.loginUser.userName,
+                    receiveAccount: global.Chat.options.loginUser.account
                 };
 
                 $.ajax({
@@ -613,6 +622,17 @@
 
             /* 各种ajax请求 */
         },
+
+        Store:{
+            SESSION_KEY: 'SESSION_KEY',
+
+            put(key, value) {
+                window.localStorage.setItem(key, value);
+            },
+            get(key){
+               return window.localStorage.getItem(key);
+            }
+        }
     }
 
     return {Chat: global.Chat}

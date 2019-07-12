@@ -22,7 +22,7 @@
             // 用于存放用户信息，需要在如果能获取用户信息时候调用
             loginUser: {
                 id: '',
-                name: '',
+                userName: '',
                 account: '',
             },
             staff: {
@@ -62,24 +62,13 @@
             if (!user) return;
 
             this.options.loginUser.id = user.id;
-            this.options.loginUser.name = user.userName;
+            this.options.loginUser.userName = user.userName;
             this.options.loginUser.account = user.account;
         },
-        // setOptions: function (options) {
-        //     Object.assign({}, this.options, options);
-        // },
         instance: function (options) {
             // 设置各种系统常量
-            var host = ''
+            global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
 
-            // 表情包
-            // var expressArr = [
-            //     {
-            //         code: '[开心]',
-            //         src: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAJrklEQVR4Xu1bD4yU1RGf+XaPO048Ob1LD6iNVYlBaKGKES/H3TePs1iUYGyLtGlaSVsrFNK0oq1t0qrVNAS1ifJH0FabFLEYSCMCobDv7d5dCNWz9Q+1xdpqrfXPnRbDYQ+W3W+a2b6PfJy7x/v2DnorvGRzWXjz3szvzZuZNzOLcIoPPMXlh9MAnNaAUxyBk3IFmBkzmcx0ADgPAJqCIGhCxI8BwMcBIAcAbwPAW/KXmd9CxJeJaO/JOJsTBoAxZgwzz0bEawBAPg1xBGLmvyPiliAInvQ8r4OIBKhhH8MOQCaTmZTP5+9CxLkAUDUcHDPzAQC4Qyl133CsF11j2ADo6OgYl8vl7gKAGxDRi27CzH8DgN/Lx/O8ZxoaGp6dMmVKNjqnu7u79uDBg5cyczMAXMbMVyDi+HCOgKCUOmvEAdDd3V114MCBWwDgR4hYG2FYBFwPAMuVUvvKYTyTyXwqCILrmflLALBJKXVrOesMRjMkDUilUhcg4iZEnBoR/AMAWJtMJu9pbW0VwzaiR9kApFKpz3qetwkAxoiEzPwfAFhZU1OzvLm5+d8jWuoIc2UBoLW+DhF/AwBJK/w+sfizZs36R6UIHvIZGwCt9RwA2BIxdE9ls9kFs2fPFtWvuBELAGuUngaAGnvya4hoCSIGFSe5ZdgZgN27d5996NChFyOu6RdE9I1KFTzWFWBmzxhjELHVnvw2IppbyScfC4B0Or2ImVeHBg8RpxPRwUo/feH/uFfAGDMWAF4FgLHMfBgRpxHRXz4KwjsBoLW+HxGX2tO/Uyn1k4+K8McFwMb3ryHiKAB4o7+//8I5c+YcPmUA0Frfh4jftQIvI6J7K0V4rfUqRFzIzEuUUr8sxXdJGyCWP51Ovyd3HwAOVlVVjW9paemrIAD2IuJkZn6HiMYhIhfjvSQAxhhJYmwJAx6l1OJKEV74NMY8CADfsvy3K6VSsQDQWq9DxG8Kked5l7S1tf0xDgDpdPq2IAi+belX+b7/s5NJLyE7Im61AKxWShV4GTgG04B/Ss6Omd9TSsVKZ6XT6bnM/OSAzeYS0VMuIAyVXvbYu3fvqJ6env02R/FnIrrYGYDOzs5P5HK58GW3iYi+4MJ4OMcY8xAAHBMmM/NDSqkbXdYZKn2Ej98CwDz5ns/nm9rb299x0gD71t9hJ99CRPe4MB7Z+AkAGAjaE0Q032UdY8yQ6MM9tNY/RMS77fcriWiXEwDGmCUA8IBMRsQ5vu9vd2F8pAFgjPkaADxq+VpKRCudANBaL0fEMP82kYheiQnAh64AAPyKiG5wWafYFYhDH+6RTqevZObf2e/3EtEyJwCiLgQAGonoXRfGIxpw1IWG/8bM31FK3e+yTtQFl0MfuQKTEbFQYGHmdUqpgluMjqJeQGu9HhG/LBOrq6trm5ub+10Yj84xxvyAmW8CgNEA8HhdXd2y6dOnH3FdZ6j0so99yO23AGxQShVkigVAY2Nj9cAcvqsQ/+954gp7e3vDt8t6IvqKKwBrEbHgsvL5fEN7e7uExBU3du3adU4ikQiv71oiEo08vgYYY1YAQGgwYhvBkYKU1C08zwsNuLsRHJABuloptW2kCBWHj2g4DABLiGiVkwak02liZi2TxR36vi8aUXHDGCNaXOA9CAKpW4Qu8agsRb2AZIAPHz4c3nvnCG6kIWSM2QgAXxS+qqqqJrS0tLzppAEyyRjzIgBMKecxNFKAMMZIia4eAF4hoonF+Cr5GtRar0bERULEzNOUUs+PFMFc+NBaT0XE5+zcoh6gcMVLLeb6nrba4jPzrxHx8WLhpgvDceYYY26XZAciftX3/Z3FaKMHONh7piQAGzduTDQ2NvZaFRo0JWaMWQMAoY9dSEThAySOXE5ztdbzEFGeuTIeJaKFAwm7urrOPHLkiNx3qVzv7+3tbZw/f34+1hWQya5J0UwmMzGfzz8nyQcpkycSiWltbW1/dZIoxiRjjDRZvQAAZ/7vZvIVSinpPDlmGGNuBoDCE56Zf66U+l6pbQYtjMRJi0efnsz8EiJeSkSHYsg36FTbifJM2IzBzGuK5Sm3bdtWPXr0aAl+JJuVTSaT5w3WqOFSGZK8gOQHZNxORHeU4tQYswEAFtj/35NIJK4bji4RW5jdjIht9lRfqKmpmVHskWaMkcKN2AgZK4moUNQpSwOEqLOzsz6Xy0mTU72UxgBgaqmeH2l06uvrE8sbupxeRPy87/ud5WpCJpP5TD6fl36ECVb41xHxciKS3sJjhtb6IgB4HhGrAeB9APgkEcnf8gEQSq31YkQshJHMvG+w4qgxpomZpW9Iur1kfoCImz3Pu7OtrU1iC6dhexFulQYpREzYtf6EiO3FhLd9id2IKCBIBLvY930xzoOO414BuzGm02kJjX272nbf968pVR63HkRycd8fsHuKmaXW+Lo9ofd7e3v76uvrx3ieNxYR5XMuAEgN4nNRWmbeUFtbe9OMGTOkZ/CYYcv3oiXSvSIj7fu+KlUMiRI7ASAE8rT0PE/Uq6CKAHDcBomOjo6Lc7mcdJBIKkwSI7GH9BgiopTlQtf3oTWMMQ8DwNftYf0rCIKprk94ZwBkcdsF2oWIZ9vNnFpkdu7ceVYymZQ63VJEPN8BBXFxnZ7nPdzT0/NYKR9uT/7BsIDDzB8kk8nm1tZWcZVOIxYAsmJHR8enc7mcRsRz7A5bs9ns9a5NUqlUaoLneZMQcVIQBPL3fHlvyLVAxDeZWQoy3UT0xmAS7Nix44xRo0ZJp9rV9jACz/OuKhUZllorNgCykDHmQsECAMbZzU9qm5xt0NwaGjwAOMLMC5RSm52OPTKpLADsdThXOrkBYJoFQdrkpCS9Im4W2ZVpY0wDM0tbrtiVsC23DxHn+b5vXNcpywgWW9xGXRJyhoGSuD0BYl0ymVwxHEGQ7NvV1TU+m81KeCsPoDNCXphZjPK1RPRaOcILTdkaEN3QGHMVADwiP4aIMJdFxMcSiYQA8VI5DGqtJwPAzYgo2dyjrfe2Lffuurq6FXFS7cV4GBYArF2QRoqfWnd0jMuLtssj4tONjY1/GJhqN8ZI86VcpxnMfBkAXI6IF0SZZuY8Ij6SSCR+PFzaNWwAhIzu2bOnrr+//0ZmXuTo8lyUQ4zclqqqqttmzpz5sguB65xhByByBeR3Qu1BEFyLiJfY0y202DqOd6XHABG3Z7PZ7a5u1nHto9NOGAADGZHwuKmp6aJcLjcNEaVZQeyFPFklUfG2xACI2GN/OPWq7/vPuoSycQUeOP+kATBURk8U/WkAThSylbLuaQ2olJM6UXz+F83ld32pOu15AAAAAElFTkSuQmCC'
-            //     }
-            // ]
-            // 单例，如果已经创建了对象，再次调用，直接返回对象本身，或者进行初始化，最后返回对象
             if (this.options._isInstance) return this;
             this.options.isInstance = true;
             this.Dom.init();
@@ -127,14 +116,13 @@
             // 初始化session
              createSession:function () {
 
-                 var connectId = global.Chat.options.loginUser.id;
-                 var data = connectId ? {connectId} : null;
+                 var sessionId = global.Chat.Store.get(global.Chat.Store.SESSION_KEY);
 
-                 var formData = new FormData();
-                 for (var k in data) {
-                     if (data.hasOwnProperty(k)) {
-                         formData.append(k, data[k]);
-                     }
+                 var data = {
+                     sessionId: sessionId,
+                     connectId: global.Chat.options.loginUser.id,
+                     connectName: global.Chat.options.loginUser.userName,
+                     connectAccount: global.Chat.options.loginUser.account
                  }
 
                  var that = this;
@@ -143,15 +131,16 @@
                     url: this.options.host + '/chat/createSession',
                     type: 'POST',
                     cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: formData,
+                    data: data,
                 }).done(function (res) {
                     if (!res.data) {
                         alert('客服繁忙中，请稍后');
                         return;
                     }
                     that.options.sessionId = res.data.id;
+
+                    //持久化缓存sessionId
+                    global.Chat.Store.put(global.Chat.Store.SESSION_KEY, res.data.id);
 
                     // 将职员名字设置到职员列表中
                     global.Chat.Dom.renderStaffName(res.data.otherSideName);
@@ -211,35 +200,13 @@
                 reader.readAsDataURL(file);
             },
 
-            // 上传图片文件
-            // function uploadFile() {
-            //     $.ajax({
-            //         url: host + '/upload',
-            //         type: 'POST',
-            //         cache: false,
-            //         data: new FormData($('#imageFile')[0]),
-            //         processData: false,
-            //         contentType: false
-            //     }).done(function (res) {
-            //         // 文件上传成功聊天记录追加图片
-            //         createChatMsg({
-            //             sendUserType: sendUserTypes.VISITOR.value,
-            //             contentType: contentTypes.IMAGE.value,
-            //             content: res,
-            //             avatar: Chat.options.visitor.avatar,
-            //             name: Chat.options.visitor.name,
-            //             time: dateFormat(Date.now(), 'HH:mm:ss'),
-            //         })
-            //     }).fail(function (res) {
-            //         alert('上传图片失败', res)
-            //     });
-            // }
             // 发送留言
              sendRecord:function (content) {
                 var data = {
                     content: content,
                     visitorId: Chat.options.visitor.id,
                 }
+
                 $.ajax({
                     url: this.options.host + '/guestBook/save',
                     type: 'POST',
@@ -257,37 +224,31 @@
             // 发送消息
              sendMsg:function  (params) {
                 var that = this;
-                // TODO
                 var data = {
                     sessionId: that.options.sessionId,
                     content: params.content,
-                    contentType: params.contentType ? params.contentType : 1
+                    contentType: params.contentType ? params.contentType : 1,
+                    receiveId:  global.Chat.options.loginUser.id,
+                    receiveName: global.Chat.options.loginUser.userName,
+                    receiveAccount: global.Chat.options.loginUser.account
                 };
-
-                var formData = new FormData();
-                for (var k in data) {
-                    if (data.hasOwnProperty(k)) {
-                        formData.append(k, data[k]);
-                    }
-                }
 
                 $.ajax({
                     url: this.options.host + '/chat/sendMsg',
                     type: 'POST',
                     cache: false,
-                    processData: false,
-                    contentType: false,
-                    data: formData,
+                    data: data
                 }).done(function (res) {
                     if (!res.success) {
                         alert('发送失败');
                         return;
                     }
-                    if( params.contentType == 1){
+                    var data = res.data;
+
+                    if(data.contentType == 1){
                         $('#chatInputArea').html('');
                     }
 
-                    var data = res.data;
                     global.Chat.Dom.createChatMsg({
                         sendUserType: data.sendUserType,
                         contentType: data.contentType,
@@ -334,8 +295,8 @@
 
             // 时间转换
              dateFormat:function (time, format) {
-                let date = new Date(time);
-                let res = format;
+                var date = new Date(time);
+                var res = format;
                 if (format.indexOf('HH') > -1) {
                     res = res.replace('HH', Number(date.getHours() + 1).toLocaleString('en', {minimumIntegerDigits: 2}));
                 } else if (format.indexOf('H') > -1) {
@@ -379,7 +340,11 @@
             },
 
             renderStaffName:function(name){
-                $('#chatServiceName').html('客服代表：' + name + ' 正在为您服务');
+                var html = '客服代表正在为您服务';
+                if(name){
+                    html = '客服代表：' + name + ' 正在为您服务';
+                }
+                $('#chatServiceName').html(html);
             },
 
             /* 页面组件渲染 */
@@ -611,8 +576,8 @@
                     msgDom.className = 'img-msg';
                     msgDom.src = msg.content;
                 }
-                dom2.append(titleDom);
-                dom2.append(msgDom);
+                dom2.appendChild(titleDom);
+                dom2.appendChild(msgDom);
                 // 设置用户头像
                 var avatarDom = document.createElement('img');
                 if (msg.sendUserType === sendUserTypes.STAFF.value) {
@@ -623,11 +588,11 @@
                 avatarDom.className = 'avatar';
                 // 追加节点
                 if (msg.sendUserType === sendUserTypes.VISITOR.value) {
-                    dom1.append(dom2);
-                    dom1.append(avatarDom);
+                    dom1.appendChild(dom2);
+                    dom1.appendChild(avatarDom);
                 } else if (msg.sendUserType === sendUserTypes.STAFF.value) {
-                    dom1.append(avatarDom);
-                    dom1.append(dom2);
+                    dom1.appendChild(avatarDom);
+                    dom1.appendChild(dom2);
                 }
                 $('#chatHistory').append(dom1);
                 setTimeout(function () {
@@ -656,6 +621,17 @@
 
             /* 各种ajax请求 */
         },
+
+        Store:{
+            SESSION_KEY: 'SESSION_KEY',
+
+            put(key, value) {
+                window.localStorage.setItem(key, value);
+            },
+            get(key){
+               return window.localStorage.getItem(key);
+            }
+        }
     }
 
     return {Chat: global.Chat}

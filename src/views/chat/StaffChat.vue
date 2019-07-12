@@ -101,7 +101,7 @@
 			let ws = '/ws';
 			if (!Utils.isLocal()) {
 				ws = '/' + constant.server + '/ws';
-			}
+            }
             const socket = new SockJS(ws);
             this.stompClient = Stomp.over(socket);
 
@@ -148,6 +148,10 @@
                     if (o.id === message.sessionId) {
                         o.messages = o.messages ? o.messages : [];
                         o.messages.push(message);
+
+						if (o.otherSideName != message.visitorName) {
+							o.otherSideName = message.visitorName;
+						}
 
 						if (o.id == that.current.id) {
 							that.messageRead(o); //是当前则已读

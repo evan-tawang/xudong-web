@@ -72,6 +72,7 @@
     top: 50%;
     margin-left: -250px;
     margin-top: -245px;
+    background-color: #ffffff;
 }
 /* 聊天主窗口-头部 */
 .chat_main .chat_header {
@@ -234,9 +235,9 @@
     box-shadow: 1px 1px 10px #ddd;
     border: 1px solid #ddd;
     display: none;
-    background: #fff;
     right: 10%;
     bottom: 10%;
+    background-color: #ffffff;
 }
 .chat_record .chat_record_header {
     padding: 6px;

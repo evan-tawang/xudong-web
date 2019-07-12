@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+var argv = require('yargs').argv;
 
 const resolve = dir => {
     return path.join(__dirname, dir)
@@ -25,12 +26,7 @@ module.exports = {
     chainWebpack: config => {
         // 配置路径别名
         config.resolve.alias
-            .set('@', resolve('src'))
-
-        config.plugin('provide')
-            .use(webpack.ProvidePlugin, [{
-                isProd: true,
-            }]);
+            .set('@', resolve('src'));
 
         //开发环境拷贝到编译后目录下
         config.plugin('copy')

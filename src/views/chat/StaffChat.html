@@ -53,7 +53,11 @@
                             <template v-else>
                                 <img class="avatar-img" src="/images/custom.png">
                                 <div class="custom-info">
-                                    <div class="title">访客 {{ message.gmtCreate | date('HH:mm:ss') }}</div>
+                                    <div class="title">
+                                        {{ current.otherSideName ? current.otherSideName : '访客' }}
+
+                                        {{ message.gmtCreate | date('HH:mm:ss') }}
+                                    </div>
                                     <img class="custom-msg img-msg" v-if="message.contentType == 2":src="message.content" @click="zoomImage(message.content)">
                                     <div v-else class="custom-msg msg" v-html="message.content"></div>
                                 </div>

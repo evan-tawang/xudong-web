@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve --server service",
     "build-prod": "vue-cli-service build --mode production",
+    "build-prod-nginx": "vue-cli-service build --mode production --server service",
     "build-portal": "webpack --config vue.portal.config.js",
+    "build-portal84": "webpack --config vue.portal.config.js --host http://47.96.89.84:9003",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {

@@ -118,13 +118,12 @@
 
                  var sessionId = global.Chat.Store.get(global.Chat.Store.SESSION_KEY);
 
-                 var connectId = global.Chat.options.loginUser.id;
-                 var data = connectId ? {
+                 var data = {
                      sessionId: sessionId,
-                     connectId: connectId,
+                     connectId: global.Chat.options.loginUser.id,
                      connectName: global.Chat.options.loginUser.userName,
                      connectAccount: global.Chat.options.loginUser.account
-                 } : null;
+                 }
 
                  var that = this;
                 // 获取历史记录

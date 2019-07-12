@@ -91,9 +91,10 @@
 .chat_main .chat_history .msg {
     border-radius: 2px;
     padding: 12px 16px;
+    word-break: break-all;
 }
 .chat_main .chat_history .chat_history_custom {
-    position: relative;s
+    position: relative;
     float: right;
     width: 70%;
     margin-bottom: 20px;

@@ -29,11 +29,6 @@ module.exports = {
                 to: './',
                 ignore: ['.*']
             },
-            {
-                from: path.resolve(__dirname,'portal/jquery-3.4.1.min.js'),
-                to: './',
-                ignore: ['.*']
-            }
         ])
     ]
 };

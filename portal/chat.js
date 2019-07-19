@@ -625,10 +625,10 @@
         Store:{
             SESSION_KEY: 'SESSION_KEY',
 
-            put(key, value) {
+            put: function (key, value) {
                 window.localStorage.setItem(key, value);
             },
-            get(key){
+            get: function (key) {
                return window.localStorage.getItem(key);
             }
         }

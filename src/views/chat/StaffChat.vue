@@ -110,6 +110,12 @@
             stompClient.connect({}, () => {
                 stompClient.subscribe(`/chat/${that.userAgent.id}/allocate`, (resp: any) => {
                     const chatSession = JSON.parse(resp.body);
+					let current = that.sessionList.find((o: any) => {
+						return o.id === chatSession.sessionId;
+					});
+
+					if(current) return;
+
                     chatSession.messages = [];
 
                     that.subscribeReceiveMsg(chatSession);
@@ -164,6 +170,17 @@
 				that.$forceUpdate();
                 that.scrollToBottom();
             });
+
+			that.stompClient.subscribe(`/chat/${chatSession.id}/disconnect`, (resp: any) => {
+				const body = JSON.parse(resp.body);
+				that.sessionList.forEach((o: any) => {
+					if (o.id === body.id) {
+						let msg = {contentType: 10};
+						o.messages.push(msg);
+					}
+				});
+				that.$forceUpdate();
+			});
         }
 
         // private loadStaff() {

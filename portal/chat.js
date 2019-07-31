@@ -111,7 +111,8 @@
         Request:  {
             options: {
                 host: 'service',
-                sessionId:''
+                sessionId:'',
+                lastMsgTime: ''
             },
             // 初始化session
              createSession:function () {
@@ -179,7 +180,7 @@
                             content: item.content,
                             avatar: item.avatar,
                             name: item.name,
-                            time: that.dateFormat(item.gmtCreate, 'HH:mm:ss'),
+                            time: item.gmtCreate,
                         })
                     }
                 }).fail(function (res) {
@@ -223,7 +224,10 @@
 
             // 发送消息
              sendMsg:function  (params) {
-                var that = this;
+                 var that = this;
+                if(!that.options.sessionId){
+                    return;
+                }
                 var data = {
                     sessionId: that.options.sessionId,
                     content: params.content,
@@ -254,7 +258,7 @@
                         contentType: data.contentType,
                         content: data.content,
                         avatar: Chat.options.visitor.avatar,
-                        time: that.dateFormat(Date.now(), 'HH:mm:ss'),
+                        time: data.gmtCreate,
                     })
                 }).fail(function (res) {
                     alert('发送失败');
@@ -278,7 +282,13 @@
                             contentType: data.contentType,
                             content: data.content,
                             name: data.name,
-                            time: that.dateFormat(data.gmtCreate, 'HH:mm:ss'),
+                            time: data.gmtCreate
+                        });
+                    });
+                    stompClient.subscribe('/chat/' + that.options.sessionId + '/disconnect', function (resp) {
+                        console.log(111111111111)
+                        global.Chat.Dom.createChatMsg({
+                            contentType: 10,
                         });
                     });
                 });
@@ -286,6 +296,18 @@
 
             /** 断开websocket连接 **/
             disconnectWebSocket:function  () {
+                var that = this;
+                $.ajax({
+                    url: this.options.host + '/chat/disconnect',
+                    type: 'POST',
+                    cache: false,
+                    data: {
+                        sessionId: that.options.sessionId,
+                    }
+                }).done(function (res) {
+                    global.Chat.Request.options.sessionId = '';
+                });
+
                 if(!this.options.stompClient){
                     return;
                 }
@@ -473,6 +495,8 @@
                 // 关闭聊天窗口
                 $('#chatClose').on('click', function (event) {
                     $('#chatMain').hide();
+                    $("#chatHistory").html('');
+                    global.Chat.Request.options.lastMsgTime = '';
                     global.Chat.Request.disconnectWebSocket();
                 });
 
@@ -545,6 +569,7 @@
 
             // 增加聊天消息代码块
             createChatMsg: function (msg) {
+                console.log(msg)
                 var Chat = global.Chat;
                 var Request = global.Chat.Request;
                 var sendUserTypes = global.Chat.options.sendUserTypes;
@@ -552,7 +577,42 @@
 
                 // 构建一个聊天信息
                 var dom1 = document.createElement('div');
+
+                //断开连接
+                if(msg.contentType == 10){
+                    console.log(1111111111111111)
+                    var domSplice = document.createElement('div');
+                    domSplice.className = 'splice_line';
+
+                    var span = document.createElement('span');
+                    span.innerHTML = '连接已断开';
+
+                    domSplice.append(span);
+                    dom1.append(domSplice);
+                    $('#chatHistory').append(dom1);
+                    return;
+                }
+
                 dom1.className = 'chat_history_' + Request.getSendTypeLabel(msg.sendUserType);
+
+                //时间标题
+                var lastMsgTime = global.Chat.Request.options.lastMsgTime;
+                console.log(lastMsgTime)
+                if (!lastMsgTime || (lastMsgTime && msg.time - lastMsgTime > 5 * 60 * 1000)) {
+                    var domSplice = document.createElement('div');
+                    domSplice.className = 'splice_line';
+
+                    var span = document.createElement('span');
+                    span.innerHTML = global.Chat.Request.dateFormat((msg.time ? msg.time : Date.now()), 'HH:mm:ss');
+
+                    domSplice.append(span);
+                    dom1.append(domSplice);
+                }
+
+                if (msg.time) {
+                    global.Chat.Request.options.lastMsgTime = msg.time;
+                }
+
                 // 构建信息内容块
                 var dom2 = document.createElement('div');
                 dom2.className = 'chat_msg';
@@ -564,7 +624,7 @@
                 if (msg.sendUserType === sendUserTypes.STAFF.value) {
                     name = '客服人员';
                 }
-                titleDom.textContent = name + '  ' + msg.time;
+                titleDom.textContent = name + '  ' + global.Chat.Request.dateFormat((msg.time ? msg.time : Date.now()), 'HH:mm:ss');
 
                 // 构建信息
                 var msgDom = document.createElement('div');

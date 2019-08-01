@@ -111,8 +111,9 @@
                 stompClient.subscribe(`/chat/${that.userAgent.id}/allocate`, (resp: any) => {
                     const chatSession = JSON.parse(resp.body);
 					let current = that.sessionList.find((o: any) => {
-						return o.id === chatSession.sessionId;
+						return o.id === chatSession.id;
 					});
+
 
 					if(current) return;
 
@@ -182,6 +183,15 @@
 				that.$forceUpdate();
 			});
         }
+
+		private unSubscribeReceiveMsg(chatSession: any) {
+			const that = this;
+			that.stompClient.unsubscribe(`/chat/${chatSession.id}-${UserEnum.Type.VISITOR}/receiveMsg`, (resp: any) => {
+			});
+
+			that.stompClient.unsubscribe(`/chat/${chatSession.id}/disconnect`, (resp: any) => {
+			});
+		}
 
         // private loadStaff() {
         // }
@@ -301,6 +311,9 @@
                         this.sessionList.splice(parseInt(i), 1);
                     }
                 }
+
+				this.unSubscribeReceiveMsg(this.current);
+
                 this.current = {
                     id: '',
                     visitorId: '',

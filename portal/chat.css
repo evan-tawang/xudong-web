@@ -163,17 +163,18 @@
     left: 5px;
 }
 
-.chat_main .chat_history .splice_line {
-    position: relative;
-    height: 40px;
-    line-height: 40px;
+.splice_line {
+    width: 100%;
     text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
-.chat_main .chat_history .splice_line span {
-    position: relative;
-    background: #F8F8F8;
-    z-index: 2;
-    padding: 6px;
+
+.disconnect {
+    clear: both;
+    width: 100%;
+    text-align: center;
+    padding-bottom: 10px;
 }
 
 /* 聊天主窗口-聊天输入 */

@@ -67,7 +67,7 @@
         },
         instance: function (options) {
             // 设置各种系统常量
-            global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
+            // global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
 
             if (this.options._isInstance) return this;
             this.options.isInstance = true;
@@ -575,38 +575,34 @@
                 var sendUserTypes = global.Chat.options.sendUserTypes;
                 var contentTypes = global.Chat.options.contentTypes;
 
-                // 构建一个聊天信息
-                var dom1 = document.createElement('div');
-
                 //断开连接
                 if(msg.contentType == 10){
-                    console.log(1111111111111111)
                     var domSplice = document.createElement('div');
-                    domSplice.className = 'splice_line';
+                    domSplice.className = 'disconnect';
 
                     var span = document.createElement('span');
                     span.innerHTML = '连接已断开';
-
                     domSplice.append(span);
-                    dom1.append(domSplice);
-                    $('#chatHistory').append(dom1);
+
+                    $('#chatHistory').append(domSplice);
                     return;
                 }
 
+                // 构建一个聊天信息
+                var dom1 = document.createElement('div');
                 dom1.className = 'chat_history_' + Request.getSendTypeLabel(msg.sendUserType);
 
                 //时间标题
                 var lastMsgTime = global.Chat.Request.options.lastMsgTime;
-                console.log(lastMsgTime)
                 if (!lastMsgTime || (lastMsgTime && msg.time - lastMsgTime > 5 * 60 * 1000)) {
                     var domSplice = document.createElement('div');
                     domSplice.className = 'splice_line';
 
                     var span = document.createElement('span');
                     span.innerHTML = global.Chat.Request.dateFormat((msg.time ? msg.time : Date.now()), 'HH:mm:ss');
-
                     domSplice.append(span);
-                    dom1.append(domSplice);
+
+                    $('#chatHistory').append(domSplice);
                 }
 
                 if (msg.time) {

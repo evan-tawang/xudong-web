@@ -67,7 +67,7 @@
         },
         instance: function (options) {
             // 设置各种系统常量
-            // global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
+            global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
 
             if (this.options._isInstance) return this;
             this.options.isInstance = true;

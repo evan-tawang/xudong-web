@@ -67,7 +67,7 @@
         },
         instance: function (options) {
             // 设置各种系统常量
-            global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
+            // global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
 
             if (this.options._isInstance) return this;
             this.options.isInstance = true;
@@ -206,6 +206,8 @@
                 var data = {
                     content: content,
                     visitorId: Chat.options.visitor.id,
+                    visitorName: $('#visitorName input').val(),
+                    visitorPhone: $('#visitorPhone input').val()
                 }
 
                 $.ajax({
@@ -427,6 +429,12 @@
                     '<span>请您留言</span>' +
                     '<div id="cancelRecord" class="cancel">-</div>' +
                     '</div>' +
+                    '<div class="chat_record_input" id="visitorName">' +
+                    '<label>姓名</label><input name="visitorName" maxLength="20">' +
+                    '</div>' +
+                    '<div class="chat_record_input" id="visitorPhone">' +
+                    '<label>电话</label><input name="visitorPhone">' +
+                    '</div>' +
                     '<div id="chatRecordArea" contenteditable="true" class="chat_record_area"></div>' +
                     '<div id="recordBtn" class="chat_btn">留言</div>' +
                     '</div>'
@@ -484,7 +492,7 @@
                 // 发送留言
                 $('#recordBtn').on('click', function (event) {
                     // TODO Websocket发送文本消息，同添加代码块
-                    if ($('#chatRecordArea').html()) {
+                    if (validateRecordForm()) {
                         global.Chat.Request.sendRecord($('#chatRecordArea').html());
                     }
                 })
@@ -553,6 +561,24 @@
                     }else{
                         return "";
                     }
+                }
+
+                function validateRecordForm () {
+                    var flag = true;
+                    $('#visitorPhone p').remove();
+                    $('#visitorName p').remove();
+                    if (!$('#visitorName input').val()) {
+                        flag = false;
+                        $('#visitorName').append('<p class="error">姓名为必填</p>');
+                    }
+                    if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test($('#visitorPhone input').val())) {
+                        flag = false;
+                        $('#visitorPhone').append('<p class="error">电话号码格式错误</p>');
+                    }
+                    if (!$('#chatRecordArea').html()) {
+                        flag = false;
+                    }
+                    return flag;
                 }
             },
 
@@ -655,7 +681,6 @@
                     $('#chatHistoryWrapper').scrollTop($('#chatHistory').innerHeight());
                 }, 0);
             },
-
 
             // 处理数据
             // function handleData(msgs) {

@@ -21,7 +21,8 @@
             <el-table-column prop="visitorId" label="访客账号" min-width="100" show-overflow-tooltip>
                 <template slot-scope="scope">{{ scope.row.visitorId == null ?  '游客' : scope.row.visitorId}}</template>
             </el-table-column>
-            <!--<el-table-column prop="visitorIp" label="访客ip" min-width="100" show-overflow-tooltip></el-table-column>-->
+            <el-table-column prop="visitorName" label="访客名称" min-width="100"></el-table-column>
+            <el-table-column prop="visitorPhone" label="访客电话" min-width="100"></el-table-column>
             <el-table-column prop="gmtCreate" label="留言时间" min-width="120">
                 <template slot-scope="scope">{{ scope.row.gmtCreate | dateTime }}</template>
             </el-table-column>

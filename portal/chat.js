@@ -67,7 +67,7 @@
         },
         instance: function (options) {
             // 设置各种系统常量
-            // global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
+            global.Chat.Request.options.host = ChatHost + '/' + global.Chat.Request.options.host;
 
             if (this.options._isInstance) return this;
             this.options.isInstance = true;
@@ -219,6 +219,8 @@
                     $('#chatRecordArea').html('');
                     // 发送留言，关闭窗口
                     $('#chatRecordMain').hide();
+                    $('#visitorName input').val('');
+                    $('#visitorPhone input').val('');
                 }).fail(function (res) {
                     alert('留言发送失败');
                 });
@@ -439,6 +441,11 @@
                     '<div id="recordBtn" class="chat_btn">留言</div>' +
                     '</div>'
                 $('body').append(html);
+                var user = global.Chat.options.loginUser;
+                if(user && Object.keys(user).length > 0){
+                    $('#visitorName input').val(user.userName);
+                    $('#visitorPhone input').val(user.mobile);
+                }
             },
 
             jquery:function(){

@@ -290,7 +290,6 @@
                         });
                     });
                     stompClient.subscribe('/chat/' + that.options.sessionId + '/disconnect', function (resp) {
-                        console.log(111111111111)
                         global.Chat.Dom.createChatMsg({
                             contentType: 10,
                         });
@@ -435,7 +434,7 @@
                     '<label>姓名</label><input name="visitorName" maxLength="20">' +
                     '</div>' +
                     '<div class="chat_record_input" id="visitorPhone">' +
-                    '<label>电话</label><input name="visitorPhone">' +
+                    '<label>电话</label><input name="visitorPhone" maxLength="12">' +
                     '</div>' +
                     '<div id="chatRecordArea" contenteditable="true" class="chat_record_area"></div>' +
                     '<div id="recordBtn" class="chat_btn">留言</div>' +

@@ -2,7 +2,7 @@
     <div class="message" >
         <div class="message_header">留言</div>
             <el-input v-model="visitor.userName" placeholder="请输入姓名" maxlength="20"></el-input>
-            <el-input v-model="visitor.mobile" placeholder="请输入联系方式" maxlength="15"></el-input>
+            <el-input v-model="visitor.mobile" placeholder="请输入电话号码" maxlength="12"></el-input>
 
             <el-input
                 class="textarea"
@@ -31,16 +31,40 @@
         }
 
         private sendMessage() {
-            if (!this.textarea) {
-                return;
-            }
-
             const data = {
                 visitorId: this.visitor && this.visitor.id ? this.visitor.id : '',
                 visitorName: this.visitor && this.visitor.userName ? this.visitor.userName : '',
                 visitorPhone: this.visitor && this.visitor.mobile ? this.visitor.mobile : '',
                 content: this.textarea
             };
+			if (!data.visitorName) {
+				this.$message({
+					message: '姓名不能为空',
+					type: 'warning'
+				});
+				return;
+			}
+			if (!data.visitorPhone) {
+				this.$message({
+					message: '电话号码不能为空',
+					type: 'warning'
+				});
+				return;
+			}
+			if (!/^1(3|4|5|6|7|8|9)\d{9}$/.test(data.visitorPhone)) {
+				this.$message({
+					message: '电话号码格式不正确',
+					type: 'warning'
+				});
+				return;
+			}
+			if (!data.content) {
+				this.$message({
+					message: '请输入留言内容',
+					type: 'warning'
+				});
+				return;
+			}
             Api.$post('guestBook/save', data).then(res => {
                 this.textarea = '';
                 this.$message({

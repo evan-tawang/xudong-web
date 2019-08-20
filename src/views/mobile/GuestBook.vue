@@ -65,14 +65,17 @@
 				});
 				return;
 			}
-            Api.$post('guestBook/save', data).then(res => {
-                this.textarea = '';
-                this.$message({
-                    message: '留言已收到，请等待反馈',
-                    type: 'success'
-                });
-            })
-
+			Api.$post('guestBook/save', data).then(res => {
+				if (!this.visitor.id) {
+					this.visitor.userName = '';
+					this.visitor.mobile = '';
+				}
+				this.textarea = '';
+				this.$message({
+					message: '留言已收到，请等待反馈',
+					type: 'success'
+				});
+			})
         }
     }
 </script>
